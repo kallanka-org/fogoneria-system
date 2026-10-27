@@ -1,0 +1,12 @@
+# Variables de entorno de ejemplo (dummy)
+# No usar valores reales en este archivo.
+
+APP_ENV=dummy
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=fogoneria_dummy
+DB_USER=dummy_user
+DB_PASSWORD=dummy_password
+JWT_SECRET=dummy_jwt_secret
+API_KEY=dummy_api_key
+DUMMY_VAR_01=dummy_value_01

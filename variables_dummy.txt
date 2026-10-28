@@ -10,3 +10,4 @@ DB_PASSWORD=dummy_password
 JWT_SECRET=dummy_jwt_secret
 API_KEY=dummy_api_key
 DUMMY_VAR_01=dummy_value_01
+DUMMY_VAR_02=dummy_value_02

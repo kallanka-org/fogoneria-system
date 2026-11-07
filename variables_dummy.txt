@@ -20,3 +20,4 @@ DUMMY_VAR_08=dummy_value_08
 DUMMY_VAR_09=dummy_value_09
 DUMMY_VAR_10=dummy_value_10
 DUMMY_VAR_11=dummy_value_11
+DUMMY_VAR_12=dummy_value_12

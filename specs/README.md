@@ -75,22 +75,22 @@ El gate corre en CI (job **Specs al día**) en cada PR. La excepción `SPECS_SKI
 ## Índice de módulos
 
 ### Plataforma
-- [auth](modulos/auth.md) · [tenant](modulos/tenant.md) · [onboarding](modulos/onboarding.md) · [saas](modulos/saas.md) · [billing](modulos/billing.md) · [audit](modulos/audit.md)
+- [auth](modulos/mod_auth.md) · [tenant](modulos/mod_tenant.md) · [onboarding](modulos/mod_onboarding.md) · [saas](modulos/mod_saas.md) · [billing](modulos/mod_billing.md) · [audit](modulos/mod_audit.md)
 
 ### Operación
-- [tables](modulos/tables.md) · [reservations](modulos/reservations.md) · [orders](modulos/orders.md) · [realtime](modulos/realtime.md)
+- [tables](modulos/mod_tables.md) · [reservations](modulos/mod_reservations.md) · [orders](modulos/mod_orders.md) · [realtime](modulos/mod_realtime.md)
 
 ### Dinero
-- [cash](modulos/cash.md) · [receipts](modulos/receipts.md) · [expenses](modulos/expenses.md)
+- [cash](modulos/mod_cash.md) · [receipts](modulos/mod_receipts.md) · [expenses](modulos/mod_expenses.md)
 
 ### Catálogo y comercial
-- [catalog](modulos/catalog.md) · [pricing](modulos/pricing.md) · [promotions](modulos/promotions.md)
+- [catalog](modulos/mod_catalog.md) · [pricing](modulos/mod_pricing.md) · [promotions](modulos/mod_promotions.md)
 
 ### Inventario y personas
-- [inventory](modulos/inventory.md) · [crm](modulos/crm.md) · [staff](modulos/staff.md)
+- [inventory](modulos/mod_inventory.md) · [crm](modulos/mod_crm.md) · [staff](modulos/mod_staff.md)
 
 ### Lectura
-- [bi](modulos/bi.md)
+- [bi](modulos/mod_bi.md)
 
 ### Producto y operación
 - [vision](producto/vision.md) · [roles y permisos](producto/roles-permisos.md) · [flujos](producto/flujos.md)

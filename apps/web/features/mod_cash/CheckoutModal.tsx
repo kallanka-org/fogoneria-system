@@ -3,7 +3,7 @@
 /**
  * Cobro de una cuenta del demo (cuenta abierta del mesero).
  *
- * Vive en `features/cash/` porque la caja es la que cobra. Acoplamiento
+ * Vive en `features/mod_cash/` porque la caja es la que cobra. Acoplamiento
  * temporal y consciente: `MozoView` (en `features/orders`) todavía cobra
  * con `checkoutAccount` del provider y no usa este modal; si lo necesita, lo
  * importa desde `@/features/mod_cash` (nunca al revés) hasta que la ola de mozo

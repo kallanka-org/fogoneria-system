@@ -290,7 +290,7 @@ beforeEach(() => {
 
 afterEach(cleanup);
 
-describe('ModulesProvider (con sesión real)', () => {
+describe('acciones del workspace (con sesión real)', () => {
   const ordenApi = {
     id: 'o-1',
     numero_orden: 'ORD-000001',
@@ -455,7 +455,7 @@ describe('ModulesProvider (con sesión real)', () => {
   });
 });
 
-describe('ModulesProvider (modo demo)', () => {
+describe('acciones del workspace (modo demo)', () => {
   it('abre cuenta, edita líneas y envía a cocina', async () => {
     montar();
     await waitFor(() => expect(ctx).toBeTruthy());

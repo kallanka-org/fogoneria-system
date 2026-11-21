@@ -1,7 +1,7 @@
 /* Cliente de caja de la API (AYCDS-46).
 
    Todo pasa por el BFF: el navegador no tiene el access token. El contrato
-   vive en `apps/api/src/modules/cash/dto/cash.dto.ts`.
+   vive en `apps/api/src/modules/mod_cash/dto/cash.dto.ts`.
 
    Reglas del dominio que conviene recordar:
    - `PAGADA` no se escribe desde órdenes: se cobra con `POST /cash/charges`.

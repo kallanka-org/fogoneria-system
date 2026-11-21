@@ -2,7 +2,7 @@
 
    El navegador no tiene el access token: todo pasa por el BFF
    (`/api/backend/...`), que adjunta el Bearer de la cookie HttpOnly.
-   El contrato vive en `apps/api/src/modules/orders/dto/**`.
+   El contrato vive en `apps/api/src/modules/mod_orders/dto/**`.
 
    Ojo: el precio NO se envía. `CreateOrderDto` no acepta `precioUnitario` y
    el `ValidationPipe` global (`forbidNonWhitelisted`) responde 400 si viaja. */

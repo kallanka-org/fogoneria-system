@@ -81,10 +81,10 @@
 | 1 | Piloto RRHH | #49, #51 | `features/mod_staff/**`, `staff/index.ts` |
 | 2 | Catálogo + precios | #50, #52 | `features/mod_catalog/**`, `features/mod_pricing/**`, `PRICING_PORT` |
 | 3 · salón | mesas, reservas, KDS | #54, #57 | `features/mod_tables`, `features/mod_reservations`, `features/mod_orders` |
-| 3 · dinero | receipts, cash, expenses | #56, #59 | `features/{cash,receipts,expenses}` |
-| 3 · operación | inventory, promotions | #58, #61 | `features/{inventory,promotions}` |
+| 3 · dinero | receipts, cash, expenses | #56, #59 | `features/{mod_cash,mod_receipts,mod_expenses}` |
+| 3 · operación | inventory, promotions | #58, #61 | `features/{mod_inventory,mod_promotions}` |
 | 3 · personas | crm | #60 | `features/mod_crm` |
-| 3 · lectura | bi, realtime | #62, #63, #65 | `features/mod_bi`, `@fogoneria/contracts/tiempo-real` |
+| 3 · lectura | bi, realtime | #62, #63, #65 | `features/mod_bi`, `@fogoneria/contracts/mod_realtime` |
 | 3 · plataforma | auth, tenant, saas, billing, onboarding, audit | #64 | baseline **0** |
 | 4 · etapa 1 | `SessionProvider`, `NotificationsProvider` | #66 | `components/dashboard/providers/{session,notifications}.tsx` |
 | 4 · etapa 2 | `TenantProvider` | #70 | `providers/tenant.tsx`, `lib/tenant-scope.ts` |

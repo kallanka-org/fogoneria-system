@@ -1,5 +1,5 @@
 /* Agenda de reservas de la API (AYCDS-26).
-   Contrato: `apps/api/src/modules/reservations/dto/reservation.dto.ts`.
+   Contrato: `apps/api/src/modules/mod_reservations/dto/reservation.dto.ts`.
    El día se filtra en hora de Lima (`fecha=YYYY-MM-DD`), no por UTC. */
 
 import { apiFetch } from "./api";

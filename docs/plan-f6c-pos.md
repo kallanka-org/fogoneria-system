@@ -20,7 +20,7 @@ El nudo es `scopes` (`BranchScope = { orders, tables, cash }`): es un hub por su
 ## 2. Restricciones del patrón vigente
 
 1. `FeatureProviders` es **generado** (`pnpm gen:modules`) y monta `<Provider>{children}</Provider>` **sin props**: un provider no puede recibir callbacks de `ModulesProvider`.
-2. El orden del registry es el de `modules/mod_catalog.json`: `orders` (10) → `cash` (12) → `receipts` (13) → `promotions` (16) → `crm` (17). Un provider **solo puede consumir contextos de providers anteriores** (ancestros).
+2. El orden del registry es el de `modules/catalog.json`: `orders` (10) → `cash` (12) → `receipts` (13) → `promotions` (16) → `crm` (17). Un provider **solo puede consumir contextos de providers anteriores** (ancestros).
 3. Por (1) y (2), la orquestación entre módulos que no son ancestros (p. ej. caja → CRM) no puede vivir en un provider: vive en una **capa compartida por debajo de todos** (`ModulesProvider`), que sí ve todos los contextos.
 4. La sesión/BFF sigue siendo la autoridad: con sesión, cuentas/caja/comprobantes operan contra la API; sin sesión se mantiene el demo local. Los providers nuevos solo cambian **quién posee el estado demo**, no las reglas.
 

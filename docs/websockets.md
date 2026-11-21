@@ -5,7 +5,8 @@ Sincronización mesero ↔ cocina sin refrescar. El transporte es **Socket.io**
 access token: pide un ticket efímero de 60 s.
 
 El contrato (nombres de evento, sobre `{ eventId, at, data }`, payloads y salas)
-vive en `packages/contracts/src/tiempo-real.ts` (`@fogoneria/contracts/tiempo-real`):
+vive en `packages/contracts/src/mod_realtime.ts` (`@fogoneria/contracts/mod_realtime`;
+el subpath `tiempo-real` queda como alias deprecado):
 la API lo reexporta en `modules/mod_realtime/realtime.types.ts` y la web lo consume
 en `lib/realtime.ts`.
 

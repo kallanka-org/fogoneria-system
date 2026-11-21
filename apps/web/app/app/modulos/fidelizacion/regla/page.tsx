@@ -1,5 +1,5 @@
 import { ModuleGuard } from "@/components/dashboard/ModuleGate";
-import { LoyaltyPage } from "@/features/crm";
+import { LoyaltyPage } from "@/features/mod_crm";
 
 export default function FidelizacionReglaPage() {
   return (

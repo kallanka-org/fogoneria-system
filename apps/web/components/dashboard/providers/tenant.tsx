@@ -1,5 +1,5 @@
 /**
- * Compatibilidad: el provider vive ahora en `features/tenant/provider.tsx`
+ * Compatibilidad: el provider vive ahora en `features/mod_tenant/provider.tsx`
  * (F6). Este archivo solo reexporta para no romper imports históricos.
  */
-export * from '@/features/tenant/provider';
+export * from '@/features/mod_tenant/provider';

@@ -1,0 +1,189 @@
+// @vitest-environment jsdom
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const sesion = vi.hoisted(() => ({
+  logout: vi.fn(),
+  notify: vi.fn(),
+  currentUser: { id: 'u-1', name: 'Super', email: 'super@fogoneria.pe', role: 'superadmin' },
+}));
+vi.mock('@/components/dashboard/providers/session', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useSession: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/notifications', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useNotifications: () => sesion,
+}));
+vi.mock('@/features/mod_tenant/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTenant: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/catalog', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCatalogoState: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/live', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useLiveData: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/workspace-actions', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useWorkspaceActions: () => sesion,
+}));
+vi.mock('@/components/dashboard/hooks/use-cash-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCashScope: () => sesion,
+}));
+vi.mock('@/components/dashboard/hooks/use-branch-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useBranchScope: () => sesion,
+}));
+vi.mock('@/components/dashboard/hooks/use-accounts-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useAccountsScope: () => (sesion as unknown as { accounts?: unknown[] }).accounts as never,
+}));
+vi.mock('@/features/mod_orders/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useAccounts: () => sesion,
+  useOrdersDemo: () => sesion,
+}));
+vi.mock('@/features/mod_tables/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTables: () => sesion,
+}));
+vi.mock('@/features/mod_reservations/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useReservations: () => sesion,
+}));
+vi.mock('@/features/mod_cash/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCash: () => sesion,
+}));
+vi.mock('@/features/mod_receipts/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useReceipts: () => sesion,
+}));
+vi.mock('@/features/mod_promotions/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  usePromotions: () => sesion,
+}));
+vi.mock('@/features/mod_crm/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCrm: () => sesion,
+}));
+vi.mock('@/features/mod_expenses/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useExpenses: () => sesion,
+}));
+vi.mock('@/features/mod_inventory/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useInventory: () => sesion,
+}));
+vi.mock('@/features/mod_staff/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useStaff: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/tickets', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTickets: () => sesion,
+}));
+
+const api = vi.hoisted(() => ({
+  empresas: vi.fn(),
+  metricas: vi.fn(),
+  suspender: vi.fn(),
+  reactivar: vi.fn(),
+}));
+vi.mock('./api', () => ({ saasApi: api }));
+
+import { SaasPage } from './SaasPage';
+
+const empresa = {
+  id: 'e-1',
+  nombreLegal: 'El Fuego',
+  nombreComercial: null,
+  ruc: '20123456786',
+  estado: 'ACTIVE',
+  plan: 'PROFESIONAL',
+  mrr: 299,
+  sucursales: 2,
+  usuarios: 5,
+};
+
+const metricas = {
+  empresas: { total: 1, trial: 0, active: 1, suspended: 0, expired: 0 },
+  mrr: 299,
+};
+
+beforeEach(() => {
+  for (const fn of Object.values(api)) fn.mockReset();
+  sesion.logout.mockReset();
+  sesion.notify.mockReset();
+  api.empresas.mockResolvedValue({ items: [empresa], total: 1, page: 1, limit: 50 });
+  api.metricas.mockResolvedValue(metricas);
+});
+
+afterEach(cleanup);
+
+describe('SaasPage', () => {
+  it('carga empresas y métricas', async () => {
+    render(<SaasPage />);
+    await waitFor(() => expect(screen.getByText('El Fuego')).toBeTruthy());
+    expect(screen.getAllByText('Empresas').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('$299.00').length).toBeGreaterThan(0);
+    expect(api.empresas).toHaveBeenCalled();
+    expect(api.metricas).toHaveBeenCalled();
+  });
+
+  it('suspende y reactiva una empresa', async () => {
+    api.suspender.mockResolvedValue({ ...empresa, estado: 'SUSPENDED' });
+    api.reactivar.mockResolvedValue(empresa);
+    render(<SaasPage />);
+    await waitFor(() => expect(screen.getByText('El Fuego')).toBeTruthy());
+
+    fireEvent.click(screen.getByRole('button', { name: 'Suspender' }));
+    fireEvent.click(screen.getAllByRole('button', { name: 'Suspender' }).at(-1)!);
+    await waitFor(() => expect(api.suspender).toHaveBeenCalledWith('e-1', expect.any(String)));
+    await waitFor(() => expect(screen.getByText('Reactivar')).toBeTruthy());
+    expect(sesion.notify).toHaveBeenCalledWith('Empresa suspendida', 'El Fuego');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reactivar' }));
+    fireEvent.click(screen.getAllByRole('button', { name: 'Reactivar' }).at(-1)!);
+    await waitFor(() => expect(api.reactivar).toHaveBeenCalledWith('e-1', expect.any(String)));
+    expect(sesion.notify).toHaveBeenCalledWith('Empresa reactivada', 'El Fuego');
+  });
+
+  it('muestra el vacío y el error de carga', async () => {
+    api.empresas.mockResolvedValueOnce({ items: [], total: 0, page: 1, limit: 50 });
+    render(<SaasPage />);
+    await waitFor(() => expect(screen.getByText(/A.n no hay empresas/)).toBeTruthy());
+
+    cleanup();
+    api.empresas.mockRejectedValueOnce(new Error('caído'));
+    render(<SaasPage />);
+    await waitFor(() => expect(screen.getByText('No se pudo cargar la consola SaaS.')).toBeTruthy());
+  });
+
+  it('avisa cuando la suspensión falla', async () => {
+    api.suspender.mockRejectedValue(new Error('caído'));
+    render(<SaasPage />);
+    await waitFor(() => expect(screen.getByText('El Fuego')).toBeTruthy());
+    fireEvent.click(screen.getByRole('button', { name: 'Suspender' }));
+    fireEvent.click(screen.getAllByRole('button', { name: 'Suspender' }).at(-1)!);
+    await waitFor(() =>
+      expect(sesion.notify).toHaveBeenCalledWith(
+        'No se pudo actualizar la empresa',
+        'No se pudo cargar la consola SaaS.',
+      ),
+    );
+  });
+
+  it('compone la sección de facturación', async () => {
+    render(
+      <SaasPage billing={<div>Facturación embebida</div>} />,
+    );
+    await waitFor(() => expect(screen.getByText('El Fuego')).toBeTruthy());
+    expect(screen.getByText('Facturación embebida')).toBeTruthy();
+  });
+});

@@ -45,7 +45,7 @@
   3. SLA de 20 min desde `confirmacion_at` (o `ingreso_at` si no se confirmó), con `orders.sla.ts` como única fuente; a los 20 justos no alerta.
   4. `OrdersSlaCron` cada minuto: marca `ordenes.alerta_sla` una sola vez y emite `order.sla`; índice parcial nuevo `idx_ordenes_sla_pendiente` (**0,072 ms** con el rol del cron).
   5. Tests: 12 unitarios nuevos (umbrales 19/20/21, base del reloj, métricas, cron) + 5 e2e (columnas, query, 400, 401) + 6 DB (dos empresas, sin confirmar, idempotencia).
-- **Archivos/rutas:** `apps/api/src/modules/orders/{orders.sla,orders.sla.cron,orders.service,orders.controller}.ts`, `dto/board-orders.dto.ts`, `apps/api/prisma/migrations/20261106120000_ordenes_sla_indice`, `db/scripts/perf/explain-board.sql`, `docs/explain-orders.md`
+- **Archivos/rutas:** `apps/api/src/modules/mod_orders/{orders.sla,orders.sla.cron,orders.service,orders.controller}.ts`, `dto/board-orders.dto.ts`, `apps/api/prisma/migrations/20261106120000_ordenes_sla_indice`, `db/scripts/perf/explain-board.sql`, `docs/explain-orders.md`
 - **Criterio de aceptación:** el KDS pinta el tablero con una sola llamada, la alerta de 20 min es determinista y el `EXPLAIN` está documentado. **Cumplido.**
 - **Depende de:** nada nuevo (`20`, `22` y `14` están en `development`).
 - **Bloquea a:** **AYCDS-41**.
@@ -78,7 +78,7 @@
   5. Migración: `ordenes.propina` con `CHECK >= 0`, columnas de arqueo y **índice único parcial** `uq_turnos_abierto_sucursal` (una caja abierta por sucursal).
   6. `PATCH /orders/:id/status` ya **no** acepta `PAGADA`: el dinero entra solo por caja (400 con el endpoint correcto).
   7. RBAC `CAJERO`/`GERENTE_SUCURSAL`/`ADMIN_GLOBAL` y auditoría en apertura, cierre, movimiento y cobro.
-- **Archivos/rutas:** `apps/api/src/modules/cash/**`, `apps/api/src/modules/orders/orders.service.ts`, `apps/api/prisma/migrations/20261106160000_caja_turnos_propina/`
+- **Archivos/rutas:** `apps/api/src/modules/mod_cash/**`, `apps/api/src/modules/mod_orders/orders.service.ts`, `apps/api/prisma/migrations/20261106160000_caja_turnos_propina/`
 - **Criterio de aceptación:** un turno cuadra al céntimo y no se puede abrir dos veces la misma caja. **Cumplido** (smoke 21/21 + 5 pruebas DB).
 - **Depende de:** nada nuevo.
 - **Bloquea a:** **AYCDS-46**, **AYCDS-17** (egreso de gastos) y la fuente de propinas de **AYCDS-33**.
@@ -95,7 +95,7 @@
   5. IGV desglosado en la respuesta (`base = total / 1.18`, `igv = total - base`), derivado y no persistido.
   6. Anulación con motivo obligatorio: estado `ANULADA` + actor + fecha; la reversión de caja/stock la aplican los triggers de AYCDS-39 cuando se desplieguen, este módulo no la duplica.
   7. Auditoría en emisión y anulación.
-- **Archivos/rutas:** `apps/api/src/modules/receipts/**`, `apps/api/src/common/sequences/sequences.service.ts`
+- **Archivos/rutas:** `apps/api/src/modules/mod_receipts/**`, `apps/api/src/common/sequences/sequences.service.ts`
 - **Criterio de aceptación:** dos cajas emitiendo a la vez nunca repiten serie-número y la anulación no descuadra caja. **Cumplido** (smoke 14/14 + 5 pruebas DB).
 - **Depende de:** **AYCDS-39** solo para la reversión automática (el correlativo y la emisión no la necesitan).
 - **Bloquea a:** **AYCDS-46** y **AYCDS-35** (BI de ventas).

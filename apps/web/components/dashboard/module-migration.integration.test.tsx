@@ -65,7 +65,7 @@ vi.mock('@/components/dashboard/providers/session', async (importOriginal) => ({
 vi.mock('@/components/dashboard/providers/notifications', () => ({
   useNotifications: () => avisos,
 }));
-vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_tenant/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useTenant: () => tenant,
 }));
@@ -84,16 +84,16 @@ vi.mock('@/lib/reservations-api', () => ({
   listReservations: vi.fn().mockResolvedValue({ items: [] }),
 }));
 
-import { CrmProvider } from '@/features/crm/provider';
-import { CashProvider } from '@/features/cash/provider';
-import { ExpensesProvider } from '@/features/expenses/provider';
-import { InventoryProvider } from '@/features/inventory/provider';
-import { AccountsProvider } from '@/features/orders/provider';
-import { PromotionsProvider } from '@/features/promotions/provider';
-import { ReceiptsProvider } from '@/features/receipts/provider';
-import { ReservationsProvider } from '@/features/reservations/provider';
-import { StaffProvider } from '@/features/staff/provider';
-import { TablesProvider } from '@/features/tables/provider';
+import { CrmProvider } from '@/features/mod_crm/provider';
+import { CashProvider } from '@/features/mod_cash/provider';
+import { ExpensesProvider } from '@/features/mod_expenses/provider';
+import { InventoryProvider } from '@/features/mod_inventory/provider';
+import { AccountsProvider } from '@/features/mod_orders/provider';
+import { PromotionsProvider } from '@/features/mod_promotions/provider';
+import { ReceiptsProvider } from '@/features/mod_receipts/provider';
+import { ReservationsProvider } from '@/features/mod_reservations/provider';
+import { StaffProvider } from '@/features/mod_staff/provider';
+import { TablesProvider } from '@/features/mod_tables/provider';
 import { TicketsProvider } from './providers/tickets';
 import { LiveDataProvider } from './providers/live';
 

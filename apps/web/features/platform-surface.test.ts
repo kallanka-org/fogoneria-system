@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { AUTH_LOGOUT_PATH, AUTH_SESSION_PATH } from './auth/api';
-import { billingApi } from './billing/api';
-import { onboardingApi } from './onboarding/api';
-import { saasApi } from './saas/api';
-import { tenantApi } from './tenant/api';
+import { AUTH_LOGOUT_PATH, AUTH_SESSION_PATH } from './mod_auth/api';
+import { billingApi } from './mod_billing/api';
+import { onboardingApi } from './mod_onboarding/api';
+import { saasApi } from './mod_saas/api';
+import { tenantApi } from './mod_tenant/api';
 import { featureModules, featureProviders, FeatureProviders } from './registry';
-import * as realtime from './realtime';
+import * as realtime from './mod_realtime';
 
 /**
  * F4/F5: fija las superficies públicas de las features de plataforma y el
@@ -34,17 +34,17 @@ describe('superficies de plataforma', () => {
   it('registra las 20 features sin pendientes', () => {
     expect(featureModules).toHaveLength(20);
     expect(featureProviders.map((provider) => provider.id)).toEqual([
-      'tenant',
-      'tables',
-      'reservations',
-      'orders',
-      'cash',
-      'receipts',
-      'expenses',
-      'inventory',
-      'promotions',
-      'crm',
-      'staff',
+      'mod_tenant',
+      'mod_tables',
+      'mod_reservations',
+      'mod_orders',
+      'mod_cash',
+      'mod_receipts',
+      'mod_expenses',
+      'mod_inventory',
+      'mod_promotions',
+      'mod_crm',
+      'mod_staff',
     ]);
     expect(typeof FeatureProviders).toBe('function');
   });

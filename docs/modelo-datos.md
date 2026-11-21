@@ -28,10 +28,10 @@ Modelo físico PostgreSQL 16 del ERP gastronómico multitenant. Esquema `fogoner
 | Archivo | Contenido |
 |---|---|
 | `core.prisma` | `generator`, `datasource` y lo compartido: `empresas`, `sucursales`, `usuarios`, `roles_empresa`, `secuencias` y sus enums |
-| `<id>.prisma` | Modelos del módulo (mismo `<id>` que `apps/api/src/modules/<id>`), con los enums que solo usa él |
-| Sin archivo | `auth`, `tenant`, `onboarding`, `bi` y `realtime` no tienen tablas propias (usan `core`, vistas o no persisten) |
+| `mod_<id>.prisma` | Modelos del módulo (mismo `mod_<id>` que `apps/api/src/modules/mod_<id>`), con los enums que solo usa él |
+| Sin archivo | `mod_auth`, `mod_tenant`, `mod_onboarding`, `mod_bi` y `mod_realtime` no tienen tablas propias (usan `core`, vistas o no persisten) |
 
-Reglas: un módulo solo edita su `<id>.prisma`; lo que usan dos o más módulos vive en `core.prisma`. Los modelos pueden relacionarse entre archivos sin imports. El `output` del cliente es relativo a la carpeta del schema (`../../src/generated/prisma`).
+Reglas: un módulo solo edita su `mod_<id>.prisma`; lo que usan dos o más módulos vive en `core.prisma`. Los modelos pueden relacionarse entre archivos sin imports. El `output` del cliente es relativo a la carpeta del schema (`../../src/generated/prisma`).
 
 ## Mapa de dominios
 

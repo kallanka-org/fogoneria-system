@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { Mesa } from "@fogoneria/contracts/tables";
+import type { Mesa } from "@fogoneria/contracts/mod_tables";
 import {
   type Reservation,
   type ReservationStatus,

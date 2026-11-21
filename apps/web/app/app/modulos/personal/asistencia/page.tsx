@@ -1,5 +1,5 @@
 import { ModuleGuard } from '@/components/dashboard/ModuleGate';
-import { StaffAttendancePage } from '@/features/staff';
+import { StaffAttendancePage } from '@/features/mod_staff';
 
 export default function PersonalAsistenciaPage() {
   return (

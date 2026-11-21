@@ -50,7 +50,7 @@ const EMPTY_CATALOG: CatalogState = {
 
 import { nextSku } from "@/lib/catalog-sku";
 
-/** Acciones del catálogo; `ModulesProvider` las reexpone por compatibilidad. */
+/** Acciones del catálogo que consumen las vistas. */
 export type CatalogoActions = {
   refreshCatalog: (signal?: AbortSignal) => Promise<void>;
   saveProduct: (input: ProductInput) => Promise<void>;
@@ -91,11 +91,10 @@ const Ctx = createContext<CatalogoContextValue | null>(null);
  * Catálogo y precios de la empresa (Fase 4 etapa 3).
  *
  * Única fuente de verdad de los maestros: la API (`lib/catalog-api.ts`) los
- * hidrata al iniciar sesión y los limpia al salir. `ModulesProvider` reexpone
- * este estado por compatibilidad y `features/catalog` lo consume directo.
- * El catálogo es de la empresa, no de la sucursal, así que solo depende de la
- * sesión; la poda de combos huérfanos vive en `ModulesProvider` (dueño de los
- * combos) y reacciona a `catalogVersion`/`products`.
+ * hidrata al iniciar sesión y los limpia al salir; `features/mod_catalog` lo
+ * consume directo. El catálogo es de la empresa, no de la sucursal, así que solo
+ * depende de la sesión; la poda de combos huérfanos vive en `LiveDataProvider`
+ * (que ve catálogo y promociones) y reacciona a `catalogVersion`/`products`.
  */
 export function CatalogoProvider({ children }: { children: React.ReactNode }) {
   const { currentUser } = useSession();

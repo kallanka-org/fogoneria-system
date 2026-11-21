@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Flame } from "lucide-react";
-import { BranchSwitcher } from "@/features/tenant";
+import { BranchSwitcher } from "@/features/mod_tenant";
 import { modulesNav, type ModuleNavRole } from "@/lib/modules-nav";
 import { moduleIcon } from "./module-icons";
 import { useSession } from "./providers/session";

@@ -1,4 +1,4 @@
-import { ModifiersView } from "@/features/catalog";
+import { ModifiersView } from "@/features/mod_catalog";
 
 export default function ModificadoresPage() {
   return (

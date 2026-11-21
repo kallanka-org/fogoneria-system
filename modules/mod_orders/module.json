@@ -1,0 +1,11 @@
+{
+  "id": "mod_orders",
+  "kind": "ui",
+  "owner": "@por-asignar",
+  "status": "aligned",
+  "routes": [
+    "/app/ordenes",
+    "/app/cocina",
+    "/app/mozo"
+  ]
+}

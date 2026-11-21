@@ -19,8 +19,8 @@
 | AYCDS-60 | API catálogo + PriceList | catalog, pricing | #2 | Listo | `catalog.service.spec.ts`, `pricing.service.spec.ts` |
 | AYCDS-61 | API SaaS + ciclo de suscripción | saas, billing | #2 | Listo | `saas.service.spec.ts`, `billing.service.spec.ts` |
 | AYCDS-62 | Índices, RLS, soft-delete e inmutabilidad | datos | #6 | Listo | `migrations/2026102012*`, `test/db/**`, [rls-modelo](../docs/rls-modelo.md) |
-| AYCDS-63 | UI catálogo contra la API | catalog | #3 | Listo | `features/catalog/**` |
-| AYCDS-65 | UI consola SaaS | saas | #3, #7 | Listo | `features/saas/SaasPage.tsx` |
+| AYCDS-63 | UI catálogo contra la API | catalog | #3 | Listo | `features/mod_catalog/**` |
+| AYCDS-65 | UI consola SaaS | saas | #3, #7 | Listo | `features/mod_saas/SaasPage.tsx` |
 | AYCDS-66 | QA aislamiento y RBAC + acta 1 | QA | #7, #8 | **Parcial** (acta sin firmas) | [acta-qa-aycds-66](../docs/acta-qa-aycds-66.md) |
 
 ## 2. Semanas 9–10 (Sprint 3)
@@ -31,8 +31,8 @@
 | AYCDS-16 | API mesas y reservas | tables, reservations | #11 | Listo | `test/db/tables-reservas.db-spec.ts` |
 | AYCDS-20 | Órdenes POS e inmutabilidad | orders, pricing | #12 | Listo | `orders.service.spec.ts`, `orders-pos.db-spec.ts` |
 | AYCDS-22 | Alta de comandas en concurrencia | orders, `common/sequences` | #16 | Listo | [explain-orders](../docs/explain-orders.md), `sequences-concurrency.db-spec.ts` |
-| AYCDS-25 | Panel del mesero contra la API | orders (mozo) | #17 (`b56865b`) | Listo | `features/orders/MozoView.tsx`, `lib/order-mapping.ts` |
-| AYCDS-26 | Mapa de mesas + agenda de reservas | tables, reservations | #18 | Listo | `features/tables/**`, `features/reservations/**`, `lib/table-mapping.ts` |
+| AYCDS-25 | Panel del mesero contra la API | orders (mozo) | #17 (`b56865b`) | Listo | `features/mod_orders/MozoView.tsx`, `lib/order-mapping.ts` |
+| AYCDS-26 | Mapa de mesas + agenda de reservas | tables, reservations | #18 | Listo | `features/mod_tables/**`, `features/mod_reservations/**`, `lib/table-mapping.ts` |
 | AYCDS-28 | E2E del flujo mesero→cocina→mesa | QA | — | **Pendiente** (0 %) | — |
 
 ## 3. Semanas 11–12 (Sprint KDS, caja y comprobantes)
@@ -43,8 +43,8 @@
 | AYCDS-39 | Reversión financiera por triggers | datos, cash, inventory | #23 | Listo | `reversion-financiera.db-spec.ts` |
 | AYCDS-34 | Caja: turnos, arqueo y cobro | cash | #24 | Listo | `cash.service.spec.ts`, `caja.db-spec.ts` |
 | AYCDS-36 | Comprobantes: correlativo y anulación | receipts | #26 | Listo | `receipts.service.spec.ts`, `comprobantes.db-spec.ts` |
-| AYCDS-41 | UI KDS Kanban con SLA | orders | #25 | Listo | `features/orders/**` |
-| AYCDS-46 | UI caja + comprobantes contra API | cash, receipts | #30, #38 | Listo | `features/cash/**`, `features/receipts/**` |
+| AYCDS-41 | UI KDS Kanban con SLA | orders | #25 | Listo | `features/mod_orders/**` |
+| AYCDS-46 | UI caja + comprobantes contra API | cash, receipts | #30, #38 | Listo | `features/mod_cash/**`, `features/mod_receipts/**` |
 | AYCDS-50 | Acta CT-FG-03 (caja/comprobantes) | QA | #39 | **Parcial** (acta mergeada, firma pendiente) | [acta-qa-aycds-50](../docs/acta-qa-aycds-50.md) |
 
 ## 4. Semanas 13–14 (inventario, gastos y comercial)
@@ -56,8 +56,8 @@
 | AYCDS-17 | Gastos con cruce a caja | expenses, cash | #31 | Listo | `expenses.service.spec.ts`, `gastos.db-spec.ts` |
 | AYCDS-19 | Combos anti-inflación y cupones | promotions, orders | #29 | Listo | `promotions.rules.spec.ts`, `promotions.e2e-spec.ts` |
 | AYCDS-23 | Modelo de escandallos N-M | datos | — | **Pendiente** (tabla existe; falta merma/rendimiento) | `escandallos_recetas` |
-| AYCDS-24 | UI kardex + semáforo | inventory | #40 | **Parcial 80 %** (maestro y ajustes demo) | `features/inventory/MovementsPage.tsx` |
-| AYCDS-27 | UI gastos, combos y promos | expenses, promotions | — | **Pendiente** (clientes listos) | `features/expenses/api.ts`, `features/promotions/api.ts` |
+| AYCDS-24 | UI kardex + semáforo | inventory | #40 | **Parcial 80 %** (maestro y ajustes demo) | `features/mod_inventory/MovementsPage.tsx` |
+| AYCDS-27 | UI gastos, combos y promos | expenses, promotions | — | **Pendiente** (clientes listos) | `features/mod_expenses/api.ts`, `features/mod_promotions/api.ts` |
 | AYCDS-29 | Pruebas cruzadas kardex↔ventas | QA | — | **Pendiente** | — |
 
 ## 5. Semanas 15–16 (CRM, RRHH, BI y cierre)
@@ -68,8 +68,8 @@
 | AYCDS-33 | RRHH: turnos, asistencia y propinas | staff | #33 | Listo | `staff.rules.spec.ts`, `propinas.db-spec.ts` |
 | AYCDS-35 | API BI (P&L, ranking, métodos) | bi | #36 | Listo | `bi.service.spec.ts`, `bi-endpoints.db-spec.ts` |
 | AYCDS-38 | Vistas BI + backup/restore | bi, datos | #35 | Listo | `migrations/20261107120000_vistas_bi`, [respaldo-recuperacion](../docs/respaldo-recuperacion.md) |
-| AYCDS-40 | UI CRM (clientes, ficha, puntos) | crm | #41 | Listo | `features/crm/ClientesPage.tsx` |
-| AYCDS-45 | UI RRHH y analíticas | staff, bi | #42, #43 | Listo | `features/staff/**`, `features/bi/**` |
+| AYCDS-40 | UI CRM (clientes, ficha, puntos) | crm | #41 | Listo | `features/mod_crm/ClientesPage.tsx` |
+| AYCDS-45 | UI RRHH y analíticas | staff, bi | #42, #43 | Listo | `features/mod_staff/**`, `features/mod_bi/**` |
 | AYCDS-49 | QA integral CT-01…09 + deploy Docker | QA | — | **Pendiente** | — |
 | AYCDS-52 | Ensayo y sustentación | docs | — | **Pendiente** | — |
 
@@ -78,17 +78,17 @@
 | Fase | Alcance | PR | Evidencia |
 |---|---|---|---|
 | 0 | `@fogoneria/{kernel,sdk,contracts}` + gate de fronteras | #48 | `scripts/check-module-boundaries.mjs`, baseline 24 |
-| 1 | Piloto RRHH | #49, #51 | `features/staff/**`, `staff/index.ts` |
-| 2 | Catálogo + precios | #50, #52 | `features/catalog/**`, `features/pricing/**`, `PRICING_PORT` |
-| 3 · salón | mesas, reservas, KDS | #54, #57 | `features/tables`, `features/reservations`, `features/orders` |
-| 3 · dinero | receipts, cash, expenses | #56, #59 | `features/{cash,receipts,expenses}` |
-| 3 · operación | inventory, promotions | #58, #61 | `features/{inventory,promotions}` |
-| 3 · personas | crm | #60 | `features/crm` |
-| 3 · lectura | bi, realtime | #62, #63, #65 | `features/bi`, `@fogoneria/contracts/tiempo-real` |
+| 1 | Piloto RRHH | #49, #51 | `features/mod_staff/**`, `staff/index.ts` |
+| 2 | Catálogo + precios | #50, #52 | `features/mod_catalog/**`, `features/mod_pricing/**`, `PRICING_PORT` |
+| 3 · salón | mesas, reservas, KDS | #54, #57 | `features/mod_tables`, `features/mod_reservations`, `features/mod_orders` |
+| 3 · dinero | receipts, cash, expenses | #56, #59 | `features/{mod_cash,mod_receipts,mod_expenses}` |
+| 3 · operación | inventory, promotions | #58, #61 | `features/{mod_inventory,mod_promotions}` |
+| 3 · personas | crm | #60 | `features/mod_crm` |
+| 3 · lectura | bi, realtime | #62, #63, #65 | `features/mod_bi`, `@fogoneria/contracts/mod_realtime` |
 | 3 · plataforma | auth, tenant, saas, billing, onboarding, audit | #64 | baseline **0** |
 | 4 · etapa 1 | `SessionProvider`, `NotificationsProvider` | #66 | `components/dashboard/providers/{session,notifications}.tsx` |
 | 4 · etapa 2 | `TenantProvider` | #70 | `providers/tenant.tsx`, `lib/tenant-scope.ts` |
-| 4 · etapa 3 | `CatalogoProvider` (catálogo/precios) | #73 | `providers/catalog.tsx`, `features/catalog/hooks.ts` |
+| 4 · etapa 3 | `CatalogoProvider` (catálogo/precios) | #73 | `providers/catalog.tsx`, `features/mod_catalog/hooks.ts` |
 | 4 · F6c/retiro | providers por módulo + `CheckoutCoordinator` + retiro de `ModulesProvider` + guards en `WorkspaceActionsProvider` | #133–#139 | `providers/live.tsx`, `providers/workspace-actions.tsx`, `hooks/use-{branch,cash,accounts}-scope.ts`, `app/layout.tsx` sin `ModulesProvider`; `useModules()` es hook puro y el reset limpia los guards del checkout |
 
 ## 7. Infraestructura y despliegue
@@ -101,7 +101,7 @@
 | `output: standalone` condicional en Vercel | #67 | `apps/web/next.config.ts` |
 | Variables de la web en `globalEnv` de Turbo | #68 | `turbo.json` |
 | Script idempotente de roles RLS | #69 | `apps/api/prisma/rls-roles.ts` |
-| Login limpio + recuperación por soporte | #71 | `features/auth/{LoginPage,RecoverPage}.tsx`, `lib/support.ts` |
+| Login limpio + recuperación por soporte | #71 | `features/mod_auth/{LoginPage,RecoverPage}.tsx`, `lib/support.ts` |
 | Runbook Vercel + Railway | #72 | [despliegue](../docs/despliegue.md) |
 | Repo de specs docs-as-code + trazabilidad | #74 | [specs/README](README.md), `docs/INDICE.md` |
 | CI Fase A: check agregado, Docker/Trivy, CodeQL y Dependabot | #76 | `.github/workflows/{ci,codeql}.yml`, `.github/dependabot.yml` |

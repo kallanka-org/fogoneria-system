@@ -1,4 +1,4 @@
-import { AnaliticasPage } from "@/features/bi";
+import { AnaliticasPage } from "@/features/mod_bi";
 
 export default function AnaliticasRoute() {
   return (

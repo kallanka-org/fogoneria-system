@@ -1,0 +1,93 @@
+# crm — especificación
+
+**Estado:** API real; fidelización demo · **Última revisión:** 2026-11-21
+
+## 1. Propósito
+
+Conocer al comensal: historial de visitas, segmento derivado y puntos por consumo. El segmento **no se edita a mano**: sale de las comandas pagadas.
+
+## 2. Superficies
+
+| Capa | Dónde vive | Estado |
+|---|---|---|
+| Backend | `apps/api/src/modules/mod_crm/` | real |
+| Web | `apps/web/features/mod_crm/` (`ClientesPage` real, `LoyaltyPage` demo, hub) | Mixto |
+| Contrato | `packages/contracts/src/mod_crm.ts` | sí |
+| Datos | `clientes`, `movimientos_puntos`, `config_lealtad`, `canjes_cupones`, `ordenes` | `20261019000000_init` |
+
+## 3. API
+
+| Método | Ruta | Roles | Qué hace |
+|---|---|---|---|
+| `GET` | `/crm/customers` | autenticado | Lista/busca/filtra por segmento |
+| `GET` | `/crm/customers/:id` | autenticado | Ficha con últimos movimientos |
+| `GET` | `/crm/customers/:id/points` | autenticado | Historial de puntos |
+| `POST` | `/crm/customers` | admin, sucursal, cajero, mesero | Alta (teléfono único) |
+| `PATCH` | `/crm/customers/:id` | admin, sucursal, cajero | Edita |
+| `POST` | `/crm/customers/:id/points` | admin, sucursal | Ajuste (cortesía/canje/caducidad) |
+| `POST` | `/crm/customers/:id/recalculate` | admin, sucursal | Recalcula visitas/segmento |
+| `POST` | `/crm/process` | admin, sucursal | Fuerza el worker de consumos |
+| `GET` | `/crm/config` | admin, sucursal | Configuración de lealtad |
+| `PATCH` | `/crm/config` | admin, sucursal | Actualiza umbrales/puntos |
+
+Reglas:
+- `visitas` = comandas `PAGADA` del cliente; `segmento` se **deriva** por umbrales de `config_lealtad` (`FRECUENTE` ≥5, `VIP` ≥20 por defecto).
+- Puntos por consumo: **worker** (cron cada 5 min + `POST /crm/process`), idempotente por movimiento `GANANCIA` de la orden; el cobro no depende del CRM.
+- El movimiento guarda el importe en positivo; el signo lo da el tipo (`GANANCIA` suma, `CANJE`/`CADUCIDAD` restan).
+- El saldo se recalcula desde los movimientos; canje > saldo → **400**.
+- El ajuste manual exige `sucursalId` para `ADMIN_GLOBAL` (el token no la trae).
+
+## 4. Datos
+
+- `clientes`: `nombre`, `telefono` (único por empresa), `visitas`, `puntos`, `segmento`, `ultima_visita`, `deleted_at`.
+- `movimientos_puntos`: `tipo`, `puntos`, `orden_id`, `sucursal_id`; append-only.
+- `config_lealtad`: `puntos_por_moneda`, umbrales de segmento.
+
+## 5. UI y rutas
+
+- `/app/clientes` → `ClientesPage`: búsqueda por nombre/teléfono, filtro por segmento, ficha con movimientos y ajuste.
+- `/app/modulos/fidelizacion/regla` → `LoyaltyPage` (**demo**); `crmApi.config()`/`actualizarConfig()` listos para conectarla.
+- `/app/modulos/fidelizacion` → `LoyaltyHubPage`.
+- F6: `CrmProvider`/`useCrm` (`features/mod_crm/provider.tsx`) es el dueño del estado demo de clientes; persiste `fogoneria:crm:v1:<tenant>`. La migración desde `ErpState` v2 y la **purga** del campo legacy corren en el loader de `ModulesProvider`, antes de su primer guardado; el provider deja un fallback de solo lectura para montajes aislados. Sincroniza entre pestañas con `BroadcastChannel` (`fogoneria:crm-sync:<tenant>`) ignorando el eco propio. `ModulesProvider` reexporta `customers`/`setCustomers` para compatibilidad.
+
+## 6. Pruebas
+
+- Cobertura p4 (2026-11-20): ramas de datos, errores 400/404/409, filtros y transiciones con Prisma mockeado; sin cambios de comportamiento.
+
+- Cobertura p3 (2026-11-20): tests de ramas de error de órdenes/SaaS/reservas/mesas y variantes de sesión en caja, comprobantes, clientes e inventario; sin cambios de comportamiento. Se amplió con RTL de páginas y flujos (estados, permisos y acciones).
+
+- Cobertura p2 (2026-11-20): tests de ramas de error y servicios (Prisma/tenant extension, promociones, precios, caja, RRHH, CRM) y SSR de providers/páginas; sin cambios de comportamiento.
+
+- Cobertura (2026-11-20): se añadieron tests de controlador, DTO, mapper y ramas de error para subir la cobertura de Sonar; sin cambios de comportamiento.
+
+- Refactor de duplicación (2026-11-20): empresa, sucursal y filtro salen de `TenantScopedService` (`apps/api/src/common/tenant/branch-scope.ts`); reglas, mensajes y scoping no cambian.
+
+| Suite | Archivo |
+|---|---|
+| Unit | `crm.service.spec.ts`, `crm.rules.spec.ts` |
+| e2e | `test/crm.e2e-spec.ts` |
+| DB | `test/db/crm.db-spec.ts` |
+| Web | `features/mod_crm/crm.test.ts` |
+
+## 7. Deuda conocida
+
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
+- F6c3: `CrmProvider` expone `restorePoints` para compensar los puntos si el cobro falla después de otorgarlos (L1). El consumidor es `lib/checkout.ts`; la vista no cambia.
+
+- Fase 1 de paridad (2026-11-21): `features/mod_crm/module.ts` describe la entrada del registry/nav generado (`pnpm gen:modules`); la ruta `/app/clientes` y el estado en `ModulesProvider` no cambian.
+
+- `LoyaltyPage` sigue demo (reglas de fidelización).
+- `coupons` del demo siguen en `ModulesProvider` hasta completar F6.
+- Los puntos otorgados por consumo dependen del worker: si el cron no corre, se puede forzar con `POST /crm/process`.
+
+## 8. Trazabilidad
+
+- Jira: AYCDS-31 (API), AYCDS-40 (UI).
+- PRs: #32, #41.
+- Docs: [decisiones](../../docs/decisiones.md) (segmento derivado, worker de puntos).
+
+## 9. Próximos pasos
+
+1. Conectar `LoyaltyPage` a `/crm/config`.
+2. Evaluar canje en el cobro (hoy es ajuste manual).

@@ -15,7 +15,7 @@ navegador → / (LoginPage) → POST /api/session
 - `proxy.ts` valida firma, expiración (15 min deslizante, 8 h tope) y `canViewPath` en cada request.
 - El navegador **nunca** ve el access token: todo pasa por el BFF.
 - Recuperación: `/recuperar` abre un `mailto:` a soporte; no hay reset automático.
-- Specs: [auth](../modulos/auth.md) · [tenant](../modulos/tenant.md) · [roles](roles-permisos.md).
+- Specs: [auth](../modulos/mod_auth.md) · [tenant](../modulos/mod_tenant.md) · [roles](roles-permisos.md).
 
 ## 2. Onboarding de una empresa
 
@@ -24,7 +24,7 @@ navegador → / (LoginPage) → POST /api/session
 3. La API valida RUC y duplicados (409), y en una transacción crea: empresa `TRIAL` (`mrr 0`), sucursal matriz, admin `ADMIN_GLOBAL`, lista de precios «Carta», lead `GANADO` y evento de auditoría.
 4. Auto-login y redirect por rol.
 - Límites: rate limit 5/10 min por IP; body de 4 MB solo en esa ruta; el DTO **no** acepta `plan` (400).
-- Specs: [onboarding](../modulos/onboarding.md) · [tenant](../modulos/tenant.md).
+- Specs: [onboarding](../modulos/mod_onboarding.md) · [tenant](../modulos/mod_tenant.md).
 
 ## 3. Comanda: mesero → cocina → caja
 
@@ -41,7 +41,7 @@ mesero abre cuenta (mesa) → agrega líneas → POST /orders (sin precio)
 - `PAGADA` **no** se escribe por `PATCH /orders/:id/status`: solo caja.
 - Al `ENTREGADO` corre el kardex por receta (idempotente, stock ≥ 0).
 - Eventos: `order.created`, `order.updated`, `order.sla`, `table.status`.
-- Specs: [orders](../modulos/orders.md) · [realtime](../modulos/realtime.md) · [cash](../modulos/cash.md) · [inventory](../modulos/inventory.md).
+- Specs: [orders](../modulos/mod_orders.md) · [realtime](../modulos/mod_realtime.md) · [cash](../modulos/mod_cash.md) · [inventory](../modulos/mod_inventory.md).
 
 ## 4. Mesas y reservas
 
@@ -50,7 +50,7 @@ mesero abre cuenta (mesa) → agrega líneas → POST /orders (sin precio)
 3. La agenda filtra por `fecha=YYYY-MM-DD` en hora de Lima.
 4. Confirmar/cancelar/no-show por `PATCH /reservations/:id/status`; «Llegó» abre cuenta sobre la mesa real.
 5. Bloqueo manual: `PATCH /tables/:id/status` con `MANTENIMIENTO`/`LIBRE` (409 si hay orden abierta o reserva activa).
-- Specs: [tables](../modulos/tables.md) · [reservations](../modulos/reservations.md).
+- Specs: [tables](../modulos/mod_tables.md) · [reservations](../modulos/mod_reservations.md).
 
 ## 5. Comprobantes y reversión
 
@@ -60,7 +60,7 @@ mesero abre cuenta (mesa) → agrega líneas → POST /orders (sin precio)
 4. IGV derivado: `base = total / 1.18`, `igv = total - base` (no se persiste).
 5. Anulación con motivo (`POST /receipts/:id/void`): estado `ANULADA` + actor + fecha. La reversión de caja y kardex la hacen **triggers** (`docs/errores-db.md`); sin turno abierto → `DB_REVERSION_SIN_TURNO` (409).
 6. SUNAT queda **«pendiente de OSE»**; el CDR simulado solo existe en el demo.
-- Specs: [receipts](../modulos/receipts.md) · [cash](../modulos/cash.md).
+- Specs: [receipts](../modulos/mod_receipts.md) · [cash](../modulos/mod_cash.md).
 
 ## 6. CRM y puntos
 
@@ -68,7 +68,7 @@ mesero abre cuenta (mesa) → agrega líneas → POST /orders (sin precio)
 2. Un worker (cron 5 min + `POST /crm/process`) busca comandas `PAGADA` sin movimiento `GANANCIA`, otorga `total × puntos por sol` y recalcula `visitas` y `segmento`.
 3. El segmento se **deriva** de las visitas (`NUEVO`/`FRECUENTE`/`VIP` por umbrales de `config_lealtad`).
 4. Ajuste manual (`POST /crm/customers/:id/points`): cortesía, canje o caducidad; el saldo se recalcula desde los movimientos; canje > saldo → 400.
-- Specs: [crm](../modulos/crm.md).
+- Specs: [crm](../modulos/mod_crm.md).
 
 ## 7. RRHH y propinas
 
@@ -77,7 +77,7 @@ mesero abre cuenta (mesa) → agrega líneas → POST /orders (sin precio)
 3. Marcación del día: `POST /staff/attendance` (upsert por empleado + fecha; `PRESENTE|TARDANZA|FALTA|DESCANSO`).
 4. `POST /staff/tips/calculate` suma `ordenes.propina` del día en la sucursal y reparte **solo** entre `PRESENTE`/`TARDANZA`, exacto al céntimo.
 5. `POST /staff/tips/:id/confirm` es idempotente; un pozo por sucursal y día (409 si se repite).
-- Specs: [staff](../modulos/staff.md).
+- Specs: [staff](../modulos/mod_staff.md).
 
 ## 8. BI (analíticas)
 
@@ -85,14 +85,14 @@ mesero abre cuenta (mesa) → agrega líneas → POST /orders (sin precio)
 2. `pnl/daily`, `top-dishes` y `sales-by-method` completan la vista.
 3. Lee las vistas `v_bi_*` (siempre `security_invoker`) **dentro** de la transacción del request; rango ≤366 días; sucursal del token.
 4. Día de Lima (UTC-05:00 fijo). La propina se informa aparte: no es ingreso.
-- Specs: [bi](../modulos/bi.md) · [vistas BI](../../docs/bi-vistas.md).
+- Specs: [bi](../modulos/mod_bi.md) · [vistas BI](../../docs/bi-vistas.md).
 
 ## Flujos de apoyo
 
 | Flujo | Resumen | Spec |
 |---|---|---|
-| Kardex por escandallo | Al `ENTREGADO` explota receta (y combos), descuenta stock con concurrencia optimista, omite platos sin receta | [inventory](../modulos/inventory.md) |
-| Semáforo y alertas de stock | `GET /inventory/stock` + cron 10 min + webhook HMAC opcional | [inventory](../modulos/inventory.md) |
-| Gasto pagado en efectivo | `POST /expenses/:id/pay` inserta `EGRESO` en caja (`CASH_PORT`); otros métodos solo cambian estado | [expenses](../modulos/expenses.md) |
-| Cupón y combo | `POST /orders` recibe `cuponCodigo`; el servidor valida, calcula y consume el uso; combo no puede superar la suma de sus platos | [promotions](../modulos/promotions.md) |
-| Ciclo SaaS | `TRIAL → EXPIRED → SUSPENDED` por cron 03:00; suspender/reactivar desde `/saas` | [saas](../modulos/saas.md) · [billing](../modulos/billing.md) |
+| Kardex por escandallo | Al `ENTREGADO` explota receta (y combos), descuenta stock con concurrencia optimista, omite platos sin receta | [inventory](../modulos/mod_inventory.md) |
+| Semáforo y alertas de stock | `GET /inventory/stock` + cron 10 min + webhook HMAC opcional | [inventory](../modulos/mod_inventory.md) |
+| Gasto pagado en efectivo | `POST /expenses/:id/pay` inserta `EGRESO` en caja (`CASH_PORT`); otros métodos solo cambian estado | [expenses](../modulos/mod_expenses.md) |
+| Cupón y combo | `POST /orders` recibe `cuponCodigo`; el servidor valida, calcula y consume el uso; combo no puede superar la suma de sus platos | [promotions](../modulos/mod_promotions.md) |
+| Ciclo SaaS | `TRIAL → EXPIRED → SUSPENDED` por cron 03:00; suspender/reactivar desde `/saas` | [saas](../modulos/mod_saas.md) · [billing](../modulos/mod_billing.md) |

@@ -1,5 +1,5 @@
 import { ModuleGuard } from '@/components/dashboard/ModuleGate';
-import { StaffShiftsPage } from '@/features/staff';
+import { StaffShiftsPage } from '@/features/mod_staff';
 
 export default function PersonalTurnosPage() {
   return (

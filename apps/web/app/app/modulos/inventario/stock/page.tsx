@@ -1,5 +1,5 @@
 import { ModuleGuard } from "@/components/dashboard/ModuleGate";
-import { InventoryPage } from "@/features/inventory";
+import { InventoryPage } from "@/features/mod_inventory";
 
 export default function InventarioStockPage() {
   return (

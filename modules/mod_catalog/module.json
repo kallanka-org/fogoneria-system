@@ -1,0 +1,11 @@
+{
+  "id": "mod_catalog",
+  "kind": "ui",
+  "owner": "@por-asignar",
+  "status": "aligned",
+  "routes": [
+    "/app/productos/platos",
+    "/app/productos/categorias",
+    "/app/productos/modificadores"
+  ]
+}

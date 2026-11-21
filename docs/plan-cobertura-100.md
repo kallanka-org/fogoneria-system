@@ -50,7 +50,7 @@ El 100 % literal de un ERP full-stack incluye scripts de seed/backup, generados,
 | `apps/web/features/salon/SalonTablesView.tsx` | 89 | 359 | 21 % |
 | `apps/web/features/rrhh/hooks.ts` | 81 | 178 | 0 % |
 | `apps/web/components/erp/MozoView.tsx` | 81 | 389 | 30 % |
-| `apps/web/features/crm/ClientesPage.tsx` | 76 | 368 | 21 % |
+| `apps/web/features/mod_crm/ClientesPage.tsx` | 76 | 368 | 21 % |
 | `apps/web/features/plataforma/OnboardingPage.tsx` | 66 | 407 | 32 % |
 | `apps/web/components/dashboard/providers/catalog.tsx` | 59 | 284 | 27 % |
 | `apps/web/features/catalogo/ModifiersView.tsx` | 54 | 285 | 32 % |
@@ -68,7 +68,7 @@ El 100 % literal de un ERP full-stack incluye scripts de seed/backup, generados,
 | `apps/web/lib/orders-board.ts` | 25 | 60 | 0 % |
 | `apps/web/components/dashboard/AppTopBar.tsx` | 24 | 156 | 0 % |
 | `apps/web/features/gastos/GastosPage.tsx` | 20 | 196 | 37 % |
-| `apps/web/features/bi/hooks.ts` | 20 | 52 | 0 % |
+| `apps/web/features/mod_bi/hooks.ts` | 20 | 52 | 0 % |
 | `apps/web/components/dashboard/BranchSwitcher.tsx` | 18 | 109 | 0 % |
 
 Además: `apps/web/features/catalogo/hooks.ts` (140 ncloc, 0 %), `apps/web/components/dashboard/DashboardShell.tsx` (85, 0 %), `MetricsCharts.tsx` (69, 0 %), `MenuPreview.tsx` (58, 0 %), `apps/web/lib/orders-board.ts` (60, 0 %), `packages/sdk/src/index.ts` (97, 0 %), DTOs de API (`cash`, `crm`, `catalog`, `pricing`, `receipts`) sin tests.
@@ -94,7 +94,7 @@ Además: `apps/web/features/catalogo/hooks.ts` (140 ncloc, 0 %), `apps/web/compo
 
 ### Fase 1 — Quick wins web (2-3 días) → ~68-70 %
 
-- Tests de `lib/orders-board.ts`, `features/bi/hooks.ts`, `rrhh/hooks.ts`, `catalogo/hooks.ts`, `AppTopBar`, `BranchSwitcher`, `MenuPreview`, `MetricsCharts`, `DashboardShell`, `Toast`, `packages/sdk/src/index.ts`.
+- Tests de `lib/orders-board.ts`, `features/mod_bi/hooks.ts`, `rrhh/hooks.ts`, `catalogo/hooks.ts`, `AppTopBar`, `BranchSwitcher`, `MenuPreview`, `MetricsCharts`, `DashboardShell`, `Toast`, `packages/sdk/src/index.ts`.
 - DTOs de API (`cash`, `crm`, `catalog`, `pricing`, `receipts`) con `class-validator`.
 - Introducir `@testing-library/react` + `jsdom` **solo** para componentes interactivos (decisión en el PR; SSR para los puros).
 - **Aceptación:** web ≥68 %, overall ≥68 %, thresholds de Vitest intactos o subidos.

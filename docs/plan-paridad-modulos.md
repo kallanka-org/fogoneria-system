@@ -18,7 +18,7 @@
 | Tests | API 683 unit + 112 e2e; Web 967; contratos 133 |
 | Auditorías | F0-F2, F3, F4-F5, F6, F6b, F6c, F6c2 y F6c3 con PASS; fixes aplicados y re-auditados |
 
-**Excepción documentada:** `ModulesProvider` ya no tiene estado de negocio ni `ErpState`, pero **no se retira del layout** todavía: 43 usos de `useModules()` y la orquestación de cobro/API. Plan de retiro en [`plan-f6c-pos.md`](plan-f6c-pos.md) §10.
+**Retiro completado:** `ModulesProvider` y `useModules` ya no existen. El layout usa `LiveDataProvider` + `WorkspaceActionsProvider` y las vistas consumen hooks por módulo (ver [`plan-f6c-pos.md`](plan-f6c-pos.md) §10).
 
 **Deuda menor:** UI compartida mapa/agenda en `components/dashboard/salon` (hasta el split fino); el registry generado puede colisionar si dos PRs añaden/modifican metadata de proveedor a la vez (se regenera); la convención de migraciones `<timestamp>_<id>_<detalle>` se aplica al agregar la primera tabla nueva.
 
@@ -69,30 +69,30 @@ Los archivos viejos se mantienen como **alias deprecados** (`export * from './nu
 
 ## 2. Catálogo canónico (mismo ID en las 3 capas)
 
-Sin prefijo `mod-` para no renombrar 20 carpetas del backend; el ID es el nombre exacto en `apps/api/src/modules/<id>`, `apps/web/features/<id>` y `packages/contracts/src/<id>.ts`. Si el equipo prefiere `mod-<id>`, se aplica igual en las tres capas en una fase única.
+Los 20 IDs llevan prefijo `mod_` en las tres capas: `apps/api/src/modules/mod_<id>`, `apps/web/features/mod_<id>` y `packages/contracts/src/mod_<id>.ts` (más `specs/modulos/mod_<id>.md`, `prisma/schema/mod_<id>.prisma` y `modules/mod_<id>/module.json`). Las rutas de la app no cambian. Los nombres anteriores quedan como alias `@deprecated` en contratos.
 
 | ID | Backend | Frontend objetivo | Contrato | Rutas | Estado |
 |---|---|---|---|---|---|
-| `auth` | `modules/auth` | `features/auth` | `auth.ts` | `/`, `/recuperar` | pendiente |
-| `tenant` | `modules/tenant` | `features/tenant` | `tenant.ts` | shell + `BranchSwitcher` | pendiente |
-| `onboarding` | `modules/onboarding` | `features/onboarding` | `onboarding.ts` | `/onboarding` | pendiente |
-| `saas` | `modules/saas` | `features/saas` | `saas.ts` | `/saas` | pendiente |
-| `billing` | `modules/billing` | `features/billing` | `billing.ts` | `/saas` (tab) | pendiente |
-| `audit` | `modules/audit` | `features/audit` | `audit.ts` | `/app/auditoria` (nueva) | pendiente |
-| `catalog` | `modules/catalog` | `features/catalog` | `catalog.ts` | `/app/productos/*` | pendiente |
-| `pricing` | `modules/pricing` | `features/pricing` | `pricing.ts` | `/app/productos/precios` | pendiente |
-| `tables` | `modules/tables` | `features/tables` | `tables.ts` | `/app/mesas`, `/maestro` | pendiente |
-| `reservations` | `modules/reservations` | `features/reservations` | `reservations.ts` | `/app/modulos/reservas/agenda` | pendiente |
-| `orders` | `modules/orders` | `features/orders` | `orders.ts` | `/app/ordenes`, `/app/cocina`, `/app/mozo` | pendiente |
-| `realtime` | `modules/realtime` | `features/realtime` | `realtime.ts` | sin ruta (transporte) | pendiente |
-| `cash` | `modules/cash` | `features/cash` | `cash.ts` | `/app/caja` | pendiente |
-| `receipts` | `modules/receipts` | `features/receipts` | `receipts.ts` | `/app/comprobantes` | pendiente |
-| `expenses` | `modules/expenses` | `features/expenses` | `expenses.ts` | `/app/gastos` | pendiente |
-| `inventory` | `modules/inventory` | `features/inventory` | `inventory.ts` | `/app/modulos/inventario/*` | pendiente |
-| `promotions` | `modules/promotions` | `features/promotions` | `promotions.ts` | `/app/combos`, `/app/promociones` | pendiente |
-| `crm` | `modules/crm` | `features/crm` | `crm.ts` | `/app/clientes`, fidelización | ✅ |
-| `staff` | `modules/staff` | `features/staff` | `staff.ts` | `/app/modulos/personal/*` | pendiente |
-| `bi` | `modules/bi` | `features/bi` | `bi.ts` | `/app/analiticas` | ✅ |
+| `auth` | `modules/mod_auth` | `features/mod_auth` | `mod_auth.ts` | `/`, `/recuperar` | pendiente |
+| `tenant` | `modules/mod_tenant` | `features/mod_tenant` | `mod_tenant.ts` | shell + `BranchSwitcher` | pendiente |
+| `onboarding` | `modules/mod_onboarding` | `features/mod_onboarding` | `mod_onboarding.ts` | `/onboarding` | pendiente |
+| `saas` | `modules/mod_saas` | `features/mod_saas` | `mod_saas.ts` | `/saas` | pendiente |
+| `billing` | `modules/mod_billing` | `features/mod_billing` | `mod_billing.ts` | `/saas` (tab) | pendiente |
+| `audit` | `modules/mod_audit` | `features/mod_audit` | `mod_audit.ts` | `/app/auditoria` (nueva) | pendiente |
+| `catalog` | `modules/mod_catalog` | `features/mod_catalog` | `mod_catalog.ts` | `/app/productos/*` | pendiente |
+| `pricing` | `modules/mod_pricing` | `features/mod_pricing` | `mod_pricing.ts` | `/app/productos/precios` | pendiente |
+| `tables` | `modules/mod_tables` | `features/mod_tables` | `mod_tables.ts` | `/app/mesas`, `/maestro` | pendiente |
+| `reservations` | `modules/mod_reservations` | `features/mod_reservations` | `mod_reservations.ts` | `/app/modulos/reservas/agenda` | pendiente |
+| `orders` | `modules/mod_orders` | `features/mod_orders` | `mod_orders.ts` | `/app/ordenes`, `/app/cocina`, `/app/mozo` | pendiente |
+| `realtime` | `modules/mod_realtime` | `features/mod_realtime` | `mod_realtime.ts` | sin ruta (transporte) | pendiente |
+| `cash` | `modules/mod_cash` | `features/mod_cash` | `mod_cash.ts` | `/app/caja` | pendiente |
+| `receipts` | `modules/mod_receipts` | `features/mod_receipts` | `mod_receipts.ts` | `/app/comprobantes` | pendiente |
+| `expenses` | `modules/mod_expenses` | `features/mod_expenses` | `mod_expenses.ts` | `/app/gastos` | pendiente |
+| `inventory` | `modules/mod_inventory` | `features/mod_inventory` | `mod_inventory.ts` | `/app/modulos/inventario/*` | pendiente |
+| `promotions` | `modules/mod_promotions` | `features/mod_promotions` | `mod_promotions.ts` | `/app/combos`, `/app/promociones` | pendiente |
+| `crm` | `modules/mod_crm` | `features/mod_crm` | `mod_crm.ts` | `/app/clientes`, fidelización | ✅ |
+| `staff` | `modules/mod_staff` | `features/mod_staff` | `mod_staff.ts` | `/app/modulos/personal/*` | pendiente |
+| `bi` | `modules/mod_bi` | `features/mod_bi` | `mod_bi.ts` | `/app/analiticas` | ✅ |
 
 ## 3. Regla de independencia y rebase
 
@@ -153,7 +153,7 @@ Un PR de módulo solo toca esas rutas. Si necesita una pieza compartida, se abre
 | **2. Renombres 1:1** | `orders`, `cash`, `receipts`, `expenses`, `inventory`, `promotions`, `staff` + contratos/alias | 1 semana | 19 features (faltan splits) |
 | **3. Splits catálogo/salón** | `catalog`+`pricing`, `tables`+`reservations`; mover `components/erp` | 1-2 semanas | 21? no: 20 con plataforma aún agrupada |
 | **4. Split plataforma** | `auth`, `tenant`, `onboarding`, `saas`, `billing`; la sesión sigue en `lib/session`/BFF | 1-2 semanas | 20 features casi completas |
-| **5. Audit/realtime** | `features/audit` (endpoint read-only), `features/realtime` (transporte) | 3-5 días | 20/20/20/20 |
+| **5. Audit/realtime** | `features/mod_audit` (endpoint read-only), `features/mod_realtime` (transporte) | 3-5 días | 20/20/20/20 |
 | **6. Providers/estado** | Providers por módulo, registry generado, retirar `ModulesProvider` | 1-2 semanas | Cero estado global compartido |
 | **7. Backend/DB** | `index.ts` estándar, puertos, Prisma multi-archivo, migraciones por módulo | 1 semana | Backend y DB sin archivos calientes |
 | **8. Gates/ownership** | `check:modules --strict`, `check:boundaries` 0, `CODEOWNERS`, PR template/Jira | 2-3 días | MRs por módulo con revisión correcta |
@@ -210,7 +210,7 @@ pnpm check:specs --base origin/development
   el registry de la API (`MODULE_REGISTRY`, consumido por `app.module.ts`), el
   registry de features y `lib/modules-nav.ts`; `pnpm check:modules` valida
   manifiestos y reporta el avance; step advisory en el job `quality`.
-- **Fase 1 (piloto `crm`):** `features/crm/module.ts` alimenta el registry y la
+- **Fase 1 (piloto `crm`):** `features/mod_crm/module.ts` alimenta el registry y la
   entrada de navegación generada; `/app/clientes` sigue igual.
 - **Fase 2 (renombres 1:1):** `orders`, `cash`, `receipts`, `expenses`,
   `inventory`, `promotions` y `staff` en features y contratos, con alias
@@ -227,7 +227,7 @@ pnpm check:specs --base origin/development
   La sesión (`lib/session.ts`, BFF y `proxy.ts`) **no se movió**. La API HTTP
   compartida vive en `lib/platform-api.ts`.
 - **Fase 5 (audit/realtime):** `GET /audit` read-only para admin, feature
-  `audit` con `/app/auditoria`; `features/realtime` reexporta el transporte y
+  `audit` con `/app/auditoria`; `features/mod_realtime` reexporta el transporte y
   el hook de comandas. `components/erp` quedó vacío: mozo a `orders` y
   staff/roles a `staff`.
 - **Fase 7 (Prisma multi-archivo):** el schema pasa de un archivo único a

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { CartaVirtualView, CategoriesView, ModifiersView, ProductsView } from "@/features/catalog";
-import { PriceListsView } from "@/features/pricing";
+import { CartaVirtualView, CategoriesView, ModifiersView, ProductsView } from "@/features/mod_catalog";
+import { PriceListsView } from "@/features/mod_pricing";
 import { Tabs } from "@/components/ui/Tabs";
 
 const HUB_PATH = "/app/productos";

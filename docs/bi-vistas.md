@@ -47,7 +47,7 @@ con el contexto de la empresa A no aparece la empresa B.
 
 ## Consumo desde la API (AYCDS-35)
 
-`src/modules/bi` expone `GET /bi/pnl`, `GET /bi/pnl/daily`, `GET /bi/top-dishes` y
+`src/modules/mod_bi` expone `GET /bi/pnl`, `GET /bi/pnl/daily`, `GET /bi/top-dishes` y
 `GET /bi/sales-by-method` (solo `ADMIN_GLOBAL` y `GERENTE_SUCURSAL`). Consultan las
 vistas con SQL crudo **dentro de la transacción del request**: como son
 `security_invoker`, fuera de esa transacción devolverían 0 filas, y es justo la

@@ -4,7 +4,7 @@ import request from 'supertest';
 import { vi } from 'vitest';
 import { AppModule } from './../src/app.module.js';
 import { PrismaService } from './../src/prisma/prisma.service.js';
-import { OnboardingService } from './../src/modules/onboarding/onboarding.service.js';
+import { OnboardingService } from './../src/modules/mod_onboarding/onboarding.service.js';
 import { configureApp } from './../src/bootstrap.js';
 import { createPrismaMock } from './prisma-mock.js';
 

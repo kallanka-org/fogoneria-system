@@ -2,9 +2,9 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import type { PrismaClient } from '../../src/generated/prisma/client.js';
 import type { PrismaService } from '../../src/prisma/prisma.service.js';
 import type { TenantContextService } from '../../src/common/context/tenant-context.service.js';
-import type { AuditService } from '../../src/modules/audit/audit.service.js';
-import { CashService } from '../../src/modules/cash/cash.service.js';
-import { ExpensesService } from '../../src/modules/expenses/expenses.service.js';
+import type { AuditService } from '../../src/modules/mod_audit/audit.service.js';
+import { CashService } from '../../src/modules/mod_cash/cash.service.js';
+import { ExpensesService } from '../../src/modules/mod_expenses/expenses.service.js';
 import {
   asTenant,
   captureDbError,

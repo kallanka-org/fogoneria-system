@@ -1,9 +1,0 @@
-{
-  "id": "audit",
-  "kind": "api",
-  "owner": "@por-asignar",
-  "status": "aligned",
-  "routes": [
-    "/app/auditoria"
-  ]
-}

@@ -5,7 +5,7 @@ import request from 'supertest';
 import { vi } from 'vitest';
 import { AppModule } from './../src/app.module.js';
 import { PrismaService } from './../src/prisma/prisma.service.js';
-import { CashService } from './../src/modules/cash/cash.service.js';
+import { CashService } from './../src/modules/mod_cash/cash.service.js';
 import { configureApp } from './../src/bootstrap.js';
 import { createPrismaMock } from './prisma-mock.js';
 

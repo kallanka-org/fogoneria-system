@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Acciones cross-cutting del workspace (retiro de `ModulesProvider`).
+ * Acciones cross-cutting del workspace.
  *
  * `WorkspaceActionsProvider` se monta **una sola vez** en `app/layout.tsx` y
  * posee los guards de orquestación (`sunatEnviados`, idempotencia y cola del
@@ -37,23 +37,23 @@ import {
 } from '@/lib/order-mapping';
 import { resetErpState } from '@/lib/persistence';
 import { tenantKeyOf } from '@/lib/session-state';
-import { useAccounts, useOrdersDemo } from '@/features/orders/provider';
-import { useCash } from '@/features/cash/provider';
-import { useCrm } from '@/features/crm/provider';
-import { useExpenses } from '@/features/expenses/provider';
-import { useInventory } from '@/features/inventory/provider';
-import { usePromotions } from '@/features/promotions/provider';
-import { useReceipts } from '@/features/receipts/provider';
-import { useReservations } from '@/features/reservations/provider';
-import { useStaff } from '@/features/staff/provider';
-import { useTables } from '@/features/tables/provider';
+import { useAccounts, useOrdersDemo } from '@/features/mod_orders/provider';
+import { useCash } from '@/features/mod_cash/provider';
+import { useCrm } from '@/features/mod_crm/provider';
+import { useExpenses } from '@/features/mod_expenses/provider';
+import { useInventory } from '@/features/mod_inventory/provider';
+import { usePromotions } from '@/features/mod_promotions/provider';
+import { useReceipts } from '@/features/mod_receipts/provider';
+import { useReservations } from '@/features/mod_reservations/provider';
+import { useStaff } from '@/features/mod_staff/provider';
+import { useTables } from '@/features/mod_tables/provider';
 import { useTickets } from './tickets';
 import { useCatalogoState } from './catalog';
 import { useCheckoutController } from './checkout';
 import { useLiveData } from './live';
 import { useNotifications } from './notifications';
 import { useSession } from './session';
-import { useTenant } from '@/features/tenant/provider';
+import { useTenant } from '@/features/mod_tenant/provider';
 
 const TERMINAL_API_STATES: readonly ordersApi.ApiOrderStatus[] = [
   'PAGADA',

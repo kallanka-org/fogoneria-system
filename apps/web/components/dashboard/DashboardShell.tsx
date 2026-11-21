@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTenant } from "@/features/tenant/provider";
+import { useTenant } from "@/features/mod_tenant/provider";
 import { useSession } from "./providers/session";
 import { AppSidebar } from "./AppSidebar";
 import { AppTopBar } from "./AppTopBar";

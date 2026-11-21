@@ -39,30 +39,30 @@ const DOCS_INDICE = join(ROOT, 'docs/INDICE.md');
  * son 1:1.
  */
 const FEATURE_SPECS = {
-  auth: ['auth'],
-  tenant: ['tenant'],
-  onboarding: ['onboarding'],
-  saas: ['saas'],
-  billing: ['billing'],
-  audit: ['audit'],
-  realtime: ['realtime'],
-  bi: ['bi'],
-  cash: ['cash'],
-  catalog: ['catalog'],
-  receipts: ['receipts'],
-  crm: ['crm'],
-  expenses: ['expenses'],
-  inventory: ['inventory'],
-  orders: ['orders'],
-  pricing: ['pricing'],
-  promotions: ['promotions'],
-  staff: ['staff'],
-  tables: ['tables'],
-  reservations: ['reservations'],
+  mod_auth: ['mod_auth'],
+  mod_tenant: ['mod_tenant'],
+  mod_onboarding: ['mod_onboarding'],
+  mod_saas: ['mod_saas'],
+  mod_billing: ['mod_billing'],
+  mod_audit: ['mod_audit'],
+  mod_catalog: ['mod_catalog'],
+  mod_pricing: ['mod_pricing'],
+  mod_tables: ['mod_tables'],
+  mod_reservations: ['mod_reservations'],
+  mod_orders: ['mod_orders'],
+  mod_realtime: ['mod_realtime'],
+  mod_cash: ['mod_cash'],
+  mod_receipts: ['mod_receipts'],
+  mod_expenses: ['mod_expenses'],
+  mod_inventory: ['mod_inventory'],
+  mod_promotions: ['mod_promotions'],
+  mod_crm: ['mod_crm'],
+  mod_staff: ['mod_staff'],
+  mod_bi: ['mod_bi'],
   // Nombres anteriores: solo aparecen en diffs de PRs de migración.
-  catalogo: ['catalog'],
-  salon: ['tables', 'reservations'],
-  plataforma: ['auth', 'tenant', 'onboarding', 'saas', 'billing'],
+  catalogo: ['mod_catalog'],
+  salon: ['mod_tables', 'mod_reservations'],
+  plataforma: ['mod_auth', 'mod_tenant', 'mod_onboarding', 'mod_saas', 'mod_billing'],
 };
 
 /** Rutas compartidas: exigen `specs/trazabilidad.md` o una spec de módulo. */
@@ -265,7 +265,7 @@ const seccionesMinimas = [
 // tienen pantalla).
 const SIN_API = new Set();
 const SIN_UI = new Set();
-const SIN_DATOS = new Set(['realtime']);
+const SIN_DATOS = new Set(['mod_realtime']);
 
 let specsRevisadas = 0;
 for (const spec of [...specsExistentes].sort((a, b) => a.localeCompare(b))) {

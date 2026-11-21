@@ -1,0 +1,10 @@
+{
+  "id": "mod_promotions",
+  "kind": "ui",
+  "owner": "@por-asignar",
+  "status": "aligned",
+  "routes": [
+    "/app/combos",
+    "/app/promociones"
+  ]
+}

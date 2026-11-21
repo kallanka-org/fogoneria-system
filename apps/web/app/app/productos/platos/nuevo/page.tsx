@@ -1,6 +1,6 @@
 "use client";
 
-import { ProductsView } from "@/features/catalog";
+import { ProductsView } from "@/features/mod_catalog";
 
 export default function NuevoProductoPage() {
   return (

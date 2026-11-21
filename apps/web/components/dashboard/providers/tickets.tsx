@@ -4,8 +4,8 @@
  * Provider compartido de tickets de soporte (F6c3).
  *
  * No hay módulo backend de soporte (la vista es demo), así que el estado vive
- * en la capa compartida en vez de en una feature. `ModulesProvider` reexporta
- * `tickets`/`addTicket`/`setTickets` para no tocar las vistas.
+ * en la capa compartida en vez de en una feature. Lo consumen la vista de
+ * soporte y `WorkspaceActionsProvider` para no tocar las vistas.
  */
 
 import { createContext, useContext, type Dispatch, type ReactNode, type SetStateAction } from 'react';

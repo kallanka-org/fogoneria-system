@@ -3,41 +3,40 @@
  * Regenera con `pnpm gen:modules`.
  *
  * Fase 6: lista las features y compone los providers opcionales de `module.ts`.
- * El layout consume `FeatureProviders`; el estado global restante sigue en
- * `ModulesProvider` hasta completar la migración.
+ * El layout consume `FeatureProviders`.
  */
 import { createElement, type ComponentType, type ReactNode } from 'react';
-import { authModule } from './auth/module';
-import { tenantModule } from './tenant/module';
-import { onboardingModule } from './onboarding/module';
-import { saasModule } from './saas/module';
-import { billingModule } from './billing/module';
-import { auditModule } from './audit/module';
-import { catalogModule } from './catalog/module';
-import { pricingModule } from './pricing/module';
-import { tablesModule } from './tables/module';
-import { reservationsModule } from './reservations/module';
-import { ordersModule } from './orders/module';
-import { realtimeModule } from './realtime/module';
-import { cashModule } from './cash/module';
-import { receiptsModule } from './receipts/module';
-import { expensesModule } from './expenses/module';
-import { inventoryModule } from './inventory/module';
-import { promotionsModule } from './promotions/module';
-import { crmModule } from './crm/module';
-import { staffModule } from './staff/module';
-import { biModule } from './bi/module';
-import { TenantProvider } from './tenant/provider';
-import { TablesProvider } from './tables/provider';
-import { ReservationsProvider } from './reservations/provider';
-import { AccountsProvider } from './orders/provider';
-import { CashProvider } from './cash/provider';
-import { ReceiptsProvider } from './receipts/provider';
-import { ExpensesProvider } from './expenses/provider';
-import { InventoryProvider } from './inventory/provider';
-import { PromotionsProvider } from './promotions/provider';
-import { CrmProvider } from './crm/provider';
-import { StaffProvider } from './staff/provider';
+import { authModule } from './mod_auth/module';
+import { tenantModule } from './mod_tenant/module';
+import { onboardingModule } from './mod_onboarding/module';
+import { saasModule } from './mod_saas/module';
+import { billingModule } from './mod_billing/module';
+import { auditModule } from './mod_audit/module';
+import { catalogModule } from './mod_catalog/module';
+import { pricingModule } from './mod_pricing/module';
+import { tablesModule } from './mod_tables/module';
+import { reservationsModule } from './mod_reservations/module';
+import { ordersModule } from './mod_orders/module';
+import { realtimeModule } from './mod_realtime/module';
+import { cashModule } from './mod_cash/module';
+import { receiptsModule } from './mod_receipts/module';
+import { expensesModule } from './mod_expenses/module';
+import { inventoryModule } from './mod_inventory/module';
+import { promotionsModule } from './mod_promotions/module';
+import { crmModule } from './mod_crm/module';
+import { staffModule } from './mod_staff/module';
+import { biModule } from './mod_bi/module';
+import { TenantProvider } from './mod_tenant/provider';
+import { TablesProvider } from './mod_tables/provider';
+import { ReservationsProvider } from './mod_reservations/provider';
+import { AccountsProvider } from './mod_orders/provider';
+import { CashProvider } from './mod_cash/provider';
+import { ReceiptsProvider } from './mod_receipts/provider';
+import { ExpensesProvider } from './mod_expenses/provider';
+import { InventoryProvider } from './mod_inventory/provider';
+import { PromotionsProvider } from './mod_promotions/provider';
+import { CrmProvider } from './mod_crm/provider';
+import { StaffProvider } from './mod_staff/provider';
 
 export type FeatureModule = {
   id: string;
@@ -82,17 +81,17 @@ export const pendingFeatureIds = [];
 
 /** Providers opcionales por módulo (Fase 6). */
 export const featureProviders: FeatureProvider[] = [
-  { id: "tenant", Provider: TenantProvider },
-  { id: "tables", Provider: TablesProvider },
-  { id: "reservations", Provider: ReservationsProvider },
-  { id: "orders", Provider: AccountsProvider },
-  { id: "cash", Provider: CashProvider },
-  { id: "receipts", Provider: ReceiptsProvider },
-  { id: "expenses", Provider: ExpensesProvider },
-  { id: "inventory", Provider: InventoryProvider },
-  { id: "promotions", Provider: PromotionsProvider },
-  { id: "crm", Provider: CrmProvider },
-  { id: "staff", Provider: StaffProvider },
+  { id: "mod_tenant", Provider: TenantProvider },
+  { id: "mod_tables", Provider: TablesProvider },
+  { id: "mod_reservations", Provider: ReservationsProvider },
+  { id: "mod_orders", Provider: AccountsProvider },
+  { id: "mod_cash", Provider: CashProvider },
+  { id: "mod_receipts", Provider: ReceiptsProvider },
+  { id: "mod_expenses", Provider: ExpensesProvider },
+  { id: "mod_inventory", Provider: InventoryProvider },
+  { id: "mod_promotions", Provider: PromotionsProvider },
+  { id: "mod_crm", Provider: CrmProvider },
+  { id: "mod_staff", Provider: StaffProvider },
 ];
 
 /** Envuelve a los hijos con los providers de las features que los declaran. */

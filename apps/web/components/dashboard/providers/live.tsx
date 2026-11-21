@@ -61,14 +61,14 @@ import { tenantKeyOf } from '@/lib/session-state';
 import {
   useAccounts,
   useOrdersDemo,
-} from '@/features/orders/provider';
-import { useCash } from '@/features/cash/provider';
-import { usePromotions } from '@/features/promotions/provider';
-import { useReservations } from '@/features/reservations/provider';
-import { useTables } from '@/features/tables/provider';
+} from '@/features/mod_orders/provider';
+import { useCash } from '@/features/mod_cash/provider';
+import { usePromotions } from '@/features/mod_promotions/provider';
+import { useReservations } from '@/features/mod_reservations/provider';
+import { useTables } from '@/features/mod_tables/provider';
 import { useCatalogoState } from './catalog';
 import { useSession } from './session';
-import { useTenant } from '@/features/tenant/provider';
+import { useTenant } from '@/features/mod_tenant/provider';
 
 type LiveDataContextValue = {
   /** `null` sin sesión: las vistas usan el demo del provider. */

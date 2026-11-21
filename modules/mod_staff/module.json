@@ -1,0 +1,13 @@
+{
+  "id": "mod_staff",
+  "kind": "ui",
+  "owner": "@por-asignar",
+  "status": "aligned",
+  "routes": [
+    "/app/modulos/personal/asistencia",
+    "/app/modulos/personal/turnos",
+    "/app/modulos/personal/directorio",
+    "/app/modulos/personal/roles",
+    "/app/modulos/personal/propinas"
+  ]
+}

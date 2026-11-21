@@ -1,7 +1,7 @@
 # Plan F6c — POS: cuentas, caja, comprobantes y promociones
 
-Estado: **F6c1, F6c2 y F6c3 implementados**. `ModulesProvider` queda como fachada sin estado propio (ver §10); su retiro físico está bloqueado por las ~20 vistas que usan `useModules()`.
-Base: `origin/development` en `47301f7` (#136 mergeado, F6c2 cerrado).
+Estado: **F6c1, F6c2, F6c3 y retiro de `ModulesProvider` implementados**. Las vistas usan hooks por módulo y `useModules` fue retirado (ver §10).
+Base: `origin/development` en `2001dae` (#139 mergeado) + renombre `mod_`.
 
 ## 1. Punto de partida
 
@@ -26,7 +26,7 @@ El nudo es `scopes` (`BranchScope = { orders, tables, cash }`): es un hub por su
 
 ## 3. Diseño por módulo
 
-### 3.1 `AccountsProvider` — `features/orders/provider.tsx` (F6c1, implementado)
+### 3.1 `AccountsProvider` — `features/mod_orders/provider.tsx` (F6c1, implementado)
 
 **Posee:** `TableAccount[]` (cuentas, items, pagos, propina, descuento, `orderApiIds`).
 
@@ -50,7 +50,7 @@ El nudo es `scopes` (`BranchScope = { orders, tables, cash }`): es un hub por su
 
 El piloto demuestra lo importante: persistencia, sync, migración/purga y que el checkout sigue funcionando leyendo el provider. Las acciones se moverán cuando `scopes` tenga dueño (3.6).
 
-### 3.2 `CashProvider` — `features/cash/provider.tsx` (F6c2, implementado)
+### 3.2 `CashProvider` — `features/mod_cash/provider.tsx` (F6c2, implementado)
 
 **Posee:** `cashShifts: CashShift[]` y los movimientos por sucursal (antes `scopes[id].cash`).
 
@@ -61,7 +61,7 @@ El piloto demuestra lo importante: persistencia, sync, migración/purga y que el
 - Persistencia: `fogoneria:cash:v1:<tenant>` con `{ shifts, movementsByBranch }`.
 - **Remapeo slug→UUID:** `remapBranches(map)` es idempotente (turnos y claves de movimientos) y `ModulesProvider` lo invoca en un efecto que depende de los turnos, los movimientos y `realBranches`, con la misma guardia que las cuentas (funciona si las sucursales llegan antes o después del montaje).
 
-### 3.3 `ReceiptsProvider` — `features/receipts/provider.tsx` (F6c2, implementado)
+### 3.3 `ReceiptsProvider` — `features/mod_receipts/provider.tsx` (F6c2, implementado)
 
 **Posee:** `receipts: Receipt[]` y `sunatContingencia: boolean` (el ciclo SUNAT es del documento, no de caja).
 
@@ -71,7 +71,7 @@ El piloto demuestra lo importante: persistencia, sync, migración/purga y que el
 - La **anulación** la orquesta `ModulesProvider` (necesita cuentas para los métodos de pago y caja para el egreso): calcula la NC/baja y llama `patchReceipt` + `addReceipt` + `cash.reverseMovements` + `enviarSunat`. El provider no importa caja (una feature no importa otra); recibe las escrituras ya resueltas.
 - Persistencia `fogoneria:receipts:v1:<tenant>`; migra `receipts` + `sunatContingencia`.
 
-### 3.4 `PromotionsProvider` — `features/promotions/provider.tsx` (F6c2, implementado)
+### 3.4 `PromotionsProvider` — `features/mod_promotions/provider.tsx` (F6c2, implementado)
 
 **Posee:** `combos` y `coupons` demo (la API manda con sesión vía `promocionesApi`).
 
@@ -98,9 +98,9 @@ El piloto demuestra lo importante: persistencia, sync, migración/purga y que el
 
 ### 3.6 `scopes`, reservas y tickets (F6c3, implementado)
 
-- `scopes.orders` → `features/orders/provider.tsx` (segundo store del módulo, `fogoneria:orders-demo:v1:<tenant>`); `useOrdersDemo` expone `ordersByBranch`, `setOrdersForBranches` (vista activa/agregada con `lib/branch-scope.ts`), `setBranchOrders`, `ensureDemoOrders` y `resetOrdersDemo`.
-- `scopes.tables` → `features/tables/provider.tsx` (`fogoneria:tables-demo:v1:<tenant>`); `patchStatus` replica el parche slug/UUID que hacía `ModulesProvider`.
-- `reservations` → `features/reservations/provider.tsx` (`fogoneria:reservations:v1:<tenant>`). La API sigue mandando con sesión (`liveReservations` en `ModulesProvider`).
+- `scopes.orders` → `features/mod_orders/provider.tsx` (segundo store del módulo, `fogoneria:orders-demo:v1:<tenant>`); `useOrdersDemo` expone `ordersByBranch`, `setOrdersForBranches` (vista activa/agregada con `lib/branch-scope.ts`), `setBranchOrders`, `ensureDemoOrders` y `resetOrdersDemo`.
+- `scopes.tables` → `features/mod_tables/provider.tsx` (`fogoneria:tables-demo:v1:<tenant>`); `patchStatus` replica el parche slug/UUID que hacía `ModulesProvider`.
+- `reservations` → `features/mod_reservations/provider.tsx` (`fogoneria:reservations:v1:<tenant>`). La API sigue mandando con sesión (`liveReservations` en `ModulesProvider`).
 - `tickets` → `components/dashboard/providers/tickets.tsx` (capa compartida, `fogoneria:tickets:v1:<tenant>`): no hay módulo backend de soporte. Se monta en `app/layout.tsx`.
 - El loader de `ModulesProvider` migra los cuatro slices, borra `fogoneria:erp:v2:<tenant>` y deja de escribir estado propio. `ErpState` queda solo como tipo legacy de lectura.
 - El provider de órdenes compone dos stores (cuentas + comandas demo) porque `module.ts` declara un único provider por feature.
@@ -167,22 +167,22 @@ Reglas:
 
 **F6c3 (mergeado en #137).** Fixes M1/M2/L1/L2, `scopes.orders`/`scopes.tables`/`reservations`/`tickets` con provider, `ErpState` vaciado y borrado.
 
-**Retiro de `ModulesProvider` (este PR).** `LiveDataProvider` (estado de la API + migración/realtime), `useWorkspaceActions` y hooks de scope; todas las vistas usan hooks específicos y el layout ya no monta `ModulesProvider`. `useModules()` queda como hook puro de compatibilidad (§10).
+**Retiro de `ModulesProvider` (mergeado en #139).** `LiveDataProvider` (estado de la API + migración/realtime), `useWorkspaceActions` y hooks de scope; todas las vistas usan hooks específicos y el layout ya no monta `ModulesProvider`.
 
 ## 10. Retiro de `ModulesProvider` (completado)
 
-`ModulesProvider` **ya no existe como provider**: se retiró de `app/layout.tsx` y todas las vistas migraron a hooks por módulo. Lo que queda es `components/dashboard/ModulesProvider.tsx` como **hook puro** `useModules()` (fachada de compatibilidad que compone contextos, sin contexto propio ni `ErpState`).
+`ModulesProvider` **ya no existe**: se retiró del layout, todas las vistas migraron a hooks por módulo y `useModules` se eliminó con el renombre `mod_` (sin consumidores de producción).
 
 Piezas nuevas del retiro:
 
 - `components/dashboard/providers/live.tsx` (`LiveDataProvider`/`useLiveData`): comandas, mesas y reservas de la API, loading/errores, refresh, realtime, migración del `ErpState` legacy y remapeo slug→UUID. Se monta en `app/layout.tsx` debajo de `CatalogoProvider`.
 - `components/dashboard/providers/workspace-actions.tsx` (`WorkspaceActionsProvider`/`useWorkspaceActions`): abrir/anular cuentas, líneas, enviar a cocina, avanzar comandas, cobrar, anular comprobantes, turnos, tickets y reset. **Se monta una vez** en el layout y es dueño de los guards de orquestación (`sunatEnviados`, `checkingOut`, `paidByAccount`, cola post-commit): todos los consumidores (topbar, caja, mozo…) comparten el mismo estado y `resetDemoData` limpia todos los guards/mapas/cola. `useCheckout` es un alias que consume ese contexto; `useCheckoutController` es el controlador interno que solo usa el provider.
 - `components/dashboard/hooks/use-branch-scope.ts`, `use-cash-scope.ts`, `use-accounts-scope.ts`: sucursal activa/`branchOf`, vista de caja y cuentas filtradas.
-- `useModules()` sigue disponible para tests y consumidores externos; las vistas usan los hooks específicos (`useSession`, `useNotifications`, `useTenant`, `useCatalogoState`, `useLiveData`, `useWorkspaceActions`, `useAccountsScope`, `useCashScope`, `useBranchScope`, `useTickets` y los providers de módulo).
+- Las vistas usan los hooks específicos (`useSession`, `useNotifications`, `useTenant`, `useCatalogoState`, `useLiveData`, `useWorkspaceActions`, `useAccountsScope`, `useCashScope`, `useBranchScope`, `useTickets` y los providers de módulo).
 
 `lib/persistence.ts` queda solo como lectura legacy (migración de una vez); ya no hay `saveErpState` ni canal `fogoneria:erp-sync`. Los tests de integración montan `FeatureProviders` + `CatalogoProvider` + `TicketsProvider` + `LiveDataProvider`.
 
-Pendiente menor: borrar `useModules()` cuando ningún test/consumidor externo lo use y eliminar `lib/persistence.ts` cuando ya no queden `ErpState` legacy en navegadores (hoy es la red de migración).
+Pendiente menor: eliminar `lib/persistence.ts` cuando ya no queden `ErpState` legacy en navegadores (hoy es la red de migración).
 
 ## 9. Decisiones
 

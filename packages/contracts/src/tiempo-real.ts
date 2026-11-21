@@ -1,5 +1,5 @@
 /**
- * @deprecated Usa `@fogoneria/contracts/realtime` (alias mantenido una release).
+ * @deprecated Usa `@fogoneria/contracts/mod_realtime` (alias mantenido una release).
  * Se elimina cuando ningún consumidor importe el nombre antiguo.
  */
-export * from './realtime';
+export * from './mod_realtime';

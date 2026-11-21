@@ -1,5 +1,5 @@
 import { ModuleGuard } from "@/components/dashboard/ModuleGate";
-import { RolesView } from "@/features/staff";
+import { RolesView } from "@/features/mod_staff";
 
 export default function PersonalRolesPage() {
   return (

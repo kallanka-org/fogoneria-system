@@ -1,4 +1,4 @@
-import { CajaPage } from "@/features/cash";
+import { CajaPage } from "@/features/mod_cash";
 
 export default function CajaRoute() {
   return (

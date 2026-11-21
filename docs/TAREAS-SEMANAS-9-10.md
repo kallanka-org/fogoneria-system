@@ -86,7 +86,7 @@
   4. Eventos `order.created`, `order.updated` y `table.status` con sobre `{ eventId, at, data }`, emitidos al crear, en cada transición del KDS y al ocupar/liberar la mesa.
   5. `docs/websockets.md` con el contrato completo, el flujo del ticket, los rooms y los límites (sin Redis adapter).
   6. Cliente `apps/web/lib/realtime.ts` con reconexión propia (backoff 1 s → 30 s + jitter, ticket nuevo en cada intento) y deduplicación por `eventId`; BFF `GET /api/session/ws-ticket` y hook `useOrdersRealtime` con el badge de estado en el KDS.
-- **Archivos/rutas:** `apps/api/src/modules/realtime/**`, `apps/api/src/modules/auth/{auth.controller,auth.service}.ts`, `apps/api/src/modules/orders/orders.service.ts`, `apps/api/src/app.module.ts`, `apps/web/lib/realtime.ts`, `apps/web/app/api/session/ws-ticket/route.ts`, `apps/web/components/erp/{OrdersView,useOrdersRealtime}.tsx`, `docs/websockets.md`
+- **Archivos/rutas:** `apps/api/src/modules/mod_realtime/**`, `apps/api/src/modules/mod_auth/{auth.controller,auth.service}.ts`, `apps/api/src/modules/mod_orders/orders.service.ts`, `apps/api/src/app.module.ts`, `apps/web/lib/realtime.ts`, `apps/web/app/api/session/ws-ticket/route.ts`, `apps/web/components/erp/{OrdersView,useOrdersRealtime}.tsx`, `docs/websockets.md`
 - **Criterio de aceptación:** el KDS recibe la comanda sin refrescar; reconexión sin duplicados; solo recibe eventos de su tenant/sucursal; contrato documentado. **Cumplido** (el pintado de la comanda en la columna sigue en AYCDS-25/26/28 porque el KDS aún lee del estado local).
 - **Evidencia:** 127 unit (gateway, ticket y eventos), 38 e2e (handshake real con Socket.io y aislamiento A/B), 55 web y smoke real contra PostgreSQL 16: el KDS recibe `order.created` con el folio, `order.updated` en la transición y `table.status` al ocupar/liberar; el ticket da 401 en la API HTTP; la empresa B no recibe nada.
 
@@ -101,10 +101,10 @@
   4. Impedir que una mesa esté `RESERVADA` y `OCUPADA` a la vez.
   5. Aplicar RLS y roles (`ADMIN_GLOBAL`, `GERENTE_SUCURSAL`, `MESERO`, `CAJERO`).
   6. Agregar tests unitarios, de base de datos y e2e.
-- **Archivos/rutas:** `apps/api/src/modules/tables/**`, `apps/api/src/modules/reservations/**`, `apps/api/src/app.module.ts`, `apps/api/test/**`
+- **Archivos/rutas:** `apps/api/src/modules/mod_tables/**`, `apps/api/src/modules/mod_reservations/**`, `apps/api/src/app.module.ts`, `apps/api/test/**`
 - **Criterio de aceptación:** CRUD y transiciones válidas; reserva con aforo excedido o solapada devuelve 409; cross-tenant devuelve 404; tests verdes.
 - **Evidencia:** Swagger actualizado, tests y prueba real con dos sucursales.
-  - `apps/api/src/modules/tables/**` y `apps/api/src/modules/reservations/**` con DTOs, controladores y servicios.
+  - `apps/api/src/modules/mod_tables/**` y `apps/api/src/modules/mod_reservations/**` con DTOs, controladores y servicios.
   - `apps/api/src/common/sequences/**` + migración `20261027120000_secuencias_tenant` (tabla `secuencias` con RLS por empresa).
   - Tests: 88 unit (9 nuevos de mesas, 12 de reservas, 5 de secuencias), 32 e2e (16 nuevos) y 34 DB (7 nuevos) verdes.
   - Prueba real contra PostgreSQL 16 (`localhost:5433`): CRUD de mesas en dos sucursales, duplicado 409, aforo 409, solapamiento 409, bloqueo con reserva 409, liberación de mesa al cancelar la última reserva, `RSV-20261031-0001` por secuencia y aislamiento cross-tenant (404).
@@ -121,7 +121,7 @@
   5. `ANULADA` solo desde `POR_CONFIRMAR`: `EN_COCINA` y `LISTO` responden 400 y el trigger `trg_ordenes_inmutable` lanza `DB_ORDEN_ANULACION_TARDIA` (migración `20261028120000_ordenes_anulacion_estricta`).
   6. `PAGADA`/`CERRADA`/`ANULADA` son terminales (409) y toda alta y cambio de estado se registra en `auditoria`.
   7. Tests: 19 unit de `OrdersService`, e2e del contrato (precio inyectado 400) y spec DB con transiciones, anulación tardía y numeración única.
-- **Archivos/rutas:** `apps/api/src/modules/orders/**`, `apps/api/src/modules/pricing/**`, `apps/api/src/common/sequences/**`, migración `20261028120000_ordenes_anulacion_estricta`, `apps/api/test/db/orders-pos.db-spec.ts`
+- **Archivos/rutas:** `apps/api/src/modules/mod_orders/**`, `apps/api/src/modules/mod_pricing/**`, `apps/api/src/common/sequences/**`, migración `20261028120000_ordenes_anulacion_estricta`, `apps/api/test/db/orders-pos.db-spec.ts`
 - **Criterio de aceptación:** total calculado por el servidor; no se puede anular en preparación; orden pagada inmutable; mesa cambia de estado correctamente; tests verdes. **Cumplido.**
 - **Evidencia:** 107 unit, 33 e2e, 40 DB y `lint`/`check-types`/`build` en verde; smoke real contra PostgreSQL 16 con dos órdenes concurrentes (`ORD-000002`/`ORD-000003`), precio inyectado rechazado con 400, anulación tardía 400, orden pagada 409, mesa liberada y cross-tenant 404.
 
@@ -136,7 +136,7 @@
   4. Optimización: el folio pasa a **una sentencia autocommit en el pool de plataforma** (`prisma.raw`), fuera de la transacción del request; los cuatro `set_config` del contexto RLS se juntan en una sentencia; los precios se resuelven en lote (platos + combos + `precios_platos`, sin N+1 por línea); `DATABASE_POOL_MAX` queda configurable (default 10, se midió 20 sin mejora). Sin índices nuevos: el plan de escritura ya era correcto.
   5. Test de concurrencia real de folios (`test/db/sequences-concurrency.db-spec.ts`): 50 altas simultáneas sin repetir número, contador por empresa y series `ORD`/`RSV` independientes.
   6. Documentación de resultados, `EXPLAIN` y límites en `docs/explain-orders.md`; decisiones en `docs/decisiones.md`.
-- **Archivos/rutas:** `apps/api/src/common/sequences/sequences.service.ts`, `apps/api/src/prisma/prisma.service.ts`, `apps/api/src/modules/orders/orders.service.ts`, `apps/api/src/config/env.validation.ts`, `apps/api/test/load/orders-load.mjs`, `apps/api/test/db/sequences-concurrency.db-spec.ts`, `db/scripts/perf/**`, `ops/perf/results/**`, `docs/explain-orders.md`
+- **Archivos/rutas:** `apps/api/src/common/sequences/sequences.service.ts`, `apps/api/src/prisma/prisma.service.ts`, `apps/api/src/modules/mod_orders/orders.service.ts`, `apps/api/src/config/env.validation.ts`, `apps/api/test/load/orders-load.mjs`, `apps/api/test/db/sequences-concurrency.db-spec.ts`, `db/scripts/perf/**`, `ops/perf/results/**`, `docs/explain-orders.md`
 - **Criterio de aceptación:** carga reproducible; p95 dentro del umbral acordado (≤ 500 ms a 50 concurrentes); sin errores 5xx; mejoras documentadas. **Cumplido** en el escenario de altas: p95 307–326 ms, ~186 órdenes/s y 0 errores.
 - **Evidencia:** 127 unit, 43 DB (3 nuevos), `lint`/`check-types`/`build` en verde; 6 corridas de 50 concurrentes (`ops/perf/results/final-escritura-c50-r*.json`), 2 de 25 y 2 de 10; `explain-before.txt` vs `explain-after.txt` con el mismo plan (no se agregaron índices). Hallazgo abierto: el listado del KDS bajo RLS no ve estadísticas y recorre ~50k filas (157 ms vs 0,075 ms con estadísticas); no se cambió la seguridad y queda documentado con opciones.
 
@@ -232,7 +232,7 @@
 
 **Riesgos de conflicto:**
 - `apps/api/src/app.module.ts`: PR-1, PR-2 y PR-3.
-- `apps/api/src/modules/orders/orders.module.ts`: PR-2 y PR-3.
+- `apps/api/src/modules/mod_orders/orders.module.ts`: PR-2 y PR-3.
 - `apps/web/components/dashboard/ModulesProvider.tsx`: PR-5 y PR-6.
 - Migraciones/secuencias: PR-2 y PR-4.
 - `docs/TAREAS-SEMANAS-9-10.md`: todos los PRs que actualicen avance; resolver a favor del estado real.

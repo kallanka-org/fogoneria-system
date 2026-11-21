@@ -1,9 +1,0 @@
-{
-  "id": "billing",
-  "kind": "ui",
-  "owner": "@por-asignar",
-  "status": "aligned",
-  "routes": [
-    "/saas"
-  ]
-}

@@ -1,4 +1,4 @@
-import { MesasPage } from "@/features/tables";
+import { MesasPage } from "@/features/mod_tables";
 
 export default function MesasRoute() {
   return (

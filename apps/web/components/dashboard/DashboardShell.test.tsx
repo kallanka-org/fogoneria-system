@@ -28,7 +28,7 @@ vi.mock('./providers/session', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useSession: () => estado,
 }));
-vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_tenant/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useTenant: () => estado,
 }));

@@ -89,6 +89,7 @@
 | 4 · etapa 1 | `SessionProvider`, `NotificationsProvider` | #66 | `components/dashboard/providers/{session,notifications}.tsx` |
 | 4 · etapa 2 | `TenantProvider` | #70 | `providers/tenant.tsx`, `lib/tenant-scope.ts` |
 | 4 · etapa 3 | `CatalogoProvider` (catálogo/precios) | #73 | `providers/catalog.tsx`, `features/catalog/hooks.ts` |
+| 4 · F6c/retiro | providers por módulo + `CheckoutCoordinator` + retiro de `ModulesProvider` | #133–#137, #139 | `providers/live.tsx`, `providers/workspace-actions.ts`, `hooks/use-{branch,cash,accounts}-scope.ts`, `app/layout.tsx` sin `ModulesProvider`; `useModules()` es hook puro |
 
 ## 7. Infraestructura y despliegue
 

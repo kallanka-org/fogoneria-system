@@ -61,6 +61,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - Sin e2e propio de SaaS (observación 9 del plan de módulos).
 - `billing` (cron de mora) es el único que cambia estado sin pasar por la consola.
 - MRR depende de `mrr_monto` del plan: no hay facturación real.

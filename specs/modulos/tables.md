@@ -63,6 +63,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - F6c3: `TablesProvider`/`useTables` (`features/tables/provider.tsx`) es dueño de las mesas demo por sucursal (`fogoneria:tables-demo:v1`) y del parche de estado (`patchStatus`). Con sesión la API sigue mandando (`liveTables`). Las claves se remapean slug→UUID con `remapBranches` (fusión por `id`).
 
 - Fase 3 de paridad (2026-11-21): `tables` es feature propia y contrato `tables.ts`; la vista compartida del salón sigue en `components/dashboard/salon` hasta el split fino de UI.

@@ -74,6 +74,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - F6b: `StaffProvider`/`useStaff` (`features/staff/provider.tsx`) es dueño de los roles demo; persiste `fogoneria:staff:v1:<tenant>` y sincroniza por `BroadcastChannel`. `ModulesProvider` lo reexporta.
 
 - Paridad de módulos (2026-11-21): feature `features/staff/` y contrato `packages/contracts/src/staff.ts` con el mismo ID que el backend. El subpath antiguo queda como alias `@deprecated` durante una release.

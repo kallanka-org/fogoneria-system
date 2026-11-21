@@ -72,6 +72,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - Fase 3 de paridad (2026-11-21): `catalog` y `pricing` son features separadas; el contrato antiguo `catalogo.ts` queda como alias `@deprecated`.
 - El **cliente de escritura** sigue en `lib/catalog-api.ts`; moverlo a `features/catalog/api.ts` para que la feature sea dueña de todo el acceso.
 - La poda de combos corre en `ModulesProvider` sobre `catalogVersion` (un render después del snapshot); si se mueve a promociones, ajustar el contrato.

@@ -71,6 +71,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - F6c3: `CrmProvider` expone `restorePoints` para compensar los puntos si el cobro falla después de otorgarlos (L1). El consumidor es `lib/checkout.ts`; la vista no cambia.
 
 - Fase 1 de paridad (2026-11-21): `features/crm/module.ts` describe la entrada del registry/nav generado (`pnpm gen:modules`); la ruta `/app/clientes` y el estado en `ModulesProvider` no cambian.

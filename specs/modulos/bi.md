@@ -65,6 +65,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - Metadata (2026-11-21): `features/bi/module.ts` describe la entrada de nav del registry generado; no cambia el estado.
 
 - Añadir `pagado_at` permitiría imputar por fecha de cobro (hoy usa `created_at`).

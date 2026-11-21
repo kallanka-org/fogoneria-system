@@ -59,6 +59,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - Fase 3 de paridad (2026-11-21): `pricing` es feature propia (`features/pricing`) y contrato `pricing.ts`; el estado compartido sigue en `CatalogoProvider`.
 - No hay historial de cambios de precio.
 - No hay precios por sucursal: la lista es de empresa.

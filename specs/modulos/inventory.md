@@ -63,6 +63,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - F6b: `InventoryProvider`/`useInventory` (`features/inventory/provider.tsx`) es dueño de insumos y kardex demo; persiste `fogoneria:inventory:v1:<tenant>` y sincroniza por `BroadcastChannel`. `ModulesProvider` lo reexporta.
 
 - Metadata (2026-11-21): `features/inventory/module.ts` describe la entrada de nav del registry generado; no cambia el estado.

@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import type { MenuItem } from "@/lib/dashboard";
 import { MenuPreview } from "@/components/dashboard/MenuPreview";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useCatalogoState } from "@/components/dashboard/providers/catalog";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 import { cartaSummary } from "@/components/dashboard/summaries/summary-selectors";
@@ -19,7 +19,7 @@ export function CartaVirtualView() {
     priceLists,
     priceOf,
     categoryNameOf,
-  } = useModules();
+  } = useCatalogoState();
 
   const activeListName = priceLists.find((l) => l.active)?.name ?? "—";
 

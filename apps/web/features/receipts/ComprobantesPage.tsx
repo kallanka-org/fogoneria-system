@@ -7,7 +7,10 @@ import { Field, Select, Textarea, TextInput } from "@/components/ui/fields";
 import { Modal } from "@/components/ui/Modal";
 import { Toolbar } from "@/components/ui/Toolbar";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useWorkspaceActions } from "@/components/dashboard/providers/workspace-actions";
+import { useReceipts } from "@/features/receipts/provider";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniDonut } from "@/components/dashboard/summaries/charts";
 import { comprobantesSummary } from "@/components/dashboard/summaries/summary-selectors";
@@ -36,17 +39,17 @@ import type { Comprobante } from "@fogoneria/contracts/receipts";
  * diario simulados). SUNAT real queda «pendiente de OSE».
  */
 export function ComprobantesPage() {
+  const { hasSession } = useSession();
   const {
-    hasSession,
     receipts,
     setReceipts,
-    annulReceipt,
     enviarSunat,
     generarResumenDiario,
     sunatContingencia,
     toggleSunatContingencia,
-    notify,
-  } = useModules();
+  } = useReceipts();
+  const { annulReceipt } = useWorkspaceActions();
+  const { notify } = useNotifications();
   const [modalOpen, setModalOpen] = useState(false);
   const [cdrTarget, setCdrTarget] = useState<Receipt | null>(null);
   const [apiRows, setApiRows] = useState<Comprobante[]>([]);

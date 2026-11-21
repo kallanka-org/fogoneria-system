@@ -18,8 +18,11 @@ const turnos = vi.hoisted(() => ({
 }));
 
 vi.mock('./hooks', () => ({ useShifts: () => turnos }));
-vi.mock('@/components/dashboard/ModulesProvider', () => ({
-  useModules: () => ({ notify: () => {}, hasSession: true }),
+vi.mock('@/components/dashboard/providers/session', () => ({
+  useSession: () => ({ hasSession: true }),
+}));
+vi.mock('@/components/dashboard/providers/notifications', () => ({
+  useNotifications: () => ({ notify: () => {} }),
 }));
 
 import { StaffShiftsPage } from './ShiftsPage';

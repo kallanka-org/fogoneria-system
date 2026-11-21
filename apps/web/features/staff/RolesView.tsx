@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/Button";
 import { Field, TextInput, Textarea } from "@/components/ui/fields";
 import { Toolbar } from "@/components/ui/Toolbar";
 import { TableCard, THead, TH, TR, TD, RowActions } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useStaff } from "@/features/staff/provider";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 
 /** Maestro de Roles: define los roles operativos del equipo. */
 export function RolesView() {
-  const { roles, setRoles, notify } = useModules();
+  const { roles, setRoles } = useStaff();
+  const { notify } = useNotifications();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", description: "" });

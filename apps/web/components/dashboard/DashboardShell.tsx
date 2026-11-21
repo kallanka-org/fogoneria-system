@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useModules } from "./ModulesProvider";
+import { useTenant } from "@/features/tenant/provider";
+import { useSession } from "./providers/session";
 import { AppSidebar } from "./AppSidebar";
 import { AppTopBar } from "./AppTopBar";
 import { Toasts } from "@/components/ui/Toast";
@@ -20,7 +21,8 @@ const mobileLinks: { href: string; label: string; roles: AppRole[] }[] = [
 ];
 
 function MobileBranchSelect() {
-  const { branches, activeBranch, setActiveBranch, currentUser } = useModules();
+  const { branches, activeBranch, setActiveBranch } = useTenant();
+  const { currentUser } = useSession();
   if (currentUser && !canSwitchBranch(currentUser.role)) {
     return (
       <span className="px-3 h-10 inline-flex items-center rounded-full text-sm font-medium text-ink-600 border border-ink-900/15 whitespace-nowrap shrink-0">
@@ -46,7 +48,7 @@ function MobileBranchSelect() {
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { currentUser } = useModules();
+  const { currentUser } = useSession();
   const role = currentUser?.role;
   const links = mobileLinks.filter((l) => !role || l.roles.includes(role));
   // Cocina y Mesero son vista única tipo tablet: sin sidebar ni nav.

@@ -2,7 +2,8 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis } from "recharts";
 import { KpiCard } from "@/components/ui/KpiCard";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useLiveData } from "@/components/dashboard/providers/live";
+import { useSession } from "@/components/dashboard/providers/session";
 import { ChartCard, HubBlocks, type HubLink } from "@/components/dashboard/workspace-ui";
 
 const bookingsByDay = [
@@ -13,7 +14,8 @@ const tick = { fontSize: 12, fill: "var(--c-mute)" };
 
 /** Workspace Reservas: KPIs + gráfico + columnas. */
 export function BookingsWorkspace() {
-  const { currentUser, tables, reservations } = useModules();
+  const { currentUser } = useSession();
+  const { tables, reservations } = useLiveData();
   const isSucursal = currentUser?.role === "sucursal";
   const occupied = tables.filter((t) => t.status === "ocupada").length;
   const free = tables.filter((t) => t.status === "libre").length;

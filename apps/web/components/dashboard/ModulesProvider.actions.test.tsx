@@ -110,11 +110,26 @@ const api = vi.hoisted(() => ({
 
 vi.mock('./providers/session', () => ({ useSession: () => sesion }));
 vi.mock('./providers/notifications', () => ({ useNotifications: () => avisos }));
-vi.mock('@/features/tenant/provider', () => ({ useTenant: () => tenant }));
-vi.mock('@/features/crm/provider', () => ({ useCrm: () => crm }));
-vi.mock('@/features/expenses/provider', () => ({ useExpenses: () => expenses }));
-vi.mock('@/features/inventory/provider', () => ({ useInventory: () => inventory }));
-vi.mock('@/features/staff/provider', () => ({ useStaff: () => staff }));
+vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTenant: () => tenant,
+}));
+vi.mock('@/features/crm/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCrm: () => crm,
+}));
+vi.mock('@/features/expenses/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useExpenses: () => expenses,
+}));
+vi.mock('@/features/inventory/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useInventory: () => inventory,
+}));
+vi.mock('@/features/staff/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useStaff: () => staff,
+}));
 vi.mock('./providers/catalog', () => ({ useCatalogoState: () => catalogo }));
 vi.mock('@/lib/realtime', () => ({ connectOrdersRealtime: () => () => {} }));
 vi.mock('@/lib/orders-api', () => ({
@@ -130,7 +145,7 @@ vi.mock('@/lib/facturacion', async (importOriginal) => {
   return { ...actual, getFacturacionPort: () => api.port };
 });
 
-import { ModulesProvider, useModules } from './ModulesProvider';
+import { useModules } from './ModulesProvider';
 import { AccountsProvider } from '@/features/orders/provider';
 import { CashProvider } from '@/features/cash/provider';
 import { ReceiptsProvider } from '@/features/receipts/provider';
@@ -138,6 +153,7 @@ import { PromotionsProvider } from '@/features/promotions/provider';
 import { ReservationsProvider } from '@/features/reservations/provider';
 import { TablesProvider } from '@/features/tables/provider';
 import { TicketsProvider } from './providers/tickets';
+import { LiveDataProvider } from './providers/live';
 
 let ctx: ReturnType<typeof useModules>;
 
@@ -158,9 +174,9 @@ function montar() {
             <ReceiptsProvider>
               <PromotionsProvider>
                 <TicketsProvider>
-                  <ModulesProvider initialPayments={[]}>
+                  <LiveDataProvider>
                     <Sonda />
-                  </ModulesProvider>
+                  </LiveDataProvider>
                 </TicketsProvider>
               </PromotionsProvider>
             </ReceiptsProvider>

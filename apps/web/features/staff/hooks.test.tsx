@@ -20,8 +20,11 @@ const entorno = vi.hoisted(() => ({
 }));
 
 vi.mock('./api', () => ({ rrhhApi: api }));
-vi.mock('@/components/dashboard/ModulesProvider', () => ({
-  useModules: () => ({ activeBranchId: entorno.activeBranchId, notify: entorno.notify }),
+vi.mock('@/components/dashboard/providers/notifications', () => ({
+  useNotifications: () => ({ notify: entorno.notify }),
+}));
+vi.mock('@/features/tenant/provider', () => ({
+  useTenant: () => ({ activeBranchId: entorno.activeBranchId }),
 }));
 
 import { useAttendance, useShifts } from './hooks';

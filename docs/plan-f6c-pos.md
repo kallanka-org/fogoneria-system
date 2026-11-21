@@ -165,19 +165,24 @@ Reglas:
 
 **F6c2 (mergeado en #136).** `CashProvider` + `ReceiptsProvider` + `PromotionsProvider` + `CheckoutCoordinator`; `scopes` se reduce a `orders`/`tables` y `ErpState` pierde caja, comprobantes y promociones.
 
-**F6c3 (este PR).** Fixes M1/M2/L1/L2, `scopes.orders`/`scopes.tables`/`reservations`/`tickets` con provider, `ErpState` vaciado y borrado. `ModulesProvider` queda como fachada; su retiro físico es el único pendiente (§10).
+**F6c3 (mergeado en #137).** Fixes M1/M2/L1/L2, `scopes.orders`/`scopes.tables`/`reservations`/`tickets` con provider, `ErpState` vaciado y borrado.
 
-## 10. Retiro de `ModulesProvider` (bloqueado)
+**Retiro de `ModulesProvider` (este PR).** `LiveDataProvider` (estado de la API + migración/realtime), `useWorkspaceActions` y hooks de scope; todas las vistas usan hooks específicos y el layout ya no monta `ModulesProvider`. `useModules()` queda como hook puro de compatibilidad (§10).
 
-`ModulesProvider` ya **no posee estado de negocio**: solo conserva el estado derivado de la API (`liveOrders`, `liveTables`, `liveReservations` y sus errores/loading) y la orquestación (abrir/enviar/anular/cobrar, `branchOf`, `resetDemoData`). El `ErpState` se migra y se borra; no hay `save` propio.
+## 10. Retiro de `ModulesProvider` (completado)
 
-Para eliminarlo del layout hay que sustituir `useModules()` en ~20 vistas y rutas. Propuesta:
+`ModulesProvider` **ya no existe como provider**: se retiró de `app/layout.tsx` y todas las vistas migraron a hooks por módulo. Lo que queda es `components/dashboard/ModulesProvider.tsx` como **hook puro** `useModules()` (fachada de compatibilidad que compone contextos, sin contexto propio ni `ErpState`).
 
-1. `useCheckout` ya cubre el cobro; exponer `useBranchScope()` (sucursal activa + `branchOf`) y `useOrdersLive()`/`useTablesLive()`/`useReservationsLive()` en la capa compartida.
-2. Migrar las vistas módulo a módulo (mesas, reservas, mozo/KDS, caja, comprobantes, gastos, inventario, promociones, CRM, RRHH, BI, configuración).
-3. Cuando no queden consumidores, borrar `ModulesProvider`, `lib/persistence.ts` y la entrada de `app/layout.tsx`; los tests de integración pasan a montar solo `FeatureProviders` + `CatalogoProvider` + `TicketsProvider`.
+Piezas nuevas del retiro:
 
-No se hace en este PR para no tocar >20 vistas en el mismo cambio que mueve scopes/reservas/tickets (riesgo de regresión y revisión).
+- `components/dashboard/providers/live.tsx` (`LiveDataProvider`/`useLiveData`): comandas, mesas y reservas de la API, loading/errores, refresh, realtime, migración del `ErpState` legacy y remapeo slug→UUID. Se monta en `app/layout.tsx` debajo de `CatalogoProvider`.
+- `components/dashboard/providers/workspace-actions.ts` (`useWorkspaceActions`): abrir/anular cuentas, líneas, enviar a cocina, avanzar comandas, cobrar, anular comprobantes, turnos, tickets y reset. Hook puro sobre los providers.
+- `components/dashboard/hooks/use-branch-scope.ts`, `use-cash-scope.ts`, `use-accounts-scope.ts`: sucursal activa/`branchOf`, vista de caja y cuentas filtradas.
+- `useModules()` sigue disponible para tests y consumidores externos; las vistas usan los hooks específicos (`useSession`, `useNotifications`, `useTenant`, `useCatalogoState`, `useLiveData`, `useWorkspaceActions`, `useAccountsScope`, `useCashScope`, `useBranchScope`, `useTickets` y los providers de módulo).
+
+`lib/persistence.ts` queda solo como lectura legacy (migración de una vez); ya no hay `saveErpState` ni canal `fogoneria:erp-sync`. Los tests de integración montan `FeatureProviders` + `CatalogoProvider` + `TicketsProvider` + `LiveDataProvider`.
+
+Pendiente menor: borrar `useModules()` cuando ningún test/consumidor externo lo use y eliminar `lib/persistence.ts` cuando ya no queden `ErpState` legacy en navegadores (hoy es la red de migración).
 
 ## 9. Decisiones
 

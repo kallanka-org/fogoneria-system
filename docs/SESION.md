@@ -1,5 +1,13 @@
 # SESION — estado entre sesiones
 
+## 2026-11-21 — Retiro de `ModulesProvider` (F6 completo)
+
+- **Provider retirado:** `app/layout.tsx` monta `Theme > Session > Notifications > FeatureProviders > Catalogo > Tickets > LiveData`; ya no hay `ModulesProvider` ni `ErpState`.
+- **Hooks nuevos:** `LiveDataProvider`/`useLiveData` (comandas, mesas y reservas de la API, errores/loading, refresh, realtime y migración legacy), `useWorkspaceActions` (cuentas, comandas, cobro, anulación, turnos, tickets y reset), `useBranchScope`, `useCashScope` y `useAccountsScope`.
+- **Vistas:** las ~35 vistas/componentes que usaban `useModules()` pasaron a hooks específicos; `useModules()` queda como hook puro de compatibilidad (sin contexto) para tests/consumidores externos.
+- **Tests:** los mocks de `ModulesProvider` se sustituyeron por mocks de los hooks específicos (con `importOriginal` para conservar exports). Web **967** tests.
+- Verificado: types, lint, build, paridad 20/20/20/20, boundaries 0 y specs.
+
 ## 2026-11-21 — Validación final de paridad de módulos
 
 - **Paridad 20/20/20/20** (manifiestos, backend, frontend, contratos) + 20 specs; 12 alias deprecados.

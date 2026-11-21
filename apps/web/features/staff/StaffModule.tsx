@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 import { personalSummary } from "@/components/dashboard/summaries/summary-selectors";
@@ -24,7 +24,7 @@ const roleTone: Record<string, string> = {
 };
 
 export function StaffModule({ tab = "equipo" }: { tab?: "equipo" | "turnos" | "propinas" }) {
-  const { notify } = useModules();
+  const { notify } = useNotifications();
   const [tipsPool] = useState(86.5);
   const [split, setSplit] = useState<number | null>(null);
 

@@ -2,12 +2,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Building2, Check, ChevronDown, LayoutGrid } from "lucide-react";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useTenant } from "@/features/tenant/provider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useSession } from "@/components/dashboard/providers/session";
 import { canSwitchBranch } from "@/lib/auth";
 
 /** Switcher multitenant: 1 RUC → N sucursales, cada una con su operación. */
 export function BranchSwitcher() {
-  const { company, branches, activeBranch, setActiveBranch, notify, currentUser } = useModules();
+  const { company, branches, activeBranch, setActiveBranch } = useTenant();
+  const { notify } = useNotifications();
+  const { currentUser } = useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 

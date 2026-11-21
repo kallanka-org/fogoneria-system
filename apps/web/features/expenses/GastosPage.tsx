@@ -7,7 +7,8 @@ import { Field, Select, TextInput } from "@/components/ui/fields";
 import { Modal } from "@/components/ui/Modal";
 import { Toolbar } from "@/components/ui/Toolbar";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useExpenses } from "@/features/expenses/provider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
 import { expenseCategories } from "@/lib/erp";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
@@ -22,7 +23,8 @@ import { Tabs } from "@/components/ui/Tabs";
  * la API vive en `./api` con el contrato de `@fogoneria/contracts/expenses`.
  */
 export function GastosPage() {
-  const { expenses, setExpenses, notify } = useModules();
+  const { expenses, setExpenses } = useExpenses();
+  const { notify } = useNotifications();
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ category: expenseCategories[0], supplier: "", amount: "", status: "Pagado" as "Pagado" | "Pendiente" });
   const [tab, setTab] = useState<"panel" | "gestion">("panel");

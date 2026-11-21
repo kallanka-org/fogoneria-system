@@ -58,11 +58,17 @@ const catalogo = vi.hoisted(() => ({
   categoryNameOf: vi.fn(() => '—'),
 }));
 
-vi.mock('@/components/dashboard/providers/session', () => ({ useSession: () => sesion }));
+vi.mock('@/components/dashboard/providers/session', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useSession: () => sesion,
+}));
 vi.mock('@/components/dashboard/providers/notifications', () => ({
   useNotifications: () => avisos,
 }));
-vi.mock('@/features/tenant/provider', () => ({ useTenant: () => tenant }));
+vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTenant: () => tenant,
+}));
 vi.mock('@/components/dashboard/providers/catalog', () => ({
   useCatalogoState: () => catalogo,
 }));
@@ -89,7 +95,7 @@ import { ReservationsProvider } from '@/features/reservations/provider';
 import { StaffProvider } from '@/features/staff/provider';
 import { TablesProvider } from '@/features/tables/provider';
 import { TicketsProvider } from './providers/tickets';
-import { ModulesProvider } from './ModulesProvider';
+import { LiveDataProvider } from './providers/live';
 
 const legacyCustomer = {
   id: 99,
@@ -210,9 +216,9 @@ describe('migración de slices en el arranque del shell', () => {
                       <PromotionsProvider>
                         <StaffProvider>
                           <TicketsProvider>
-                            <ModulesProvider initialPayments={[]}>
+                            <LiveDataProvider>
                               <div />
-                            </ModulesProvider>
+                            </LiveDataProvider>
                           </TicketsProvider>
                         </StaffProvider>
                       </PromotionsProvider>
@@ -301,9 +307,9 @@ function shell() {
                     <PromotionsProvider>
                       <StaffProvider>
                         <TicketsProvider>
-                          <ModulesProvider initialPayments={[]}>
+                          <LiveDataProvider>
                             <div />
-                          </ModulesProvider>
+                          </LiveDataProvider>
                         </TicketsProvider>
                       </StaffProvider>
                     </PromotionsProvider>

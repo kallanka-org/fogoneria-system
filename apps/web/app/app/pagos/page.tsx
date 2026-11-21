@@ -4,10 +4,12 @@ import { useState } from "react";
 import { PaymentsView } from "@/components/dashboard/PaymentsView";
 import { PlanModal, SecurityModal } from "@/components/dashboard/PlanModals";
 import { Button } from "@/components/ui/Button";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { initialPayments } from "@/lib/dashboard";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
 
 export default function PagosPage() {
-  const { payments, notify } = useModules();
+  const { notify } = useNotifications();
+  const payments = initialPayments;
   const [planOpen, setPlanOpen] = useState(false);
   const [securityOpen, setSecurityOpen] = useState(false);
   const [activePlan, setActivePlan] = useState("profesional");

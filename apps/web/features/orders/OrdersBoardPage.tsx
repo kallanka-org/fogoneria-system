@@ -6,7 +6,11 @@ import { elapsedLabel, fmtMoney } from "@/lib/domain";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useLiveData } from "@/components/dashboard/providers/live";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useWorkspaceActions } from "@/components/dashboard/providers/workspace-actions";
+import { useBranchScope } from "@/components/dashboard/hooks/use-branch-scope";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 import { ordenesSummary } from "@/components/dashboard/summaries/summary-selectors";
@@ -53,16 +57,14 @@ function actionOrderOf(item: KdsOrder): Order {
 export function OrdersBoardPage({ mode = "ordenes" }: { mode?: OrdersMode } = {}) {
   const {
     orders,
-    advanceOrder,
     ordersLoading,
     ordersError,
     refreshOrders,
-    activeBranch,
-    isGeneral,
-    branchOf,
-    currentUser,
-    notify,
-  } = useModules();
+  } = useLiveData();
+  const { advanceOrder } = useWorkspaceActions();
+  const { activeBranch, isGeneral, branchOf } = useBranchScope();
+  const { currentUser } = useSession();
+  const { notify } = useNotifications();
   useNow(30000);
 
   const hasSession = Boolean(currentUser?.empresaId);

@@ -6,7 +6,8 @@ import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 import { kardexSummary } from "@/components/dashboard/summaries/summary-selectors";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useInventory } from "@/features/inventory/provider";
 import type { StockMovement } from "@/lib/erp";
 import { inventarioApi, kardexRowFromApi, semaforoDeStock } from "./api";
 
@@ -14,7 +15,8 @@ const typeTone = { Entrada: "success", Salida: "neutral", Ajuste: "warning" } as
 
 /** Inventarios · Movimientos: kardex de entradas, salidas y ajustes. */
 export function MovementsPage() {
-  const { hasSession, movements } = useModules();
+  const { hasSession } = useSession();
+  const { movements } = useInventory();
   const [filter, setFilter] = useState<"Todos" | "Entrada" | "Salida" | "Ajuste">(() => {
     try {
       if (typeof window === "undefined") return "Todos";

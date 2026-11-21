@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { TextInput } from "@/components/ui/fields";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useCrm } from "@/features/crm/provider";
+import { usePromotions } from "@/features/promotions/provider";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 import { clientesSummary, promosSummary } from "@/components/dashboard/summaries/summary-selectors";
@@ -16,7 +17,8 @@ import { clientesSummary, promosSummary } from "@/components/dashboard/summaries
  * para conectarla sin duplicar el mapeo.
  */
 export function LoyaltyPage() {
-  const { customers, coupons } = useModules();
+  const { customers } = useCrm();
+  const { coupons } = usePromotions();
   const [pointsPerDollar, setPointsPerDollar] = useState(1);
 
   const summary = useMemo(() => {

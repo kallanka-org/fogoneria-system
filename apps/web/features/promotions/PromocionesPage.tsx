@@ -10,7 +10,8 @@ import { Field, TextInput } from "@/components/ui/fields";
 import { Toolbar } from "@/components/ui/Toolbar";
 import { Toggle } from "@/components/ui/Toggle";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { usePromotions } from "@/features/promotions/provider";
 import { initialPromos } from "@/lib/erp";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
@@ -19,7 +20,8 @@ import { HubBlocks } from "@/components/dashboard/workspace-ui";
 
 /** Promociones: cupones con cupo + promociones programadas con vigencia. */
 export function PromocionesPage() {
-  const { coupons, setCoupons, notify } = useModules();
+  const { coupons, setCoupons } = usePromotions();
+  const { notify } = useNotifications();
   const [promos, setPromos] = useState(initialPromos);
   const [modalOpen, setModalOpen] = useState(() => {
     try {

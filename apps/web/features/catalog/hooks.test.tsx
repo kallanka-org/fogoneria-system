@@ -22,8 +22,14 @@ const estado = vi.hoisted(() => ({
 
 const avisos = vi.hoisted(() => ({ notify: vi.fn() }));
 
-vi.mock('@/components/dashboard/providers/catalog', () => ({ useCatalogoState: () => estado }));
-vi.mock('@/components/dashboard/providers/notifications', () => ({ useNotifications: () => avisos }));
+vi.mock('@/components/dashboard/providers/catalog', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCatalogoState: () => estado,
+}));
+vi.mock('@/components/dashboard/providers/notifications', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useNotifications: () => avisos,
+}));
 
 import { useCatalogo } from './hooks';
 

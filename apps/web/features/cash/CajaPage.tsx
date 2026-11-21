@@ -11,7 +11,13 @@ import { cajaSummary } from "@/components/dashboard/summaries/summary-selectors"
 import { Modal } from "@/components/ui/Modal";
 import { Toolbar } from "@/components/ui/Toolbar";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useLiveData } from "@/components/dashboard/providers/live";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useWorkspaceActions } from "@/components/dashboard/providers/workspace-actions";
+import { useAccountsScope } from "@/components/dashboard/hooks/use-accounts-scope";
+import { useBranchScope } from "@/components/dashboard/hooks/use-branch-scope";
+import { useCashScope } from "@/components/dashboard/hooks/use-cash-scope";
 import { CheckoutModal } from "./CheckoutModal";
 import { elapsedLabel, fmtDateTime, fmtMoney, type TableAccount } from "@/lib/domain";
 import { canOperateCash } from "@/lib/permissions";
@@ -80,20 +86,13 @@ type TurnoCerradoVM = {
  * pinta; las mutaciones de la demo se delegan en sus acciones.
  */
 export function CajaPage() {
-  const {
-    cashMovements,
-    setCashMovements,
-    openCashShift,
-    cashShifts,
-    startCashShift,
-    closeCashShift,
-    accounts,
-    refreshOrders,
-    notify,
-    isGeneral,
-    branchOf,
-    currentUser,
-  } = useModules();
+  const { cashMovements, setCashMovements, openCashShift, cashShifts } = useCashScope();
+  const { startCashShift, closeCashShift } = useWorkspaceActions();
+  const accounts = useAccountsScope();
+  const { refreshOrders } = useLiveData();
+  const { notify } = useNotifications();
+  const { isGeneral, branchOf } = useBranchScope();
+  const { currentUser } = useSession();
   const canCash = canOperateCash(currentUser?.role);
   const hasSession = Boolean(currentUser?.empresaId);
 

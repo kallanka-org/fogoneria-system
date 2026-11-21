@@ -7,13 +7,13 @@ import { Flame } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Field, TextInput } from "@/components/ui/fields";
 import { ROLE_HOME } from "@/lib/auth";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useSession } from "@/components/dashboard/providers/session";
 
 export function LoginPage() {
   const [loginError, setLoginError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login } = useModules();
+  const { login } = useSession();
 
   const enterAs = async (email: string, password: string) => {
     setLoading(true);

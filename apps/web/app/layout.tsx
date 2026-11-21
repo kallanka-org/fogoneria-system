@@ -3,13 +3,12 @@ import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme";
-import { ModulesProvider } from "@/components/dashboard/ModulesProvider";
 import { CatalogoProvider } from "@/components/dashboard/providers/catalog";
+import { LiveDataProvider } from "@/components/dashboard/providers/live";
 import { NotificationsProvider } from "@/components/dashboard/providers/notifications";
 import { SessionProvider } from "@/components/dashboard/providers/session";
 import { TicketsProvider } from "@/components/dashboard/providers/tickets";
 import { FeatureProviders } from "@/features/registry";
-import { initialPayments } from "@/lib/dashboard";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,7 +39,7 @@ export default function RootLayout({
               <FeatureProviders>
                 <CatalogoProvider>
                   <TicketsProvider>
-                    <ModulesProvider initialPayments={initialPayments}>{children}</ModulesProvider>
+                    <LiveDataProvider>{children}</LiveDataProvider>
                   </TicketsProvider>
                 </CatalogoProvider>
               </FeatureProviders>

@@ -7,7 +7,7 @@ import { Check } from "lucide-react";
 import { DropZone } from "./DropZone";
 import { Button } from "@/components/ui/Button";
 import { Field, Select, TextInput, Textarea } from "@/components/ui/fields";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useSession } from "@/components/dashboard/providers/session";
 import { ROLE_HOME } from "@/lib/auth";
 import { isValidEmail, isValidRuc, type RangoSucursales } from "@fogoneria/contracts/onboarding";
 import { onboardingApi } from "./api";
@@ -96,7 +96,7 @@ export function OnboardingPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
-  const { login } = useModules();
+  const { login } = useSession();
 
   const set = <K extends keyof Form>(key: K, value: Form[K]) =>
     setForm((prev) => ({ ...prev, [key]: value }));

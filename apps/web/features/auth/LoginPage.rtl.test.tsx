@@ -6,7 +6,87 @@ const router = vi.hoisted(() => ({ push: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => router }));
 
 const sesion = vi.hoisted(() => ({ login: vi.fn() }));
-vi.mock('@/components/dashboard/ModulesProvider', () => ({ useModules: () => sesion }));
+vi.mock('@/components/dashboard/providers/session', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useSession: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/notifications', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useNotifications: () => sesion,
+}));
+vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTenant: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/catalog', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCatalogoState: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/live', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useLiveData: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/workspace-actions', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useWorkspaceActions: () => sesion,
+}));
+vi.mock('@/components/dashboard/hooks/use-cash-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCashScope: () => sesion,
+}));
+vi.mock('@/components/dashboard/hooks/use-branch-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useBranchScope: () => sesion,
+}));
+vi.mock('@/components/dashboard/hooks/use-accounts-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useAccountsScope: () => (sesion as unknown as { accounts?: unknown[] }).accounts as never,
+}));
+vi.mock('@/features/orders/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useAccounts: () => sesion,
+  useOrdersDemo: () => sesion,
+}));
+vi.mock('@/features/tables/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTables: () => sesion,
+}));
+vi.mock('@/features/reservations/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useReservations: () => sesion,
+}));
+vi.mock('@/features/cash/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCash: () => sesion,
+}));
+vi.mock('@/features/receipts/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useReceipts: () => sesion,
+}));
+vi.mock('@/features/promotions/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  usePromotions: () => sesion,
+}));
+vi.mock('@/features/crm/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCrm: () => sesion,
+}));
+vi.mock('@/features/expenses/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useExpenses: () => sesion,
+}));
+vi.mock('@/features/inventory/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useInventory: () => sesion,
+}));
+vi.mock('@/features/staff/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useStaff: () => sesion,
+}));
+vi.mock('@/components/dashboard/providers/tickets', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTickets: () => sesion,
+}));
 
 import { LoginPage } from './LoginPage';
 

@@ -6,7 +6,7 @@ import { Flame } from "lucide-react";
 import { BranchSwitcher } from "@/features/tenant";
 import { modulesNav, type ModuleNavRole } from "@/lib/modules-nav";
 import { moduleIcon } from "./module-icons";
-import { useModules } from "./ModulesProvider";
+import { useSession } from "./providers/session";
 
 /**
  * Sidebar generada desde `lib/modules-nav.ts` (Fase 6): grupos, etiquetas,
@@ -19,7 +19,7 @@ const itemCls = (active: boolean) =>
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { currentUser } = useModules();
+  const { currentUser } = useSession();
   const role = currentUser?.role as ModuleNavRole | undefined;
 
   const visible = (entry: (typeof modulesNav)[number]["entries"][number]) =>

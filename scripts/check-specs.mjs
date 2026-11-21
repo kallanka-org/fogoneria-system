@@ -265,7 +265,7 @@ const seccionesMinimas = [
 // tienen pantalla).
 const SIN_API = new Set();
 const SIN_UI = new Set();
-const SIN_DATOS = new Set(['realtime']);
+const SIN_DATOS = new Set(['mod_realtime']);
 
 let specsRevisadas = 0;
 for (const spec of [...specsExistentes].sort((a, b) => a.localeCompare(b))) {

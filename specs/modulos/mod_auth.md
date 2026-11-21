@@ -69,7 +69,7 @@ Reglas:
 
 - Jira: AYCDS-48 (auth), AYCDS-55 (sesión), AYCDS-14 (ticket WS).
 - PRs: #2 (`feat/api-david`), #4/#5 (sesión HttpOnly), #13 (ticket WS).
-- Specs: [auth](auth.md) · [roles](../producto/roles-permisos.md).
+- Specs: [mod_auth](mod_auth.md) · [roles](../producto/roles-permisos.md).
 
 ## 9. Próximos pasos
 

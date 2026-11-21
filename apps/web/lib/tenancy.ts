@@ -108,7 +108,7 @@ export const initialScopes: Record<string, BranchScope> = {
   "san-isidro": { orders: sanIsidroOrders, tables: sanIsidroTables },
 };
 
-/** Movimientos de caja demo por sucursal (dueño: `features/cash/provider`). */
+/** Movimientos de caja demo por sucursal (dueño: `features/mod_cash/provider`). */
 export const initialCashMovementsByBranch: Record<string, CashMovement[]> = {
   miraflores: initialCashMovements,
   surco: surcoCash,

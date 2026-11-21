@@ -5,7 +5,7 @@
  * responde snake_case; aquí se traduce al contrato
  * (`@fogoneria/contracts/mod_expenses`).
  *
- * Hoy `GastosPage` sigue en el estado demo de `ModulesProvider` (AYCDS-27):
+ * Hoy `GastosPage` sigue en el estado demo de `ExpensesProvider` (AYCDS-27):
  * este cliente deja listo el contrato para conectar la vista sin duplicar el
  * mapeo. Pagar en efectivo exige turno abierto en el servidor.
  */

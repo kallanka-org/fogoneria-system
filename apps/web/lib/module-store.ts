@@ -3,7 +3,7 @@
 /**
  * Fábrica de stores por módulo (F6b): estado + persistencia por tenant +
  * sincronización entre pestañas con `BroadcastChannel`, sin tocar el estado
- * global que aún vive en `ModulesProvider`.
+ * legacy (`ErpState`) que quedó de versiones anteriores.
  */
 
 import {

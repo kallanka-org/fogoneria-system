@@ -69,8 +69,8 @@ function readSavedBranch(storageKey: string): string | null {
 /**
  * Empresa y sucursales del shell (Fase 4 etapa 2). Sin sesión usa la demo;
  * con sesión **nunca** cae a demo: si la API falla queda `tenant: null` y
- * solo la vista general. No confundir con el estado de negocio, que sigue en
- * `ModulesProvider`.
+ * solo la vista general. No confundir con el estado de negocio, que vive en
+ * los providers de cada módulo.
  */
 export function TenantProvider({ children }: { children: React.ReactNode }) {
   const { ready, hasSession, currentUser } = useSession();

@@ -6,8 +6,6 @@ import type { SetStateAction } from 'react';
  * - Sucursal activa: escribe solo esa rama.
  * - Vista general (`todas`): aplica sobre el combinado y reparte por `id`;
  *   los ítems nuevos van a la primera sucursal (matriz).
- *
- * Es el mismo comportamiento que tenía `applyWrite` en `ModulesProvider`.
  */
 export function applyBranchWrite<T extends { id: number | string }>(
   prev: Record<string, T[]>,

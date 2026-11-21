@@ -2,7 +2,7 @@
    F6c3: todo el estado de negocio vive en los providers
    (`fogoneria:<id>:v1:<tenant>`). Este archivo solo conserva la lectura del
    `ErpState` v2 que dejaron las versiones anteriores, para que el loader de
-   `ModulesProvider` migre y borre la clave una última vez. */
+   `LiveDataProvider` migre y borre la clave una última vez. */
 
 export const ERP_STORAGE_KEY = "fogoneria:erp:v2";
 

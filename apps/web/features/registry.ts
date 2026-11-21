@@ -3,7 +3,7 @@
  * Regenera con `pnpm gen:modules`.
  *
  * Fase 6: lista las features y compone los providers opcionales de `module.ts`.
- * El layout consume `FeatureProviders`; ya no hay `ModulesProvider`.
+ * El layout consume `FeatureProviders`.
  */
 import { createElement, type ComponentType, type ReactNode } from 'react';
 import { authModule } from './mod_auth/module';

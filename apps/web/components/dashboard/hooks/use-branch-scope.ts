@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * Sucursal activa y resolución de la sucursal de un ítem (retiro de
- * `ModulesProvider`). Hook puro: compone tenant + stores demo + caja.
+ * Sucursal activa y resolución de la sucursal de un ítem. Hook puro: compone
+ * tenant + stores demo + caja.
  */
 
 import { useCallback } from 'react';

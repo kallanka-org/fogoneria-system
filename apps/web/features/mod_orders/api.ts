@@ -2,8 +2,9 @@
  * Cliente del módulo Órdenes para el tablero del KDS.
  *
  * Solo lectura: `GET /orders/board` en una llamada (columnas, SLA y métricas).
- * Las mutaciones siguen en `ModulesProvider`, que es quien reconcilia cuentas y
- * comandas del ERP; escribir desde aquí dejaría dos fuentes de verdad.
+ * Las mutaciones viven en `WorkspaceActionsProvider` y en `AccountsProvider`,
+ * que reconcilian cuentas y comandas del ERP; escribir desde aquí dejaría dos
+ * fuentes de verdad.
  */
 
 import { createClient, queryString } from '@fogoneria/sdk';

@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Vista de caja por sucursal (retiro de `ModulesProvider`): turnos filtrados,
+ * Vista de caja por sucursal: turnos filtrados,
  * turno abierto, movimientos y el setter compatible con la distribución de la
  * vista `todas`. Hook puro sobre `useCash` + tenant.
  */

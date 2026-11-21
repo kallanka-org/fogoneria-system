@@ -2,7 +2,7 @@
  * Feature Inventario (stock, escandallos y kardex).
  *
  * El maestro de insumos, los ajustes y las recetas siguen en el estado demo de
- * `ModulesProvider` (AYCDS-24); el semáforo y el kardex ya salen de la API.
+ * `InventoryProvider` (AYCDS-24); el semáforo y el kardex ya salen de la API.
  * Las rutas y `ModuleGate` solo importan este índice.
  */
 

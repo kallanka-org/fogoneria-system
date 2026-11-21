@@ -2,7 +2,7 @@
  * Feature Comprobantes.
  *
  * Con sesión la página lista/emite/anula contra la API; sin sesión cae al demo
- * de `ModulesProvider`. SUNAT sigue «pendiente de OSE»: no se simula CDR.
+ * de `ReceiptsProvider`. SUNAT sigue «pendiente de OSE»: no se simula CDR.
  */
 
 export { ComprobantesPage } from './ComprobantesPage';

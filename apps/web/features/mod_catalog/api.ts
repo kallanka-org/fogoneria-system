@@ -7,7 +7,7 @@
  * `lib/catalog-api.ts`) porque el ERP entero comparte ese estado.
  *
  * La API responde snake_case; aquí se traduce al contrato
- * (`@fogoneria/contracts/mod_catalog`). El precio vive en `features/pricing`.
+ * (`@fogoneria/contracts/mod_catalog`). El precio vive en `features/mod_pricing`.
  */
 
 import { createClient, queryString } from '@fogoneria/sdk';

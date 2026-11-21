@@ -19,7 +19,7 @@ import { Tabs } from "@/components/ui/Tabs";
 /**
  * Gastos: egresos operativos por categoría y proveedor.
  *
- * El estado sigue en `ModulesProvider` (demo) hasta AYCDS-27; el cliente para
+ * El estado sigue en `ExpensesProvider` (demo) hasta AYCDS-27; el cliente para
  * la API vive en `./api` con el contrato de `@fogoneria/contracts/mod_expenses`.
  */
 export function GastosPage() {

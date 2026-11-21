@@ -2,8 +2,8 @@
 
 /**
  * Hook del coordinador de cobro (F6c2/F6c3). Vive en la capa compartida y se
- * monta dentro de `ModulesProvider` (debajo de todos los providers) porque
- * necesita ver cuentas, caja, comprobantes, promociones y CRM a la vez.
+ * monta dentro de `WorkspaceActionsProvider` (debajo de todos los providers)
+ * porque necesita ver cuentas, caja, comprobantes, promociones y CRM a la vez.
  *
  * No posee estado: arma los puertos de `lib/checkout.ts` con los contextos.
  *

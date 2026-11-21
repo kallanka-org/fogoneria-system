@@ -33,9 +33,9 @@ import type { Comprobante } from "@fogoneria/contracts/mod_receipts";
 /**
  * Comprobantes: boletas, facturas y notas de crédito con ciclo de vida SUNAT.
  *
- * Con sesión lista/emite/anula contra la API (`features/receipts/api.ts`):
+ * Con sesión lista/emite/anula contra la API (`features/mod_receipts/api.ts`):
  * la emisión solo acepta una comanda `PAGADA` y el importe lo pone el servidor.
- * Sin sesión se mantiene el flujo demo de `ModulesProvider` (CDR y resumen
+ * Sin sesión se mantiene el flujo demo de `ReceiptsProvider` (CDR y resumen
  * diario simulados). SUNAT real queda «pendiente de OSE».
  */
 export function ComprobantesPage() {

@@ -4,10 +4,9 @@
  * Provider del módulo CRM (F6): dueño del estado de clientes del demo.
  *
  * La API sigue mandando cuando hay sesión (`ClientesPage` lee `/crm/clientes`);
- * este provider conserva la lista demo y la comparte con `ModulesProvider` por
- * compatibilidad (`useModules().customers`). Persiste por empresa; la migración
- * desde el `ErpState` v2 (y la purga del campo legacy) corre en el loader de
- * `ModulesProvider`, antes de su primer guardado.
+ * este provider conserva la lista demo y la comparte con `useLoyaltyData`.
+ * Persiste por empresa; la migración desde el `ErpState` v2 (y la purga del
+ * campo legacy) corre en el loader de `LiveDataProvider`, antes del borrado.
  */
 
 import {
@@ -49,7 +48,7 @@ function demoTenant(tenantKey: string): boolean {
 /**
  * Lectura del provider cuando se monta aislado: primero la clave CRM y, si
  * aún no existe, el fallback legacy de solo lectura. La migración que purga el
- * ErpState vive en el loader de `ModulesProvider` (orden padre→hijo).
+ * ErpState vive en el loader de `LiveDataProvider` (orden padre→hijo).
  */
 function readCustomers(tenantKey: string): Customer[] | null {
   return readCrmCustomers(tenantKey) ?? readLegacyCustomers(tenantKey);

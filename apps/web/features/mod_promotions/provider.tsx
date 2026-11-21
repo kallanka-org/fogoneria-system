@@ -3,10 +3,10 @@
 /**
  * Provider del módulo Promociones (F6c2): dueño de los combos y cupones demo.
  *
- * La poda de combos huérfanos se queda en `ModulesProvider` porque necesita el
- * catálogo, que se monta **debajo** de `FeatureProviders`; aquí solo se expone
- * `setCombos`. El importe del descuento lo sigue calculando `lib/domain.ts`
- * (y el servidor con sesión).
+ * `setCombos`. La poda de combos huérfanos vive en `LiveDataProvider` porque
+ * necesita el catálogo, que se monta **debajo** de `FeatureProviders`; aquí
+ * solo se expone el estado. El importe del descuento lo sigue calculando
+ * `lib/domain.ts` (y el servidor con sesión).
  */
 
 import { createContext, useCallback, useContext, useMemo, type ReactNode } from 'react';

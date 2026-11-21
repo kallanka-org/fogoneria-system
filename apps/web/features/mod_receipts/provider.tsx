@@ -4,9 +4,9 @@
  * Provider del módulo Comprobantes (F6c2): dueño del estado demo de
  * comprobantes y del modo contingencia SUNAT.
  *
- * La anulación no revierte caja aquí: la orquesta `ModulesProvider` (que ve
- * caja y cuentas) y usa `patchReceipt`/`addReceipt`. La emisión real con
- * sesión sigue yendo a la API (`features/receipts/api.ts`).
+ * La anulación no revierte caja aquí: la orquesta `WorkspaceActionsProvider`
+ * (que ve caja y cuentas) y usa `patchReceipt`/`addReceipt`. La emisión real con
+ * sesión sigue yendo a la API (`features/mod_receipts/api.ts`).
  */
 
 import { createContext, useCallback, useContext, useMemo, type ReactNode } from 'react';

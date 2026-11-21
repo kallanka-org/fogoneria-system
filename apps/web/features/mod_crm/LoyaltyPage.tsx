@@ -11,9 +11,10 @@ import { clientesSummary, promosSummary } from "@/components/dashboard/summaries
 /**
  * Fidelización: KPIs + regla de puntos. Cupones y clientes viven en sus módulos.
  *
- * Sigue con el estado demo de `ModulesProvider`; la configuración real de
- * lealtad ya está expuesta por `crmApi.config()`/`actualizarConfig()` en `./api`
- * para conectarla sin duplicar el mapeo.
+ * Sigue con el estado demo de `CrmProvider` y `PromotionsProvider`; la
+ * configuración real de lealtad ya está expuesta por
+ * `crmApi.config()`/`actualizarConfig()` en `./api` para conectarla sin duplicar
+ * el mapeo.
  */
 export function LoyaltyPage() {
   const { customers, coupons } = useLoyaltyData();

@@ -7,7 +7,7 @@
  *
  * El descuento **no se calcula en el navegador**: `validarCupon` devuelve el
  * importe que calculó el servidor y el consumo del uso ocurre al cobrar. Las
- * vistas siguen leyendo el estado demo de `ModulesProvider`; este cliente deja
+ * vistas siguen leyendo el estado demo de `PromotionsProvider`; este cliente deja
  * listo el contrato para conectarlas sin duplicar el mapeo.
  */
 

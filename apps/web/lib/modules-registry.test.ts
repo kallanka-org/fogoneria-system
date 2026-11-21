@@ -5,7 +5,7 @@ import { featureModules, pendingFeatureIds } from '@/features/registry';
 import { modulesNav, moduleTitles } from './modules-nav';
 
 /**
- * Fase 1 del plan de paridad: la metadata de `features/crm/module.ts` alimenta
+ * Fase 1 del plan de paridad: la metadata de `features/mod_crm/module.ts` alimenta
  * el registry y el nav generados, sin cambiar todavía el shell.
  */
 describe('registry y nav generados', () => {

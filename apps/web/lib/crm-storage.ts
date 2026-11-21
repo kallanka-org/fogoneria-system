@@ -2,7 +2,7 @@
  * Persistencia del módulo CRM y migración del estado legacy.
  *
  * Hasta F6 los clientes demo vivían en `ErpState` v2 (`customers`). La
- * migración se ejecuta en el **loader de `ModulesProvider`**, antes de que su
+ * migración se ejecuta en el **loader de `LiveDataProvider`**, antes de que su
  * efecto de guardado escriba un estado limpio; así el `CrmProvider` (que corre
  * después por el orden de efectos hijo→padre) siempre encuentra la nueva clave.
  */

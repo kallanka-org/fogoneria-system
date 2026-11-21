@@ -1,6 +1,6 @@
 /* Puente catálogo ↔ API (tarea 63).
    Traduce los nombres snake_case del backend a los tipos del ERP y expone
-   las mutaciones que consume `ModulesProvider`. */
+   las mutaciones que consume `CatalogoProvider`. */
 
 import { apiFetch } from "./api";
 import type { ModifierGroup, PriceList, Product, ProductCategory } from "./erp-catalog";

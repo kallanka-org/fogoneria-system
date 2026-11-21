@@ -80,7 +80,7 @@ type TurnoCerradoVM = {
  *
  * Con sesión real todo pasa por la API (AYCDS-34): el turno, los movimientos,
  * el arqueo y el cobro de comandas `ENTREGADO` con `POST /cash/charges`. Sin
- * sesión (demo) se mantiene el estado local de `ModulesProvider`.
+ * sesión (demo) se mantiene el estado local de `CashProvider`.
  *
  * El estado de negocio sigue en el provider (Fase 4): esta página solo lee y
  * pinta; las mutaciones de la demo se delegan en sus acciones.

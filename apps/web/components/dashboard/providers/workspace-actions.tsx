@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Acciones cross-cutting del workspace (retiro de `ModulesProvider`).
+ * Acciones cross-cutting del workspace.
  *
  * `WorkspaceActionsProvider` se monta **una sola vez** en `app/layout.tsx` y
  * posee los guards de orquestación (`sunatEnviados`, idempotencia y cola del

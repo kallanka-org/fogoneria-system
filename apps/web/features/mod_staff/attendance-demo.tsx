@@ -5,7 +5,7 @@ import { TableCard, THead, TH, TR, TD } from '@/components/ui/data-table';
 
 /**
  * Vista de demostración (sin sesión): matriz semanal con los datos del ERP demo.
- * Vive dentro de la feature para no acoplarse a `components/erp`.
+ * Vive dentro de la feature para no acoplarse a la capa compartida.
  */
 export function AttendanceDemo() {
   const presente = (empleadoId: number, dia: number) =>

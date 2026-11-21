@@ -1,8 +1,8 @@
 /**
  * Feature Caja (turnos, movimientos, arqueo y cobro).
  *
- * El estado de negocio sigue en `ModulesProvider` (Fase 4). La página lee y
- * pinta; este índice expone solo lo que consumen las rutas y el resto del ERP.
+ * La página lee y pinta; este índice expone solo lo que consumen las rutas y
+ * el resto del ERP.
  */
 
 export { CajaPage } from './CajaPage';

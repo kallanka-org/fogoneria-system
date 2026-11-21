@@ -3,8 +3,8 @@
 /**
  * Provider del módulo Reservas (F6c3): dueño de la agenda demo.
  *
- * Con sesión la agenda real viene de la API (`liveReservations` en
- * `ModulesProvider`); este store solo guarda el demo persistido.
+ * Con sesión la agenda real viene de la API (`liveReservations` de
+ * `LiveDataProvider`); este store solo guarda el demo persistido.
  */
 
 import { createContext, useContext, type ReactNode } from 'react';

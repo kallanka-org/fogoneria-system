@@ -8,7 +8,7 @@
  *
  * El provider compone los dos stores para que `module.ts` siga declarando un
  * único provider. La migración/purga de `accounts` y `scopes` del `ErpState`
- * corre en el loader de `ModulesProvider` antes de su último borrado.
+ * corre en el loader de `LiveDataProvider` antes de su borrado.
  */
 
 import {

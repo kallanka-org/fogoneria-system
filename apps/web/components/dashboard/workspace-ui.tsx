@@ -8,9 +8,9 @@ import { Card } from "@/components/ui/Card";
 /**
  * Capa compartida del workspace: hubs y tarjetas de gráfico.
  *
- * Vive en `components/dashboard/` y no en `components/erp/` porque la usan las
- * features (`rrhh`, `catalogo`, la ola de dinero) y el propio dashboard: una
- * feature no puede importar `components/erp/*`.
+ * Vive en `components/dashboard/` porque la usan las features (`staff`,
+ * `catalog`, la ola de dinero) y el propio dashboard; ninguna feature la
+ * duplica.
  */
 
 /** Link de bloque de hub: navega (href) o selecciona tab (onSelect). */

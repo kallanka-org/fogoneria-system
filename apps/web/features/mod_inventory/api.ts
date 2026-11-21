@@ -7,7 +7,7 @@
  * se arma la fila que pinta la tabla.
  *
  * El maestro de insumos, los ajustes manuales y las recetas siguen en el estado
- * demo de `ModulesProvider` (AYCDS-24): este cliente cubre lo que la API ya
+ * demo de `InventoryProvider` (AYCDS-24): este cliente cubre lo que la API ya
  * expone —semáforo y kardex— sin inventar endpoints.
  */
 

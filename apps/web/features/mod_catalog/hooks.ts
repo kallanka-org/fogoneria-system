@@ -7,7 +7,7 @@
  * catálogo y precios, así que la feature no lo duplica: traduce el contrato del
  * módulo (`@fogoneria/contracts/mod_catalog`) al estado del provider y sus acciones.
  * La lista activa se lee solo para mostrar el precio del plato; editarla es
- * responsabilidad de `features/pricing`.
+ * responsabilidad de `features/mod_pricing`.
  */
 
 import { useMemo } from 'react';

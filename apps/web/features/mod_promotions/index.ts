@@ -1,7 +1,7 @@
 /**
  * Feature Promociones (combos, cupones y reglas horarias).
  *
- * Las vistas siguen leyendo el estado demo de `ModulesProvider`; `promocionesApi`
+ * Las vistas siguen leyendo el estado demo de `PromotionsProvider`; `promocionesApi`
  * deja listo el contrato de la API (con `PRICING_PORT` y el descuento en el
  * servidor) sin duplicar el mapeo. Las rutas solo importan este índice.
  */

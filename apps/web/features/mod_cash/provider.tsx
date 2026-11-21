@@ -5,9 +5,9 @@
  * por sucursal (antes en `scopes[*].cash`).
  *
  * `addMovements`/`reverseMovements` son las puertas de escritura del cobro y
- * de la anulación; `setMovements` existe para la fachada de `useModules()`
- * (compatibilidad con las vistas). La migración/purga de `cashShifts` y
- * `scopes[*].cash` corre en el loader de `ModulesProvider`.
+ * de la anulación; `setMovements` lo usan la vista por sucursal y el
+ * coordinador de cobro. La migración/purga de `cashShifts` y `scopes[*].cash`
+ * corre en el loader de `LiveDataProvider`.
  */
 
 import { createContext, useCallback, useContext, useMemo, type ReactNode } from 'react';

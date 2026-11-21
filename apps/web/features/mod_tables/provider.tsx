@@ -4,7 +4,7 @@
  * Provider del módulo Mesas (F6c3): dueño de las mesas demo por sucursal
  * (antes `scopes[*].tables`).
  *
- * Con sesión la API manda (`useModules().tables` = `liveTables`); este store
+ * Con sesión la API manda (`useLiveData().tables` = `liveTables`); este store
  * solo conserva el demo y el parche de estado que usan abrir/anular/cobrar.
  */
 

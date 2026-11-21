@@ -34,3 +34,4 @@ DUMMY_VAR_22=dummy_value_22
 DUMMY_VAR_23=dummy_value_23
 DUMMY_VAR_24=dummy_value_24
 DUMMY_VAR_25=dummy_value_25
+DUMMY_VAR_26=dummy_value_26

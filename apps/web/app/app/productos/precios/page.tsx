@@ -1,4 +1,4 @@
-import { PriceListsView } from "@/features/pricing";
+import { PriceListsView } from "@/features/mod_pricing";
 
 export default function PreciosPage() {
   return (

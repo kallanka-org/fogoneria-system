@@ -49,20 +49,20 @@ const tables = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('@/features/tenant/provider', () => ({ useTenant: () => tenant }));
-vi.mock('@/features/orders/provider', () => ({
+vi.mock('@/features/mod_tenant/provider', () => ({ useTenant: () => tenant }));
+vi.mock('@/features/mod_orders/provider', () => ({
   useAccounts: () => ({ accounts }),
   useOrdersDemo: () => ordersDemo,
 }));
-vi.mock('@/features/tables/provider', () => ({ useTables: () => tables }));
-vi.mock('@/features/cash/provider', () => ({ useCash: () => cash }));
-vi.mock('@/features/crm/provider', () => ({
+vi.mock('@/features/mod_tables/provider', () => ({ useTables: () => tables }));
+vi.mock('@/features/mod_cash/provider', () => ({ useCash: () => cash }));
+vi.mock('@/features/mod_crm/provider', () => ({
   useCrm: () => ({ customers: [{ id: 7 }], setCustomers: vi.fn() }),
 }));
-vi.mock('@/features/promotions/provider', () => ({
+vi.mock('@/features/mod_promotions/provider', () => ({
   usePromotions: () => ({ coupons: [{ code: 'C10' }], setCoupons: vi.fn() }),
 }));
-vi.mock('@/features/expenses/provider', () => ({
+vi.mock('@/features/mod_expenses/provider', () => ({
   useExpenses: () => ({ expenses: [{ id: 3 }], setExpenses: vi.fn() }),
 }));
 

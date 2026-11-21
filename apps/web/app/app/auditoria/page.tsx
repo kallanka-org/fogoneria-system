@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { AuditPage } from "@/features/audit";
+import { AuditPage } from "@/features/mod_audit";
 import { canViewPath } from "@/lib/auth";
 import { SESSION_COOKIE, verifySession } from "@/lib/session";
 

@@ -1,0 +1,9 @@
+{
+  "id": "mod_receipts",
+  "kind": "ui",
+  "owner": "@por-asignar",
+  "status": "aligned",
+  "routes": [
+    "/app/comprobantes"
+  ]
+}

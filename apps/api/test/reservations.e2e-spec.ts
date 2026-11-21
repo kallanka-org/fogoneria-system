@@ -5,7 +5,7 @@ import request from 'supertest';
 import { vi } from 'vitest';
 import { AppModule } from './../src/app.module.js';
 import { PrismaService } from './../src/prisma/prisma.service.js';
-import { ReservationsService } from './../src/modules/reservations/reservations.service.js';
+import { ReservationsService } from './../src/modules/mod_reservations/reservations.service.js';
 import { configureApp } from './../src/bootstrap.js';
 import { createPrismaMock } from './prisma-mock.js';
 

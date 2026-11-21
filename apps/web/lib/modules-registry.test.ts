@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { crmModule } from '@/features/crm/module';
+import { crmModule } from '@/features/mod_crm/module';
 import { featureModules, pendingFeatureIds } from '@/features/registry';
 import { modulesNav, moduleTitles } from './modules-nav';
 
@@ -10,19 +10,19 @@ import { modulesNav, moduleTitles } from './modules-nav';
  */
 describe('registry y nav generados', () => {
   it('incluye la metadata de crm una sola vez', () => {
-    expect(featureModules.filter((module) => module.id === 'crm')).toEqual([crmModule]);
+    expect(featureModules.filter((module) => module.id === 'mod_crm')).toEqual([crmModule]);
   });
 
   it('incluye los módulos de la Fase 3', () => {
     expect(featureModules.map((module) => module.id)).toEqual(
-      expect.arrayContaining(['catalog', 'pricing', 'tables', 'reservations']),
+      expect.arrayContaining(['mod_catalog', 'mod_pricing', 'mod_tables', 'mod_reservations']),
     );
   });
 
   it('no repite IDs y deja el resto como pendientes', () => {
     const ids = featureModules.map((module) => module.id);
     expect(new Set(ids).size).toBe(ids.length);
-    expect(pendingFeatureIds).not.toContain('crm');
+    expect(pendingFeatureIds).not.toContain('mod_crm');
   });
 
   it('el nav de crm sale de module.ts', () => {

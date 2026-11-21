@@ -15,11 +15,11 @@ vi.mock('@/components/dashboard/providers/session', () => ({
 }));
 
 import { useCheckoutController } from './checkout';
-import { AccountsProvider, useAccounts } from '@/features/orders/provider';
-import { CashProvider, useCash } from '@/features/cash/provider';
-import { CrmProvider } from '@/features/crm/provider';
-import { PromotionsProvider } from '@/features/promotions/provider';
-import { ReceiptsProvider, useReceipts } from '@/features/receipts/provider';
+import { AccountsProvider, useAccounts } from '@/features/mod_orders/provider';
+import { CashProvider, useCash } from '@/features/mod_cash/provider';
+import { CrmProvider } from '@/features/mod_crm/provider';
+import { PromotionsProvider } from '@/features/mod_promotions/provider';
+import { ReceiptsProvider, useReceipts } from '@/features/mod_receipts/provider';
 
 const onCommitted = vi.fn();
 const onPostCommitFailed = vi.fn();

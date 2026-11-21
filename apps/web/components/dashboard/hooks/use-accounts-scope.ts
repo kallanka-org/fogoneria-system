@@ -2,8 +2,8 @@
 
 /** Cuentas de la sucursal activa (o todas en la vista agregada). */
 import { useMemo } from 'react';
-import { useAccounts } from '@/features/orders/provider';
-import { useTenant } from '@/features/tenant/provider';
+import { useAccounts } from '@/features/mod_orders/provider';
+import { useTenant } from '@/features/mod_tenant/provider';
 import { matchesBranch } from '@/lib/tenant-scope';
 
 export function useAccountsScope() {

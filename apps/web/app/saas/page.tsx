@@ -1,5 +1,5 @@
-import { SaasPage } from "@/features/saas";
-import { BillingSummary } from "@/features/billing";
+import { SaasPage } from "@/features/mod_saas";
+import { BillingSummary } from "@/features/mod_billing";
 
 /**
  * Consola SaaS del superadmin. La vista vive en `features/saas` y la sección de

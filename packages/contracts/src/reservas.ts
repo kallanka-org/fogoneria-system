@@ -1,5 +1,5 @@
 /**
- * @deprecated Usa `@fogoneria/contracts/reservations` (alias mantenido una
+ * @deprecated Usa `@fogoneria/contracts/mod_reservations` (alias mantenido una
  * release). Se elimina cuando ningún consumidor importe el nombre antiguo.
  */
-export * from './reservations';
+export * from './mod_reservations';

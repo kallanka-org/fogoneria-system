@@ -2,10 +2,10 @@
 
 import { notFound } from "next/navigation";
 import { MODULE_CATALOG, type ModuleId } from "@/lib/erp";
-import { LoyaltyHubPage } from "@/features/crm";
-import { BookingsWorkspace } from "@/features/reservations";
-import { InventoryHubPage } from "@/features/inventory";
-import { StaffWorkspace } from "@/features/staff";
+import { LoyaltyHubPage } from "@/features/mod_crm";
+import { BookingsWorkspace } from "@/features/mod_reservations";
+import { InventoryHubPage } from "@/features/mod_inventory";
+import { StaffWorkspace } from "@/features/mod_staff";
 
 export function moduleMeta(id: string) {
   const meta = MODULE_CATALOG.find((m) => m.id === (id as ModuleId));

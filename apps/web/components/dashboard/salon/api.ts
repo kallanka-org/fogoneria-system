@@ -17,14 +17,14 @@ import {
   type Mesa,
   type MesaInput,
   type MesaUpdate,
-} from '@fogoneria/contracts/tables';
+} from '@fogoneria/contracts/mod_tables';
 import {
   isEstadoReserva,
   type EstadoReserva,
   type Reserva,
   type ReservaInput,
   type ReservaUpdate,
-} from '@fogoneria/contracts/reservations';
+} from '@fogoneria/contracts/mod_reservations';
 
 export const salonClient = createClient({ baseUrl: '/api/backend' });
 

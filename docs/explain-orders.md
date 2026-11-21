@@ -99,7 +99,7 @@ con p50 72 ms).
 |---|---|---|---|
 | 1 | El folio se incrementa en **una sentencia autocommit** en el pool de plataforma (`prisma.raw`), fuera de la transacción del request. El lock dura solo el upsert (~0,3 ms). | `apps/api/src/common/sequences/sequences.service.ts` | Elimina la serialización: 64 → 186 órdenes/s |
 | 2 | Los cuatro `set_config` del contexto RLS pasan a **una sola sentencia**. | `apps/api/src/prisma/prisma.service.ts` | 4 → 1 round-trip por request: ~88 → ~103 rps en la medición intermedia |
-| 3 | Los precios de la comanda se resuelven **en lote**: un `findMany` de platos, uno de combos y uno de `precios_platos`, sin importar cuántas líneas tenga. Antes eran 2 consultas por línea (N+1). | `apps/api/src/modules/orders/orders.service.ts` | ~103 → ~186 rps; con comandas de 5 líneas el ahorro es mayor |
+| 3 | Los precios de la comanda se resuelven **en lote**: un `findMany` de platos, uno de combos y uno de `precios_platos`, sin importar cuántas líneas tenga. Antes eran 2 consultas por línea (N+1). | `apps/api/src/modules/mod_orders/orders.service.ts` | ~103 → ~186 rps; con comandas de 5 líneas el ahorro es mayor |
 | 4 | `DATABASE_POOL_MAX` configurable (default **10**, el histórico). | `src/config/env.validation.ts`, `src/prisma/prisma.service.ts`, `.env.example` | Ninguno por sí solo: se probó con 20 y el throughput no subió porque la base estaba ociosa. Queda como perilla operativa |
 | 5 | Test de concurrencia real de folios (50 altas simultáneas, contador por empresa, ORD vs RSV). | `apps/api/test/db/sequences-concurrency.db-spec.ts` | 3 tests nuevos |
 

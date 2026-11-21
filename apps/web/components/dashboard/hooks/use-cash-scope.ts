@@ -8,8 +8,8 @@
 
 import { useCallback, useMemo } from 'react';
 import type { CashMovement } from '@/lib/erp';
-import { useCash } from '@/features/cash/provider';
-import { useTenant } from '@/features/tenant/provider';
+import { useCash } from '@/features/mod_cash/provider';
+import { useTenant } from '@/features/mod_tenant/provider';
 
 export function useCashScope() {
   const { branchIds, activeBranchId, isGeneral } = useTenant();

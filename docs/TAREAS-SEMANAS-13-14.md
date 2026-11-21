@@ -42,7 +42,7 @@
   4. **Sin receta no rompe**: el plato se omite y se reporta en `sinReceta` (la cocina no deja de servir por un escandallo faltante).
   5. **Stock sin negativos**: la base tiene un `CHECK`, así que el faltante queda en 0 y el movimiento registra lo consumido; el descuento usa concurrencia optimista (`updateMany` con la cantidad leída) para no pisar a otra comanda.
   6. Corre **dentro de la transacción del request**: si el kardex falla, la entrega no se confirma.
-- **Archivos/rutas:** `apps/api/src/modules/inventory/**`, `apps/api/src/modules/orders/orders.service.ts`
+- **Archivos/rutas:** `apps/api/src/modules/mod_inventory/**`, `apps/api/src/modules/mod_orders/orders.service.ts`
 - **Criterio de aceptación:** la entrega descuenta la receta una sola vez, los combos también, y ninguna comanda deja stock negativo. **Cumplido** (smoke 9/9 + 6 pruebas DB).
 - **Depende de:** nada bloqueante (la tabla de recetas existe desde el modelo inicial).
 - **Bloquea a:** **AYCDS-13** (el semáforo se alimenta de este kardex) y **AYCDS-24**/**29**.

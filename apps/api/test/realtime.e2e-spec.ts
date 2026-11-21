@@ -5,7 +5,7 @@ import { io, type Socket } from 'socket.io-client';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { AppModule } from './../src/app.module.js';
 import { PrismaService } from './../src/prisma/prisma.service.js';
-import { OrdersGateway } from './../src/modules/realtime/orders.gateway.js';
+import { OrdersGateway } from './../src/modules/mod_realtime/orders.gateway.js';
 import { configureApp } from './../src/bootstrap.js';
 import { createPrismaMock } from './prisma-mock.js';
 

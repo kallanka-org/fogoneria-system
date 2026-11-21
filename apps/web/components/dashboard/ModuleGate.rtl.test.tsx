@@ -7,12 +7,12 @@ const notFound = vi.hoisted(() => vi.fn(() => {
 }));
 vi.mock('next/navigation', () => ({ notFound }));
 
-vi.mock('@/features/crm', () => ({ LoyaltyHubPage: () => <div>loyalty-hub</div> }));
-vi.mock('@/features/inventory', () => ({ InventoryHubPage: () => <div>inventory-hub</div> }));
-vi.mock('@/features/reservations', () => ({
+vi.mock('@/features/mod_crm', () => ({ LoyaltyHubPage: () => <div>loyalty-hub</div> }));
+vi.mock('@/features/mod_inventory', () => ({ InventoryHubPage: () => <div>inventory-hub</div> }));
+vi.mock('@/features/mod_reservations', () => ({
   BookingsWorkspace: () => <div>bookings-workspace</div>,
 }));
-vi.mock('@/features/staff', () => ({
+vi.mock('@/features/mod_staff', () => ({
   StaffWorkspace: () => <div>staff-workspace</div>,
 }));
 

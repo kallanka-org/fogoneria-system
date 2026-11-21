@@ -3,8 +3,8 @@
  * (alias mantenido una release). Se elimina cuando ningún consumidor importe el
  * nombre antiguo.
  */
-export * from './auth';
-export * from './tenant';
-export * from './onboarding';
-export * from './saas';
-export * from './billing';
+export * from './mod_auth';
+export * from './mod_tenant';
+export * from './mod_onboarding';
+export * from './mod_saas';
+export * from './mod_billing';

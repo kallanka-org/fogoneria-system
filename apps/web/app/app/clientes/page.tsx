@@ -1,4 +1,4 @@
-import { ClientesPage } from "@/features/crm";
+import { ClientesPage } from "@/features/mod_crm";
 
 export default function ClientesRoute() {
   return (

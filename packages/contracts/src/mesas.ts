@@ -1,5 +1,5 @@
 /**
- * @deprecated Usa `@fogoneria/contracts/tables` (alias mantenido una release).
+ * @deprecated Usa `@fogoneria/contracts/mod_tables` (alias mantenido una release).
  * Se elimina cuando ningún consumidor importe el nombre antiguo.
  */
-export * from './tables';
+export * from './mod_tables';

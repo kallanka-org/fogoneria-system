@@ -3,23 +3,23 @@ import {
   esRolWeb,
   etiquetaRol,
   rolDesdeApi,
-} from '@fogoneria/contracts/auth';
+} from '@fogoneria/contracts/mod_auth';
 import {
   esPlanEmpresa,
   etiquetaPlan,
-} from '@fogoneria/contracts/billing';
+} from '@fogoneria/contracts/mod_billing';
 import {
   isValidEmail,
   isValidRuc,
   toOnboardingPayload,
   validarOnboarding,
   type OnboardingInput,
-} from '@fogoneria/contracts/onboarding';
+} from '@fogoneria/contracts/mod_onboarding';
 import {
   esEstadoEmpresa,
   estadoEmpresaTone,
   etiquetaEstadoEmpresa,
-} from '@fogoneria/contracts/tenant';
+} from '@fogoneria/contracts/mod_tenant';
 import {
   toEmpresa,
   toEmpresaSaas,

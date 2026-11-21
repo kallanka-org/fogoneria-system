@@ -1,7 +1,7 @@
 /**
- * @deprecated Usa `@fogoneria/contracts/catalog` y `@fogoneria/contracts/pricing`
+ * @deprecated Usa `@fogoneria/contracts/mod_catalog` y `@fogoneria/contracts/mod_pricing`
  * (alias mantenido una release). Se elimina cuando ningún consumidor importe el
  * nombre antiguo.
  */
-export * from './catalog';
-export * from './pricing';
+export * from './mod_catalog';
+export * from './mod_pricing';

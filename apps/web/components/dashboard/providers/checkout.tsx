@@ -18,11 +18,11 @@ import { useCallback, useEffect, useRef } from 'react';
 import { nextReceiptNumber } from '@/lib/domain';
 import type { TableAccount } from '@/lib/domain';
 import type { Coupon, Receipt } from '@/lib/erp';
-import { useAccounts } from '@/features/orders/provider';
-import { useCash } from '@/features/cash/provider';
-import { useCrm } from '@/features/crm/provider';
-import { usePromotions } from '@/features/promotions/provider';
-import { useReceipts } from '@/features/receipts/provider';
+import { useAccounts } from '@/features/mod_orders/provider';
+import { useCash } from '@/features/mod_cash/provider';
+import { useCrm } from '@/features/mod_crm/provider';
+import { usePromotions } from '@/features/mod_promotions/provider';
+import { useReceipts } from '@/features/mod_receipts/provider';
 import { runCheckout, type CheckoutInput, type CheckoutWrites } from '@/lib/checkout';
 
 const MAX_POST_COMMIT_ATTEMPTS = 3;

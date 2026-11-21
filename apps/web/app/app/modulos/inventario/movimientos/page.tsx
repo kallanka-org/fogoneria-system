@@ -1,5 +1,5 @@
 import { ModuleGuard } from "@/components/dashboard/ModuleGate";
-import { MovementsPage } from "@/features/inventory";
+import { MovementsPage } from "@/features/mod_inventory";
 
 export default function InventarioMovimientosPage() {
   return (

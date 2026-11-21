@@ -12,19 +12,19 @@
  */
 
 import { createClient, queryString } from '@fogoneria/sdk';
-import { rolDesdeApi, type UsuarioSesion } from '@fogoneria/contracts/auth';
-import { esPlanEmpresa, type PlanEmpresa } from '@fogoneria/contracts/billing';
+import { rolDesdeApi, type UsuarioSesion } from '@fogoneria/contracts/mod_auth';
+import { esPlanEmpresa, type PlanEmpresa } from '@fogoneria/contracts/mod_billing';
 import {
   type OnboardingInput,
   type OnboardingResultado,
-} from '@fogoneria/contracts/onboarding';
-import { type EmpresaSaas, type MetricasSaas } from '@fogoneria/contracts/saas';
+} from '@fogoneria/contracts/mod_onboarding';
+import { type EmpresaSaas, type MetricasSaas } from '@fogoneria/contracts/mod_saas';
 import {
   esEstadoEmpresa,
   type Empresa,
   type EstadoEmpresa,
   type Sucursal,
-} from '@fogoneria/contracts/tenant';
+} from '@fogoneria/contracts/mod_tenant';
 
 export const plataformaClient = createClient({ baseUrl: '/api/backend' });
 

@@ -14,7 +14,7 @@ import type {
   OrdenItemInput,
   OrigenOrden,
   TableroOrdenes,
-} from "@fogoneria/contracts/orders";
+} from "@fogoneria/contracts/mod_orders";
 
 export type ApiOrderStatus =
   | "POR_CONFIRMAR"

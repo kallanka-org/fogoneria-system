@@ -8,10 +8,10 @@
 import { useCallback } from 'react';
 import type { Branch, BranchScope } from '@/lib/tenancy';
 import { GENERAL_BRANCH } from '@/lib/tenancy';
-import { useCash } from '@/features/cash/provider';
-import { useOrdersDemo } from '@/features/orders/provider';
-import { useTables } from '@/features/tables/provider';
-import { useTenant } from '@/features/tenant/provider';
+import { useCash } from '@/features/mod_cash/provider';
+import { useOrdersDemo } from '@/features/mod_orders/provider';
+import { useTables } from '@/features/mod_tables/provider';
+import { useTenant } from '@/features/mod_tenant/provider';
 
 export function useBranchScope() {
   const {

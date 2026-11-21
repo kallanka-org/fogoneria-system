@@ -154,7 +154,7 @@ Estos son los puntos que las olas deben cortar en ese orden.
 
 - `apps/web/features/rrhh/`: `api.ts` (SDK + contratos), `hooks.ts` (`useAttendance`, `useShifts`), `AttendancePage`, `ShiftsPage`, demo aislado.
 - Las rutas de asistencia y turnos solo importan `@/features/rrhh` (la página conserva guard y cabecera).
-- `apps/api/src/modules/staff/index.ts` como API pública; `app.module` importa el `index`.
+- `apps/api/src/modules/mod_staff/index.ts` como API pública; `app.module` importa el `index`.
 - La feature no importa `components/erp/*` ni otras features; usa `@fogoneria/sdk`, `@fogoneria/contracts` y `@fogoneria/kernel`.
 - Criterio: avanzar RRHH toca `features/rrhh/**` + sus rutas + `staff/**`; hecho.
 
@@ -265,7 +265,7 @@ Estos son los puntos que las olas deben cortar en ese orden.
 
 #### Ola personas ✅ (2026-11-19) — PR #60
 
-- **Contratos:** `packages/contracts/src/crm.ts` (segmentos, cliente y detalle,
+- **Contratos:** `packages/contracts/src/mod_crm.ts` (segmentos, cliente y detalle,
   movimientos de puntos, configuración de lealtad, inputs, etiquetas y
   `validarAjustePuntos`) + subpath `./crm`.
 - **Backend:** `crm/index.ts` público (`CrmModule`, `CrmService`,
@@ -274,7 +274,7 @@ Estos son los puntos que las olas deben cortar en ese orden.
   `movimientos_puntos` con Prisma scoped, así que no necesita puerto. Sin
   cambios de reglas, worker ni triggers.
 - **Baseline 7 → 6** (sale `crm → audit` directo). Sin excepciones nuevas.
-- **Web:** `features/crm/` (`api.ts` SDK+contratos, `ClientesPage` con búsqueda,
+- **Web:** `features/mod_crm/` (`api.ts` SDK+contratos, `ClientesPage` con búsqueda,
   filtro por segmento, ficha y ajuste, `LoyaltyPage` que sigue demo,
   `LoyaltyHubPage` y `crm.test.ts`). `ModuleGate` importa el hub desde la
   feature; las rutas `/app/clientes` y `/app/modulos/fidelizacion/regla` solo
@@ -287,7 +287,7 @@ Estos son los puntos que las olas deben cortar en ese orden.
 
 #### Ola lectura ✅ (2026-11-19) — PR #62
 
-- **Contratos:** `packages/contracts/src/bi.ts` (`RangoBi`, `Pnl`, `PnlDia`,
+- **Contratos:** `packages/contracts/src/mod_bi.ts` (`RangoBi`, `Pnl`, `PnlDia`,
   `PlatoTop`, `CobroMetodo`, `ReporteBi`, `calcularMargen`,
   `etiquetaMetodoPago`) y `tiempo-real.ts` (`EventoTiempoReal`, `SobreEvento<T>`,
   payloads `OrdenCreadaEvento`/`OrdenActualizadaEvento`/`OrdenSlaEvento`/
@@ -301,7 +301,7 @@ Estos son los puntos que las olas deben cortar en ese orden.
   interno. Sin cambios de rooms, eventos ni consultas de BI.
 - **Baseline 6 → 4** (salen `orders → realtime` ×2). Queda `realtime → auth`
   para la ola de plataforma.
-- **Web:** `features/bi/` (`api.ts` SDK + contratos, `hooks.ts` con `useBi` y
+- **Web:** `features/mod_bi/` (`api.ts` SDK + contratos, `hooks.ts` con `useBi` y
   rango de 7 días de Lima vía `@fogoneria/kernel`, `AnaliticasPage` con P&L,
   serie, ranking, cobros por método y fallback demo, `index.ts`, `bi.test.ts`).
   La ruta `/app/analiticas` solo importa la feature; `lib/bi-api.ts` y su test

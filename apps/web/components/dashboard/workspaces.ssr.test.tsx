@@ -20,7 +20,7 @@ vi.mock('@/components/dashboard/providers/notifications', async (importOriginal)
   ...(await importOriginal<Record<string, unknown>>()),
   useNotifications: () => estado,
 }));
-vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_tenant/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useTenant: () => estado,
 }));
@@ -48,44 +48,44 @@ vi.mock('@/components/dashboard/hooks/use-accounts-scope', async (importOriginal
   ...(await importOriginal<Record<string, unknown>>()),
   useAccountsScope: () => (estado as unknown as { accounts?: unknown[] }).accounts as never,
 }));
-vi.mock('@/features/orders/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_orders/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useAccounts: () => estado,
   useOrdersDemo: () => estado,
 }));
-vi.mock('@/features/tables/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_tables/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useTables: () => estado,
 }));
-vi.mock('@/features/reservations/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_reservations/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useReservations: () => estado,
 }));
-vi.mock('@/features/cash/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_cash/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useCash: () => estado,
 }));
-vi.mock('@/features/receipts/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_receipts/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useReceipts: () => estado,
 }));
-vi.mock('@/features/promotions/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_promotions/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   usePromotions: () => estado,
 }));
-vi.mock('@/features/crm/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_crm/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useCrm: () => estado,
 }));
-vi.mock('@/features/expenses/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_expenses/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useExpenses: () => estado,
 }));
-vi.mock('@/features/inventory/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_inventory/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useInventory: () => estado,
 }));
-vi.mock('@/features/staff/provider', async (importOriginal) => ({
+vi.mock('@/features/mod_staff/provider', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useStaff: () => estado,
 }));
@@ -111,9 +111,9 @@ vi.mock('@/components/dashboard/summaries/ModuleSummary', () => ({
 }));
 vi.mock('@/components/dashboard/summaries/charts', () => ({ MiniBars: () => null }));
 
-import { BookingsWorkspace } from '@/features/reservations';
-import { CartaVirtualView } from '@/features/catalog';
-import { StaffWorkspace } from '@/features/staff';
+import { BookingsWorkspace } from '@/features/mod_reservations';
+import { CartaVirtualView } from '@/features/mod_catalog';
+import { StaffWorkspace } from '@/features/mod_staff';
 
 describe('BookingsWorkspace', () => {
   it('calcula ocupación con mesas y muestra el maestro solo a sucursal', () => {

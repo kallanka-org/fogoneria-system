@@ -1,9 +1,0 @@
-{
-  "id": "reservations",
-  "kind": "ui",
-  "owner": "@por-asignar",
-  "status": "aligned",
-  "routes": [
-    "/app/modulos/reservas/agenda"
-  ]
-}

@@ -228,8 +228,7 @@ const webRegistry = `/**
  * Regenera con \`pnpm gen:modules\`.
  *
  * Fase 6: lista las features y compone los providers opcionales de \`module.ts\`.
- * El layout consume \`FeatureProviders\`; el estado global restante sigue en
- * \`ModulesProvider\` hasta completar la migración.
+ * El layout consume \`FeatureProviders\`; ya no hay \`ModulesProvider\`.
  */
 import { createElement, type ComponentType, type ReactNode } from 'react';
 ${registryImports.map(({ module }) => `import { ${webMetadata.get(module.id).exportName ?? `${module.id}Module`} } from './${module.id}/module';`).join('\n')}

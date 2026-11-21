@@ -1,9 +1,9 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { PrismaClient } from '../../src/generated/prisma/client.js';
-import type { AuditService } from '../../src/modules/audit/audit.service.js';
+import type { AuditService } from '../../src/modules/mod_audit/audit.service.js';
 import type { TenantContextService } from '../../src/common/context/tenant-context.service.js';
 import type { PrismaService } from '../../src/prisma/prisma.service.js';
-import { StockAlertsService } from '../../src/modules/inventory/stock-alerts.service.js';
+import { StockAlertsService } from '../../src/modules/mod_inventory/stock-alerts.service.js';
 import {
   asTenant,
   createDb,

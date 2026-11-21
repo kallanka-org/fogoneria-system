@@ -5,8 +5,8 @@ import request from 'supertest';
 import { vi } from 'vitest';
 import { AppModule } from './../src/app.module.js';
 import { PrismaService } from './../src/prisma/prisma.service.js';
-import { AuthService } from './../src/modules/auth/auth.service.js';
-import { SaasService } from './../src/modules/saas/saas.service.js';
+import { AuthService } from './../src/modules/mod_auth/auth.service.js';
+import { SaasService } from './../src/modules/mod_saas/saas.service.js';
 import { configureApp } from './../src/bootstrap.js';
 import { createPrismaMock } from './prisma-mock.js';
 

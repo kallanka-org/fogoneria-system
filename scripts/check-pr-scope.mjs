@@ -26,125 +26,125 @@ if (!base || !head) {
 }
 
 const MODULOS = {
-  'api:auth': 'auth',
-  'api:tenant': 'tenant',
-  'api:onboarding': 'onboarding',
-  'api:saas': 'saas',
-  'api:billing': 'billing',
-  'api:audit': 'audit',
-  'api:catalog': 'catalog',
-  'api:pricing': 'pricing',
-  'api:tables': 'tables',
-  'api:reservations': 'reservations',
-  'api:orders': 'orders',
-  'api:realtime': 'realtime',
-  'api:cash': 'cash',
-  'api:receipts': 'receipts',
-  'api:expenses': 'expenses',
-  'api:inventory': 'inventory',
-  'api:promotions': 'promotions',
-  'api:crm': 'crm',
-  'api:staff': 'staff',
-  'api:bi': 'bi',
+  'api:mod_auth': 'mod_auth',
+  'api:mod_tenant': 'mod_tenant',
+  'api:mod_onboarding': 'mod_onboarding',
+  'api:mod_saas': 'mod_saas',
+  'api:mod_billing': 'mod_billing',
+  'api:mod_audit': 'mod_audit',
+  'api:mod_catalog': 'mod_catalog',
+  'api:mod_pricing': 'mod_pricing',
+  'api:mod_tables': 'mod_tables',
+  'api:mod_reservations': 'mod_reservations',
+  'api:mod_orders': 'mod_orders',
+  'api:mod_realtime': 'mod_realtime',
+  'api:mod_cash': 'mod_cash',
+  'api:mod_receipts': 'mod_receipts',
+  'api:mod_expenses': 'mod_expenses',
+  'api:mod_inventory': 'mod_inventory',
+  'api:mod_promotions': 'mod_promotions',
+  'api:mod_crm': 'mod_crm',
+  'api:mod_staff': 'mod_staff',
+  'api:mod_bi': 'mod_bi',
 };
 
 const VISTAS = {
-  OrdersView: 'orders',
-  MozoView: 'orders',
-  AccountPanel: 'orders',
-  useOrdersRealtime: 'realtime',
-  BookingsModule: 'reservations',
-  BookingsWorkspace: 'reservations',
-  SalonTablesView: 'tables',
-  CajaView: 'cash',
-  ComprobantesView: 'receipts',
-  InventoryModule: 'inventory',
-  InventoryMovementsView: 'inventory',
-  GastosView: 'expenses',
-  CombosView: 'promotions',
-  PromocionesView: 'promotions',
-  ClientesView: 'crm',
-  LoyaltyModule: 'crm',
-  StaffAttendanceView: 'staff',
-  StaffTurnosView: 'staff',
-  StaffModule: 'staff',
-  RolesView: 'staff',
-  AnaliticasView: 'bi',
-  AuditPage: 'audit',
-  CartaVirtualView: 'catalog',
-  ProductsView: 'catalog',
-  CategoriesView: 'catalog',
-  ModifiersView: 'catalog',
-  PriceListsView: 'pricing',
+  OrdersView: 'mod_orders',
+  MozoView: 'mod_orders',
+  AccountPanel: 'mod_orders',
+  useOrdersRealtime: 'mod_realtime',
+  BookingsModule: 'mod_reservations',
+  BookingsWorkspace: 'mod_reservations',
+  SalonTablesView: 'mod_tables',
+  CajaView: 'mod_cash',
+  ComprobantesView: 'mod_receipts',
+  InventoryModule: 'mod_inventory',
+  InventoryMovementsView: 'mod_inventory',
+  GastosView: 'mod_expenses',
+  CombosView: 'mod_promotions',
+  PromocionesView: 'mod_promotions',
+  ClientesView: 'mod_crm',
+  LoyaltyModule: 'mod_crm',
+  StaffAttendanceView: 'mod_staff',
+  StaffTurnosView: 'mod_staff',
+  StaffModule: 'mod_staff',
+  RolesView: 'mod_staff',
+  AnaliticasView: 'mod_bi',
+  AuditPage: 'mod_audit',
+  CartaVirtualView: 'mod_catalog',
+  ProductsView: 'mod_catalog',
+  CategoriesView: 'mod_catalog',
+  ModifiersView: 'mod_catalog',
+  PriceListsView: 'mod_pricing',
 };
 
 const FEATURES = {
-  catalog: 'catalog',
-  pricing: 'pricing',
-  tables: 'tables',
-  reservations: 'reservations',
-  promotions: 'promotions',
-  orders: 'orders',
-  cash: 'cash',
-  receipts: 'receipts',
-  inventory: 'inventory',
-  expenses: 'expenses',
-  crm: 'crm',
-  staff: 'staff',
-  bi: 'bi',
+  mod_catalog: 'mod_catalog',
+  mod_pricing: 'mod_pricing',
+  mod_tables: 'mod_tables',
+  mod_reservations: 'mod_reservations',
+  mod_orders: 'mod_orders',
+  mod_cash: 'mod_cash',
+  mod_receipts: 'mod_receipts',
+  mod_expenses: 'mod_expenses',
+  mod_inventory: 'mod_inventory',
+  mod_promotions: 'mod_promotions',
+  mod_crm: 'mod_crm',
+  mod_staff: 'mod_staff',
+  mod_bi: 'mod_bi',
   // Alias deprecados de contratos y nombres anteriores.
-  catalogo: 'catalog',
-  salon: 'tables',
-  mesas: 'tables',
-  reservas: 'reservations',
-  caja: 'cash',
-  comprobantes: 'receipts',
-  gastos: 'expenses',
-  inventario: 'inventory',
-  ordenes: 'orders',
-  promociones: 'promotions',
-  rrhh: 'staff',
-  'tiempo-real': 'realtime',
+  catalogo: 'mod_catalog',
+  salon: 'mod_tables',
+  mesas: 'mod_tables',
+  reservas: 'mod_reservations',
+  caja: 'mod_cash',
+  comprobantes: 'mod_receipts',
+  gastos: 'mod_expenses',
+  inventario: 'mod_inventory',
+  ordenes: 'mod_orders',
+  promociones: 'mod_promotions',
+  rrhh: 'mod_staff',
+  'tiempo-real': 'mod_realtime',
 };
 
 const LIB = {
-  catalog: 'catalog',
-  pricing: 'pricing',
-  promotions: 'promotions',
-  orders: 'orders',
-  'orders-board': 'orders',
-  'orders-realtime': 'realtime',
-  realtime: 'realtime',
-  tables: 'tables',
-  reservations: 'reservations',
-  cash: 'cash',
-  receipts: 'receipts',
-  inventory: 'inventory',
-  expenses: 'expenses',
-  crm: 'crm',
-  staff: 'staff',
-  bi: 'bi',
+  catalog: 'mod_catalog',
+  pricing: 'mod_pricing',
+  tables: 'mod_tables',
+  reservations: 'mod_reservations',
+  orders: 'mod_orders',
+  realtime: 'mod_realtime',
+  cash: 'mod_cash',
+  receipts: 'mod_receipts',
+  expenses: 'mod_expenses',
+  inventory: 'mod_inventory',
+  promotions: 'mod_promotions',
+  crm: 'mod_crm',
+  staff: 'mod_staff',
+  bi: 'mod_bi',
+  'orders-board': 'mod_orders',
+  'orders-realtime': 'mod_realtime',
 };
 
 const RUTAS = [
   [/^apps\/web\/app\/app\/(caja|comprobantes|clientes|analiticas|gastos|combos|promociones)(\/|$)/, (m) => ({
-    caja: 'cash',
-    comprobantes: 'receipts',
-    clientes: 'crm',
-    analiticas: 'bi',
-    gastos: 'expenses',
-    combos: 'promotions',
-    promociones: 'promotions',
+    caja: 'mod_cash',
+    comprobantes: 'mod_receipts',
+    clientes: 'mod_crm',
+    analiticas: 'mod_bi',
+    gastos: 'mod_expenses',
+    combos: 'mod_promotions',
+    promociones: 'mod_promotions',
   })[m[1]]],
-  [/^apps\/web\/app\/app\/(ordenes|cocina|mozo)(\/|$)/, () => 'orders'],
-  [/^apps\/web\/app\/app\/productos\/precios(\/|$)/, () => 'pricing'],
-  [/^apps\/web\/app\/app\/productos(\/|$)/, () => 'catalog'],
-  [/^apps\/web\/app\/app\/mesas(\/|$)/, () => 'tables'],
-  [/^apps\/web\/app\/app\/modulos\/reservas(\/|$)/, () => 'reservations'],
-  [/^apps\/web\/app\/app\/modulos\/inventario(\/|$)/, () => 'inventory'],
-  [/^apps\/web\/app\/app\/modulos\/personal(\/|$)/, () => 'staff'],
-  [/^apps\/web\/app\/app\/modulos\/fidelizacion(\/|$)/, () => 'crm'],
-  [/^apps\/web\/app\/app\/auditoria(\/|$)/, () => 'audit'],
+  [/^apps\/web\/app\/app\/(ordenes|cocina|mozo)(\/|$)/, () => 'mod_orders'],
+  [/^apps\/web\/app\/app\/productos\/precios(\/|$)/, () => 'mod_pricing'],
+  [/^apps\/web\/app\/app\/productos(\/|$)/, () => 'mod_catalog'],
+  [/^apps\/web\/app\/app\/mesas(\/|$)/, () => 'mod_tables'],
+  [/^apps\/web\/app\/app\/modulos\/reservas(\/|$)/, () => 'mod_reservations'],
+  [/^apps\/web\/app\/app\/modulos\/inventario(\/|$)/, () => 'mod_inventory'],
+  [/^apps\/web\/app\/app\/modulos\/personal(\/|$)/, () => 'mod_staff'],
+  [/^apps\/web\/app\/app\/modulos\/fidelizacion(\/|$)/, () => 'mod_crm'],
+  [/^apps\/web\/app\/app\/auditoria(\/|$)/, () => 'mod_audit'],
 ];
 
 /** Devuelve la clave del módulo o `null` si el archivo es compartido. */
@@ -156,7 +156,7 @@ function moduloDe(archivo) {
 
   // Schema Prisma multi-archivo: cada módulo es dueño de su `<id>.prisma`;
   // `core.prisma` y el resto de `prisma/` son compartidos.
-  const prismaModulo = /^apps\/api\/prisma\/schema\/([a-z0-9-]+)\.prisma$/.exec(archivo);
+  const prismaModulo = /^apps\/api\/prisma\/schema\/([a-z0-9_-]+)\.prisma$/.exec(archivo);
   if (prismaModulo) {
     if (prismaModulo[1] === 'core') return null;
     return MODULOS[`api:${prismaModulo[1]}`] ?? prismaModulo[1];
@@ -164,7 +164,7 @@ function moduloDe(archivo) {
   if (archivo.startsWith('apps/api/prisma/')) return null;
 
   // Contratos por módulo: `packages/contracts/src/<m>.ts`.
-  const contrato = /^packages\/contracts\/src\/([a-z-]+)\.ts$/.exec(archivo);
+  const contrato = /^packages\/contracts\/src\/([a-z0-9_-]+)\.ts$/.exec(archivo);
   if (contrato && contrato[1] !== 'index') {
     // `plataforma` se reparte en la Fase 4; hasta entonces es compartido.
     if (contrato[1] === 'plataforma') return null;
@@ -203,16 +203,16 @@ function moduloDe(archivo) {
   const lib = /^apps\/web\/lib\/([a-z-]+?)(?:-api)?\.tsx?$/.exec(archivo);
   if (lib) {
     // Sesión/BFF, RBAC y auth web son la autoridad compartida hasta la Fase 4.
-    if (['session', 'backend', 'auth'].includes(lib[1])) return null;
-    if (lib[1] === 'order-mapping') return 'orders';
-    if (lib[1] === 'table-mapping') return 'tables';
-    if (lib[1] === 'receipt-mapping') return 'receipts';
+    if (['session', 'backend', 'mod_auth'].includes(lib[1])) return null;
+    if (lib[1] === 'order-mapping') return 'mod_orders';
+    if (lib[1] === 'table-mapping') return 'mod_tables';
+    if (lib[1] === 'receipt-mapping') return 'mod_receipts';
     return LIB[lib[1]] ?? null;
   }
 
   const vista = /^apps\/web\/components\/erp\/(?:.*\/)?([A-Za-z0-9]+)\.tsx$/.exec(archivo);
   if (vista) {
-    if (archivo.includes('/catalog/')) return 'catalog';
+    if (archivo.includes('/catalog/')) return 'mod_catalog';
     return VISTAS[vista[1]] ?? null;
   }
 

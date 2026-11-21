@@ -1,5 +1,12 @@
 # SESION — estado entre sesiones
 
+## 2026-11-21 — Prefijo `mod_` en los 20 módulos y retiro de `useModules`
+
+- **Renombre:** backend (`apps/api/src/modules/mod_*`), features web (`features/mod_*`), contratos (`mod_*.ts`), specs (`mod_*.md`), schema Prisma (`mod_*.prisma`) y manifiestos (`modules/mod_*/module.json`). Catálogo, generadores, check de paridad/alcance/specs y registry regenerado con los IDs `mod_*`. Rutas de la app sin cambios.
+- **Contratos:** subpaths `@fogoneria/contracts/mod_*` para todos los consumidores; los 20 nombres anteriores quedan como archivos alias `@deprecated` que reexportan `./mod_*` (además de los 12 históricos `caja`, `catalogo`, `plataforma`, …). Test de alias actualizado.
+- **`useModules` retirado:** `ModulesProvider.tsx` eliminado; el test de acciones pasó a `workspace-actions.integration.test.tsx` con un `useTestWorkspace` local que compone hooks. Layout sin `ModulesProvider`.
+- Verificado: API 683 unit + 112 e2e, web 974, contratos 153; types, lint, builds, paridad 20/20/20/20, `gen:modules --check`, boundaries 0 y specs.
+
 ## 2026-11-21 — H1: guards del workspace en un provider singleton
 
 - **Hallazgo:** `sunatEnviados`, `checkingOut`, `paidByAccount` y la cola post-commit vivían en refs por instancia de `useWorkspaceActions`/`useCheckout`; el reset de `AppTopBar` solo limpiaba su copia y otro consumidor (CheckoutModal) podía omitir SUNAT con IDs reciclados.
@@ -29,7 +36,7 @@
 ## 2026-11-21 — F6c3: scopes, reservas y tickets + fixes de auditoría
 
 - **M1/M2/L1/L2:** `useCheckout` con guard `checkingOut`, cola de post-commit que acepta promesas y reintenta 3 veces con backoff (avisa con `onPostCommitFailed`), `restorePoints` (CRM) y `paidByAccount` reconstruido desde el estado (se limpia al resetear/cambiar de empresa).
-- **Scopes:** `scopes.orders` → segundo store de `features/orders` (`useOrdersDemo`, `fogoneria:orders-demo:v1`); `scopes.tables` → `features/tables` (`fogoneria:tables-demo:v1`, `patchStatus`); `reservations` → `features/reservations`; `tickets` → `components/dashboard/providers/tickets.tsx`. Ambos stores remapean sus claves slug→UUID (`remapBranches`) desde `ModulesProvider`, al montar o cuando llegan las sucursales.
+- **Scopes:** `scopes.orders` → segundo store de `features/mod_orders` (`useOrdersDemo`, `fogoneria:orders-demo:v1`); `scopes.tables` → `features/mod_tables` (`fogoneria:tables-demo:v1`, `patchStatus`); `reservations` → `features/mod_reservations`; `tickets` → `components/dashboard/providers/tickets.tsx`. Ambos stores remapean sus claves slug→UUID (`remapBranches`) desde `ModulesProvider`, al montar o cuando llegan las sucursales.
 - **Migración:** el loader de `ModulesProvider` migra todos los slices, borra `fogoneria:erp:v2:<tenant>` y ya no guarda estado propio. `lib/persistence.ts` queda solo como lectura legacy.
 - **Retiro de `ModulesProvider`:** bloqueado; queda como fachada sin estado (estado de API + orquestación). Plan en `docs/plan-f6c-pos.md` §10.
 - Verificado: web **963** tests, types, lint, build, paridad 20/20/20/20, boundaries 0 y specs.
@@ -45,7 +52,7 @@
 ## 2026-11-21 — F6c: diseño POS + piloto `AccountsProvider`
 
 - **Diseño:** `docs/plan-f6c-pos.md` — `AccountsProvider` (orders), `CashProvider` (turnos + movimientos por sucursal), `ReceiptsProvider`, `PromotionsProvider` y `CheckoutCoordinator` en capa compartida (`lib/checkout.ts` + hook), con orden del cobro, idempotencia, migración/purga, tests y fases F6c1–F6c3.
-- **Piloto (F6c1):** `features/orders/provider.tsx` (`AccountsProvider`/`useAccounts`) dueño de `accounts`, con `fogoneria:orders:v1:<tenant>` y `BroadcastChannel`; el loader de `ModulesProvider` migra/purga `accounts` del `ErpState` y un efecto propio e idempotente remapea slug→UUID (corre con `accounts`, `realBranches` y la sucursal activa, así funcione con sucursales al montar o después; cubierto por dos tests de integración).
+- **Piloto (F6c1):** `features/mod_orders/provider.tsx` (`AccountsProvider`/`useAccounts`) dueño de `accounts`, con `fogoneria:orders:v1:<tenant>` y `BroadcastChannel`; el loader de `ModulesProvider` migra/purga `accounts` del `ErpState` y un efecto propio e idempotente remapea slug→UUID (corre con `accounts`, `realBranches` y la sucursal activa, así funcione con sucursales al montar o después; cubierto por dos tests de integración).
 - **L1 diferido:** el test de fallo entre `accounts` y `receipts`/`cash` durante el cobro no es viable sin el coordinador (no hay punto de inyección); queda documentado en `docs/plan-f6c-pos.md` §5 y se implementa en F6c2.
 - **Sin mover todavía:** abrir/enviar/anular/cobrar siguen en `ModulesProvider` (escriben `scopes` y orquestan caja/comprobantes/CRM). `checkoutAccount` solo cambió `state.accounts` por `accounts` del provider.
 - **Estado:** providers fuera de `ModulesProvider`: tenant, orders/cuentas, expenses, inventory, crm y staff (6).
@@ -62,7 +69,7 @@
 ## 2026-11-21 — Paridad F6 (timeboxed): shell generado + providers piloto
 
 - **Shell:** `AppSidebar` consume `modules-nav.ts` (grupos/roles/iconos/rutas) con `components/dashboard/module-icons.ts`; `AppTopBar` usa `moduleTitles` generado (incluye `detailTitles`) y `app/layout.tsx` usa `FeatureProviders` de `features/registry.ts`.
-- **Providers:** `TenantProvider` movido a `features/tenant/provider.tsx`; `CrmProvider`/`useCrm` (`features/crm/provider.tsx`) dueño del estado demo de clientes: persiste `fogoneria:crm:v1:<tenant>` y sincroniza entre pestañas con `BroadcastChannel` propio ignorando el eco. La migración/purga de `customers` del `ErpState` v2 corre en el loader de `ModulesProvider`, antes de su primer guardado (evita la carrera padre→hijo). `ModulesProvider` reexporta `customers`/`setCustomers`.
+- **Providers:** `TenantProvider` movido a `features/mod_tenant/provider.tsx`; `CrmProvider`/`useCrm` (`features/mod_crm/provider.tsx`) dueño del estado demo de clientes: persiste `fogoneria:crm:v1:<tenant>` y sincroniza entre pestañas con `BroadcastChannel` propio ignorando el eco. La migración/purga de `customers` del `ErpState` v2 corre en el loader de `ModulesProvider`, antes de su primer guardado (evita la carrera padre→hijo). `ModulesProvider` reexporta `customers`/`setCustomers`.
 - **Resto:** órdenes, cuentas, caja, gastos, inventario, promociones y comprobantes siguen en `ModulesProvider` (F6 completo pendiente).
 - Verificado: web **885** tests, `check:modules --strict`, `gen:modules --check`, boundaries 0, types, lint y build.
 
@@ -78,23 +85,23 @@
 ## 2026-11-21 — Paridad F4/F5 + strict 20/20/20/20
 
 - **Hardening:** BOM quitado de 5 páginas de productos; duplicado de `tables` fuera del barrel; `module.ts` en las 8 features que faltaban.
-- **F4:** `features/auth`, `tenant`, `onboarding`, `saas` y `billing`; contratos `auth/tenant/onboarding/saas/billing` con alias `plataforma`; `lib/platform-api.ts` concentra el HTTP y la sesión (`lib/session.ts`, BFF, `proxy.ts`) no se movió. `/saas` compone SaaS + `BillingSummary`.
-- **F5:** `GET /audit` read-only (admin, Swagger y controller spec), `features/audit` con `/app/auditoria`; `features/realtime` reexporta transporte/hook; `components/erp` eliminado (mozo → `orders`, staff/roles → `staff`).
+- **F4:** `features/mod_auth`, `tenant`, `onboarding`, `saas` y `billing`; contratos `auth/tenant/onboarding/saas/billing` con alias `plataforma`; `lib/platform-api.ts` concentra el HTTP y la sesión (`lib/session.ts`, BFF, `proxy.ts`) no se movió. `/saas` compone SaaS + `BillingSummary`.
+- **F5:** `GET /audit` read-only (admin, Swagger y controller spec), `features/mod_audit` con `/app/auditoria`; `features/mod_realtime` reexporta transporte/hook; `components/erp` eliminado (mozo → `orders`, staff/roles → `staff`).
 - **Strict:** `check:modules --strict` **20/20/20/20** verde y cableado en CI; 12 alias deprecados.
 - Verificado: api **683** unit + **112** e2e; web **880**; contracts **133**; lint, check-types, builds, boundaries 0 y specs.
 
 ## 2026-11-21 — Paridad F3 + hardening
 
 - **Hardening:** `check-pr-scope` con IDs canónicos y alias (catalog/pricing, tables/reservations, platform); `check-specs` mapea las 14 features; `gen:modules --check` corre en CI y normaliza EOL (LF/CRLF); `registry.spec` verifica que `AppModule` importa `MODULE_REGISTRY`; README 9/20 corregido.
-- **F3a:** `features/catalog` (Products/Categories/Modifiers + `CartaVirtualView`) y `features/pricing` (PriceListsView); contratos `catalog`+`pricing` con alias `catalogo`; `/app/productos/*` intactas.
-- **F3b:** `features/tables` (MesasPage, SalonTablesPage, SalonTablesView) y `features/reservations` (ReservasPage, BookingsModule, BookingsWorkspace); contratos `tables`/`reservations` con alias `mesas`/`reservas`. La UI compartida mapa/agenda queda en `components/dashboard/salon` hasta el split fino.
+- **F3a:** `features/mod_catalog` (Products/Categories/Modifiers + `CartaVirtualView`) y `features/mod_pricing` (PriceListsView); contratos `catalog`+`pricing` con alias `catalogo`; `/app/productos/*` intactas.
+- **F3b:** `features/mod_tables` (MesasPage, SalonTablesPage, SalonTablesView) y `features/mod_reservations` (ReservasPage, BookingsModule, BookingsWorkspace); contratos `tables`/`reservations` con alias `mesas`/`reservas`. La UI compartida mapa/agenda queda en `components/dashboard/salon` hasta el split fino.
 - **Estado:** manifiestos 20/20, backend 20/20, frontend **14/20**, contratos **13/20** (+10 alias), specs 20/20 canónicas.
 - Verificado: api **680** unit + **112** e2e; web **866**; contracts **122**; lint, check-types, builds, `check:boundaries` 0 y `check:specs` OK.
 
 ## 2026-11-21 — Paridad de módulos: Fases 0–2
 
 - **Fase 0:** `modules/<id>/module.json` en los 20 módulos; `scripts/gen-modules.mjs` (`pnpm gen:modules`) genera `apps/api/src/modules/registry.ts` (consumido por `app.module.ts`), `apps/web/features/registry.ts` y `apps/web/lib/modules-nav.ts` (el shell aún usa su lista). `check:modules` valida manifiestos y reporta **backend 20/20, frontend 12/20, contratos 9/20 (+7 alias), specs 20/20**; step advisory en `quality`.
-- **Fase 1:** `features/crm/module.ts` alimenta el registry y la entrada de nav generada; test `lib/modules-registry.test.ts`; `/app/clientes` intacta.
+- **Fase 1:** `features/mod_crm/module.ts` alimenta el registry y la entrada de nav generada; test `lib/modules-registry.test.ts`; `/app/clientes` intacta.
 - **Fase 2:** renombres 1:1 `orders`, `cash`, `receipts`, `expenses`, `inventory`, `promotions`, `staff` en features y contratos. Subpaths antiguos (`caja`, `comprobantes`, `gastos`, `inventario`, `ordenes`, `promociones`, `rrhh`) quedan como alias `@deprecated`. Imports, mocks, specs, `check-specs`, `check-pr-scope`, catálogo y `AGENTS.md` actualizados. Sin splits, providers ni cambios de estado.
 - Verificado: api **680** unit + **112** e2e; web **865**; contracts **119**; lint, check-types, builds, `check:boundaries` (0) y `check:specs` OK.
 
@@ -102,7 +109,7 @@
 
 - **Auditoría:** 20 módulos backend, **12** features frontend, **14** contratos y **21** specs; no hay paridad.
 - **Plan:** `docs/plan-paridad-modulos.md` con catálogo canónico de 20 IDs, mapeo actual→objetivo, estrategia de rebase (generadores, contratos wildcard, Prisma multi-archivo, providers), fases 0-9 y criterios de aceptación.
-- **Artefactos:** `modules/catalog.json` (20 módulos, owner/estado/rutas/legado), `scripts/check-module-parity.mjs` (`pnpm check:modules`; `--strict` cuando termine) y `modules/README.md`.
+- **Artefactos:** `modules/mod_catalog.json` (20 módulos, owner/estado/rutas/legado), `scripts/check-module-parity.mjs` (`pnpm check:modules`; `--strict` cuando termine) y `modules/README.md`.
 - **Baseline:** backend 20/20, frontend 12/20, contratos 14/20, specs 20/20 (+`plataforma` sobrante). Próximo: Fase 0/1 (metadata por módulo, generadores, piloto `crm`).
 - `development` en `ca99e99`, 0 PRs abiertos; sin cambios de código de producción.
 
@@ -230,9 +237,9 @@
 
 ## 2026-11-19 — Modularización Fase 3, ola lectura (PR #62, mergeado)
 
-- **Contratos:** `packages/contracts/src/bi.ts` (`RangoBi`, `Pnl`, `PnlDia`, `PlatoTop`, `CobroMetodo`, `ReporteBi`, `calcularMargen`, `etiquetaMetodoPago`) y `tiempo-real.ts` (`EventoTiempoReal`, `SobreEvento<T>`, payloads de orden/mesa, `REALTIME_EVENT`, `salaEmpresa`/`salaSucursal`/`salaOrden`) + subpaths `./bi` y `./tiempo-real`. La API agrega `@fogoneria/contracts` como dependencia de workspace y el Dockerfile copia `packages/contracts` (Node 24 ejecuta el `.ts` del contrato en runtime).
+- **Contratos:** `packages/contracts/src/mod_bi.ts` (`RangoBi`, `Pnl`, `PnlDia`, `PlatoTop`, `CobroMetodo`, `ReporteBi`, `calcularMargen`, `etiquetaMetodoPago`) y `tiempo-real.ts` (`EventoTiempoReal`, `SobreEvento<T>`, payloads de orden/mesa, `REALTIME_EVENT`, `salaEmpresa`/`salaSucursal`/`salaOrden`) + subpaths `./bi` y `./tiempo-real`. La API agrega `@fogoneria/contracts` como dependencia de workspace y el Dockerfile copia `packages/contracts` (Node 24 ejecuta el `.ts` del contrato en runtime).
 - **Backend:** `bi/index.ts` y `realtime/index.ts` públicos (`BiModule`/`BiService`, `RealtimeModule`/`RealtimeService` + contrato; `OrdersGateway` no se exporta). `app.module.ts` importa ambos por el `index`; `orders.service.ts` y `orders.sla.cron.ts` usan `../realtime/index.js`. `realtime.types.ts` reexporta el contrato con alias históricos. Sin cambios de rooms, eventos ni SQL de BI.
-- **Web:** `features/bi/` (`api.ts` SDK+contratos, `hooks.ts` con `useBi` y rango de 7 días de Lima, `AnaliticasPage`, `index.ts`, `bi.test.ts`); `/app/analiticas` solo importa la feature; se retiraron `lib/bi-api.ts` y su test. `lib/realtime.ts` importa tipos/constantes de `@fogoneria/contracts/tiempo-real` y sigue siendo transporte compartido (sin feature web).
+- **Web:** `features/mod_bi/` (`api.ts` SDK+contratos, `hooks.ts` con `useBi` y rango de 7 días de Lima, `AnaliticasPage`, `index.ts`, `bi.test.ts`); `/app/analiticas` solo importa la feature; se retiraron `lib/bi-api.ts` y su test. `lib/realtime.ts` importa tipos/constantes de `@fogoneria/contracts/tiempo-real` y sigue siendo transporte compartido (sin feature web).
 - Baseline **6 → 4** (`--write-baseline`): salen `orders → realtime` ×2; queda `realtime → auth` para plataforma.
 - Verificado: web **230** tests (28 archivos), `check-types`, `lint` (estilos OK), build OK (48 rutas); api **305** unit + **112** e2e + `check-types` + build; `check:boundaries` OK (4 históricas, 0 nuevas).
 - **Auditoría (11/12 PASS, 1 doc):** la tabla de olas ya marca lectura ✅; specs de órdenes tipan contra `realtime/index.js`; el barrel de contratos queda prohibido en la API (Node type stripping) y `websockets.md` describe la paridad de eventos.
@@ -240,9 +247,9 @@
 
 ## 2026-11-19 — Modularización Fase 3, ola personas (PR #60, mergeado)
 
-- **Contratos:** `packages/contracts/src/crm.ts` (segmentos, cliente y detalle, movimientos de puntos, config de lealtad, inputs, etiquetas y `validarAjustePuntos`) + subpath `./crm`. El segmento lo calcula el servidor; la web solo lo pinta.
+- **Contratos:** `packages/contracts/src/mod_crm.ts` (segmentos, cliente y detalle, movimientos de puntos, config de lealtad, inputs, etiquetas y `validarAjustePuntos`) + subpath `./crm`. El segmento lo calcula el servidor; la web solo lo pinta.
 - **Backend:** `crm/index.ts` público (`CrmModule`, `CrmService`, `ConfigLealtad`); `app.module.ts` importa por el `index` y `crm.service.ts` usa `../audit/index.js`. Sin cambios de reglas, worker de consumos ni triggers. Baseline **7 → 6** (`--write-baseline`).
-- **Web:** `features/crm/` (`api.ts` SDK+contratos, `ClientesPage` con búsqueda/filtro/ficha/ajuste, `LoyaltyPage` demo, `LoyaltyHubPage`, `index.ts`) y `crm.test.ts` (12). `ModuleGate` y las rutas `/app/clientes` y `/app/modulos/fidelizacion/regla` importan la feature. Retirados `lib/crm-api.ts` y su test (los reemplaza la feature).
+- **Web:** `features/mod_crm/` (`api.ts` SDK+contratos, `ClientesPage` con búsqueda/filtro/ficha/ajuste, `LoyaltyPage` demo, `LoyaltyHubPage`, `index.ts`) y `crm.test.ts` (12). `ModuleGate` y las rutas `/app/clientes` y `/app/modulos/fidelizacion/regla` importan la feature. Retirados `lib/crm-api.ts` y su test (los reemplaza la feature).
 - **Acoplamiento restante:** `customers`/`coupons` demo siguen en `ModulesProvider` (Fase 4); `LoyaltyPage` aún no consume `crmApi.config()` (cliente listo); el ajuste manda `sucursalId` para `ADMIN_GLOBAL`. Backend en baseline: `orders → realtime` ×2, `realtime → auth` y `audit` directo en billing/onboarding/saas.
 - Verificado: **224** web tests (28 archivos), `lint` (estilos OK), `check-types`, build OK (48 rutas); api **305** unit + **112** e2e + check-types; `check:boundaries` OK (baseline **6**, 0 nuevas).
 - **Auditoría (12/12 PASS):** sin hallazgos funcionales; solo se ajustó el conteo de tests de `crm.test.ts` (12).
@@ -285,7 +292,7 @@
 ## 2026-11-19 — Modularización: Fases 0–2 + auditoría de la Fase 1
 
 - **Fase 0 (PR #48, mergeado):** `@fogoneria/kernel` (money/fechas Lima), `@fogoneria/sdk` (cliente BFF) y `@fogoneria/contracts` (RRHH). `scripts/check-module-boundaries.mjs` con baseline de 24 acoplamientos históricos y job CI **Fronteras de módulos**. `pr-scope` reconoce `features/<m>` y `contracts/src/<m>.ts`. Documento `docs/MODULARIZACION.md` con el diagnóstico (5 acoplamientos backend + 5 frontend).
-- **Fase 1 (PR #49, mergeado):** `apps/web/features/rrhh/` con `api.ts` (SDK + contratos), `hooks.ts` (`useAttendance`, `useShifts`), `AttendancePage`, `ShiftsPage` y demo aislado. Las rutas de asistencia y turnos solo importan la feature. `apps/api/src/modules/staff/index.ts` como API pública.
+- **Fase 1 (PR #49, mergeado):** `apps/web/features/rrhh/` con `api.ts` (SDK + contratos), `hooks.ts` (`useAttendance`, `useShifts`), `AttendancePage`, `ShiftsPage` y demo aislado. Las rutas de asistencia y turnos solo importan la feature. `apps/api/src/modules/mod_staff/index.ts` como API pública.
 - **Fase 2 (PR #50, mergeado, etiqueta `multi-modulo`):** `packages/contracts/src/catalogo.ts`; `apps/web/features/catalogo/` con `api.ts` (SDK, lectura), `hooks.ts` (`useCatalogo` sobre el provider) y las 4 vistas de catálogo movidas; `catalog/index.ts` y `pricing/index.ts` públicos; `summaries` movido a `components/dashboard` para que la feature no importe `components/erp`.
 - **Auditoría de la Fase 1 (10/10 PASS) y correcciones aplicadas:** borrado `lib/staff-api.ts` (código muerto) y `bi-staff-api.test.ts` → `bi-api.test.ts`; `audit/index.ts` público (staff lo importa sin violar frontera); baseline 24 → **23**; test de `toTurno`; docs sincronizados (`AGENTS.md`, `PLAN-MODULOS-Y-PROPIEDAD.md`, `MODULARIZACION.md`, este archivo).
 - **Independencia lograda:** RRHH toca solo `features/rrhh/**` + rutas + `staff/**`; catálogo, `features/catalogo/**` + rutas de productos + `catalog|pricing/**`. Ninguna feature importa `components/erp/*` ni otra feature.
@@ -441,7 +448,7 @@
 - Hecho (PR-0, `chore/sprint-11-12-plan-ci`): `docs/TAREAS-SEMANAS-11-12.md` (fichas, dependencias, ruta crítica, DoD), 3 decisiones en `docs/decisiones.md` y `api test:e2e` agregado al CI (no se ejecutaba).
 - Hecho (PR-A1, `feat/aycds-30-kds-sla`):
   - `GET /orders/board?dias&limite&sucursalId` con las 4 columnas, `alertaSla` y métricas (abiertas, fuera de SLA, espera y preparación medias) en una llamada.
-  - `apps/api/src/modules/orders/orders.sla.ts`: SLA de 20 min desde `confirmacion_at ?? ingreso_at`; única fuente del cálculo (umbrales 19/20/21 cubiertos).
+  - `apps/api/src/modules/mod_orders/orders.sla.ts`: SLA de 20 min desde `confirmacion_at ?? ingreso_at`; única fuente del cálculo (umbrales 19/20/21 cubiertos).
   - `OrdersSlaCron` cada minuto: marca `alerta_sla` una sola vez y emite `order.sla` (`RealtimeService`/gateway/`docs/websockets.md`).
   - Migración `20261106120000_ordenes_sla_indice`: índice parcial `idx_ordenes_sla_pendiente` (el barrido pasó de 83 ms a 0,072 ms).
   - Medición del tablero en `docs/explain-orders.md` §7: 1,56 ms acotado vs 81 ms sin ventana. **No se tocó RLS** (decisión: medir primero).
@@ -491,7 +498,7 @@
   - Causa raíz: el upsert de `secuencias` dentro de la transacción del request retenía el lock de `(empresa_id, tipo)` durante toda la comanda (p95 1034–1092 ms, 64–66 órdenes/s, 8–9 sesiones esperando lock).
   - `apps/api/src/common/sequences/sequences.service.ts:61` — el folio corre en **autocommit sobre `prisma.raw`**, fuera de la transacción. Se acepta hueco de folio (`docs/decisiones.md:34`).
   - `apps/api/src/prisma/prisma.service.ts` — los 4 `set_config` del contexto RLS pasan a una sola sentencia; `DATABASE_POOL_MAX` configurable (default 10; 20 no mejoró porque la base estaba ociosa).
-  - `apps/api/src/modules/orders/orders.service.ts` — precios en lote (platos, combos y `precios_platos`), sin N+1 por línea.
+  - `apps/api/src/modules/mod_orders/orders.service.ts` — precios en lote (platos, combos y `precios_platos`), sin N+1 por línea.
   - Test `apps/api/test/db/sequences-concurrency.db-spec.ts` (50 altas simultáneas, contador por empresa, ORD vs RSV).
   - Resultado: p95 **307–326 ms** a 50 concurrentes (r3–r6 de 6 corridas), ~**186 órdenes/s**, 0 5xx, 0 esperas de lock. Sin índices nuevos: el plan de escritura ya era correcto.
 - Pendiente / hallazgo abierto: el listado del KDS bajo RLS no ve `pg_statistic`, estima 20 % para `estado` y recorre ~50k filas (157 ms vs 0,075 ms con estadísticas). No se tocó la seguridad; opciones (BYPASSRLS, vista `SECURITY DEFINER`, contadores denormalizados, `pg_hint_plan`) en `docs/explain-orders.md` §6.
@@ -502,7 +509,7 @@
 
 - Objetivo: ejecutar las tareas de David del Sprint 3 en orden `16 → 20 → 14`, un PR por tarea desde `development`.
 - Hecho (PR-3, `feat/aycds-14-websockets-david`):
-  - API: módulo `src/modules/realtime/**` (`@Global`) con `OrdersGateway` (namespace `/orders`), `RealtimeService` y el contrato en `realtime.types.ts`. Rooms `empresa:<id>`, `empresa:<id>:sucursal:<id>` y `order:<id>` (`order:subscribe` valida el tenant). Sobre `{ eventId, at, data }` y eventos `order.created`, `order.updated` y `table.status`.
+  - API: módulo `src/modules/mod_realtime/**` (`@Global`) con `OrdersGateway` (namespace `/orders`), `RealtimeService` y el contrato en `realtime.types.ts`. Rooms `empresa:<id>`, `empresa:<id>:sucursal:<id>` y `order:<id>` (`order:subscribe` valida el tenant). Sobre `{ eventId, at, data }` y eventos `order.created`, `order.updated` y `table.status`.
   - Handshake con **ticket de 60 s** (`POST /api/v1/auth/ws-ticket`, `scope: 'ws'`); `JwtStrategy` rechaza cualquier token con `scope`, así que el ticket no abre la API HTTP.
   - `OrdersService` publica el alta, cada transición y el cambio de mesa (`OCUPADA`/`LIBRE`/`RESERVADA`); `releaseTable` devuelve el estado nuevo para poder emitirlo.
   - Web: `lib/realtime.ts` (reconexión propia con backoff 1 s → 30 s + jitter y ticket nuevo por intento, dedupe por `eventId`), BFF `GET /api/session/ws-ticket` (401 sin sesión, `no-store`) y hook `components/erp/useOrdersRealtime.ts`; `OrdersView` muestra el badge *En vivo / Reconectando… / Sin canal en vivo* y la última novedad.
@@ -516,7 +523,7 @@
 
 - Objetivo: ejecutar las tareas de David del Sprint 3 en orden `16 → 20 → 14`, un PR por tarea desde `development`.
 - Hecho (PR-2, `feat/aycds-20-ordenes-pos-david`):
-  - `apps/api/src/modules/orders/orders.service.ts` reescrito: precio del servidor (`PricingService.resolvePrice` para platos, `combos.precio_fijo` para combos), `mesero_id` del JWT, `numero_orden` vía `SequencesService`, totales con 2 decimales y validación de descuento.
+  - `apps/api/src/modules/mod_orders/orders.service.ts` reescrito: precio del servidor (`PricingService.resolvePrice` para platos, `combos.precio_fijo` para combos), `mesero_id` del JWT, `numero_orden` vía `SequencesService`, totales con 2 decimales y validación de descuento.
   - `dto/create-order.dto.ts`: fuera `precioUnitario` (el `forbidNonWhitelisted` global lo rechaza con 400) y dentro `sucursalId` para `ADMIN_GLOBAL`.
   - `TRANSITIONS` cerradas: `ANULADA` solo desde `POR_CONFIRMAR`; `EN_COCINA`/`LISTO` devuelven 400 y los estados terminales 409. La misma regla queda en la base con la migración `20261028120000_ordenes_anulacion_estricta` (`DB_ORDEN_ANULACION_TARDIA`).
   - Mesa: `OCUPADA` al crear y liberación transaccional en estado terminal, respetando reserva activa y `MANTENIMIENTO`. Auditoría en alta y en cada cambio de estado.
@@ -529,7 +536,7 @@
 
 - Objetivo: ejecutar las tareas de David del Sprint 3 en orden `16 → 20 → 14`, un PR por tarea desde `development`.
 - Hecho (PR-1, `feat/aycds-16-mesas-reservas-david`):
-  - Módulos `apps/api/src/modules/tables/**` y `reservations/**` con DTOs, `@Roles`, Swagger y transiciones explícitas.
+  - Módulos `apps/api/src/modules/mod_tables/**` y `reservations/**` con DTOs, `@Roles`, Swagger y transiciones explícitas.
   - `common/sequences` + migración `20261027120000_secuencias_tenant`: tabla `secuencias` con RLS por empresa y `INSERT ... ON CONFLICT ... RETURNING` para folios (`ORD-000123`, `RSV-20261031-0001`). El SQL crudo se califica con `DATABASE_SCHEMA` porque no pasa por Prisma.
   - Estados de mesa: `PATCH /tables/:id/status` solo `LIBRE|MANTENIMIENTO`; `OCUPADA`/`RESERVADA` los derivan órdenes y reservas. Mesa con orden abierta o reserva activa no se bloquea ni se da de baja (409).
   - Reservas: aforo contra `mesas.capacidad` (409), solapamiento ±90 min (409), edición solo en `POR_CONFIRMAR`, día filtrado en hora de Lima (`limaDayRange`) y liberación de mesa al cancelar la última reserva.
@@ -634,7 +641,7 @@
 - Hecho:
   - Cliente HTTP `lib/api.ts` (`NEXT_PUBLIC_API_URL` ?? `http://localhost:3001/api/v1`, JWT en `fogoneria:token`, `ApiError`), `lib/auth-api.ts` (`loginRequest`) y `lib/onboarding-api.ts` (RUC módulo 11 + `submitOnboarding`).
   - 57: `LoginContent.tsx` con `await login(email, password)` y estados de carga/error; `OnboardingContent.tsx` reescrito (3 pasos reales, `DropZone` con archivo/URL de logo, auto-login + redirect por rol). El logo subido se lee como **data URL** (≤2 MB, validado en cliente) y el body parser de Express se subió a 4 MB en `apps/api/src/main.ts`. `lib/auth.ts` mapea rol y sucursal de la API y sigue dejando las cookies `fogoneria.role`/`fogoneria.branch` para no romper el RBAC de `proxy.ts`.
-  - 57 backend (módulo nuevo): `apps/api/src/modules/onboarding/**` expone `POST /api/v1/onboarding` (`@Public()`): valida RUC, 409 si existe, y en transacción crea empresa `TRIAL` con `logo_url`, sucursal matriz, admin bcrypt, lista "Carta", lead `GANADO` y evento de auditoría. Registrado en `app.module.ts`.
+  - 57 backend (módulo nuevo): `apps/api/src/modules/mod_onboarding/**` expone `POST /api/v1/onboarding` (`@Public()`): valida RUC, 409 si existe, y en transacción crea empresa `TRIAL` con `logo_url`, sucursal matriz, admin bcrypt, lista "Carta", lead `GANADO` y evento de auditoría. Registrado en `app.module.ts`.
   - 63: `lib/catalog-api.ts` (lecturas de categorías/platos/modificadores/listas + precios y todas las mutaciones); `ModulesProvider.tsx` mantiene el catálogo en estado con `refreshCatalog`/`catalogLoading`/`catalogError` y expone las mutaciones; `ProductsView`, `CategoriesView`, `ModifiersView` y `PriceListsView` dejaron de usar mocks. Los `id` del catálogo pasan a UUID en todo el ERP (`erp`, `domain`, `dashboard`, `tenancy`, `AddItemModal`, resúmenes) y `ErpState` sube a `v2` (`fogoneria:erp:v2`) sin catálogo. `catalog.service.ts` incluye `platos_grupos_modificadores` en el listado.
   - `apps/web/.env.example` nuevo con `NEXT_PUBLIC_API_URL`.
 - Verificado: `web lint` OK (eslint + `check-styles`), `web check-types` OK, `web build` OK (45 rutas), `api lint` OK, `api test` 28/28 (3 nuevas de onboarding) y `api test:e2e` 7/7.
@@ -660,10 +667,10 @@
 - Hecho:
   - Merge local de `origin/feat/prisma-schema` (`d6bb6a6`): Prisma 7.10.1, schema de 41 modelos, migración y seed. Ese trabajo no estaba en `main`.
   - 44: wiring en `app.module.ts`, `bootstrap.ts` (prefijo `/api/v1`, CORS, `ValidationPipe`), `swagger.ts` (`/api/docs`), `config/env.validation.ts` y health.
-  - 48: `modules/auth` con JWT/Passport, `JwtStrategy`, guards globales, decoradores `@Public/@Roles/@CurrentUser`, login con bcrypt y bloqueo por estado del tenant; colección Postman y contraseña demo `Fogoneria123!`.
+  - 48: `modules/mod_auth` con JWT/Passport, `JwtStrategy`, guards globales, decoradores `@Public/@Roles/@CurrentUser`, login con bcrypt y bloqueo por estado del tenant; colección Postman y contraseña demo `Fogoneria123!`.
   - 53: `TenantContextService` + `TenantContextInterceptor` + extensión Prisma (`prisma.scoped`) con bypass SUPERADMIN; tests en `tenant-scope.spec.ts`.
-  - 60: `modules/catalog` y `modules/pricing` con DTOs, RBAC, Swagger y tests.
-  - 61: `modules/saas`, `modules/billing` (cron diario 03:00) y `modules/audit`; MRR, alta transaccional, suspensión/reactivación y eventos.
+  - 60: `modules/mod_catalog` y `modules/mod_pricing` con DTOs, RBAC, Swagger y tests.
+  - 61: `modules/mod_saas`, `modules/mod_billing` (cron diario 03:00) y `modules/mod_audit`; MRR, alta transaccional, suspensión/reactivación y eventos.
 - Verificado: `api check-types`, `api lint`, `api build`, `api test` (25) y `api test:e2e` (7). Sin PostgreSQL (Docker apagado y sin `psql`): los tests usan Prisma mockeado.
 - Pendiente: verificar contra Postgres real (tarea 58), conectar UIs 63/65 y RLS nativo (62).
 - Próximo paso: levantar Docker/Postgres, correr `db:deploy` + `db:seed` + colección Postman y luego push.

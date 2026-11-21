@@ -6,7 +6,7 @@
    cliente con un ticket vencido.
 
    Los nombres de evento, el sobre y los rooms son el contrato compartido de
-   `@fogoneria/contracts/realtime`: este archivo solo es el transporte. */
+   `@fogoneria/contracts/mod_realtime`: este archivo solo es el transporte. */
 
 import { io, type Socket } from "socket.io-client";
 import {
@@ -17,7 +17,7 @@ import {
   type OrdenCreadaEvento,
   type OrdenSlaEvento,
   type SobreEvento,
-} from "@fogoneria/contracts/realtime";
+} from "@fogoneria/contracts/mod_realtime";
 
 export { REALTIME_EVENT, REALTIME_NAMESPACE };
 

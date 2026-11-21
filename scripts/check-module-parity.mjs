@@ -60,7 +60,7 @@ const isDeprecatedAlias = (id) => {
     if (error.code === 'ENOENT') return false;
     throw error;
   }
-  return /@deprecated/.test(content) && /export \* from '\.\/[a-z0-9-]+';/.test(content);
+  return /@deprecated/.test(content) && /export \* from '\.\/[a-z0-9_-]+';/.test(content);
 };
 
 const aliases = extraContracts.filter(isDeprecatedAlias);

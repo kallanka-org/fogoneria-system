@@ -1,0 +1,9 @@
+{
+  "id": "mod_expenses",
+  "kind": "ui",
+  "owner": "@por-asignar",
+  "status": "aligned",
+  "routes": [
+    "/app/gastos"
+  ]
+}

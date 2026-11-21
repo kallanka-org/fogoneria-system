@@ -12,7 +12,7 @@ vi.mock('./providers/session', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   useSession: () => sesion,
 }));
-vi.mock('@/features/tenant', () => ({ BranchSwitcher: () => <div>sucursal</div> }));
+vi.mock('@/features/mod_tenant', () => ({ BranchSwitcher: () => <div>sucursal</div> }));
 
 import { AppSidebar } from './AppSidebar';
 

@@ -6,7 +6,7 @@ access token: pide un ticket efímero de 60 s.
 
 El contrato (nombres de evento, sobre `{ eventId, at, data }`, payloads y salas)
 vive en `packages/contracts/src/tiempo-real.ts` (`@fogoneria/contracts/tiempo-real`):
-la API lo reexporta en `modules/realtime/realtime.types.ts` y la web lo consume
+la API lo reexporta en `modules/mod_realtime/realtime.types.ts` y la web lo consume
 en `lib/realtime.ts`.
 
 ## 1. Flujo de autenticación
@@ -149,8 +149,8 @@ badge *En vivo / Reconectando… / Sin canal en vivo* y la última novedad.
 
 | Suite | Qué cubre |
 |---|---|
-| `src/modules/realtime/orders.gateway.spec.ts` | Rooms por rol, rechazo de tickets (ausente, vencido, HTTP, sin empresa), `order:subscribe` (UUID, cross-empresa, cross-sucursal), sobre de los eventos |
-| `src/modules/auth/auth.service.spec.ts` | `ws-ticket` de 60 s con `scope: 'ws'` y rechazo sin empresa |
+| `src/modules/mod_realtime/orders.gateway.spec.ts` | Rooms por rol, rechazo de tickets (ausente, vencido, HTTP, sin empresa), `order:subscribe` (UUID, cross-empresa, cross-sucursal), sobre de los eventos |
+| `src/modules/mod_auth/auth.service.spec.ts` | `ws-ticket` de 60 s con `scope: 'ws'` y rechazo sin empresa |
 | `test/realtime.e2e-spec.ts` | Socket.io real: handshake sin ticket, access token como ticket, evento solo a la sucursal del tenant, `ADMIN_GLOBAL` sin duplicados, A no recibe de B |
 | `app/api/session/ws-ticket/route.test.ts` (web) | BFF: 401 sin sesión, Bearer de la cookie, 502 upstream, propagación de 401 |
 | `lib/realtime.test.ts` (web) | Base URL, deduplicador y paridad de eventos/namespace/salas |

@@ -14,7 +14,10 @@ import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Field, Select, TextInput } from "@/components/ui/fields";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useLoyaltyData } from "@/components/dashboard/hooks/use-loyalty-data";
+import { useCashScope } from "@/components/dashboard/hooks/use-cash-scope";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useWorkspaceActions } from "@/components/dashboard/providers/workspace-actions";
 import {
   PAYMENT_METHODS,
   accountTotals,
@@ -39,7 +42,10 @@ export function CheckoutModal({
   account: TableAccount;
   onClose: (receipt: Receipt | null) => void;
 }) {
-  const { coupons, customers, checkoutAccount, openCashShift, notify } = useModules();
+  const { coupons, customers } = useLoyaltyData();
+  const { checkoutAccount } = useWorkspaceActions();
+  const { openCashShift } = useCashScope();
+  const { notify } = useNotifications();
   const [receiptType, setReceiptType] = useState<ReceiptType>("03");
   const [docType, setDocType] = useState<"1" | "6" | "">("");
   const [docNumber, setDocNumber] = useState("");

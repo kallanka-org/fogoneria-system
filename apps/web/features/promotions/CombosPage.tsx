@@ -7,7 +7,9 @@ import { Card } from "@/components/ui/Card";
 import { Field, TextInput } from "@/components/ui/fields";
 import { Modal } from "@/components/ui/Modal";
 import { Toolbar } from "@/components/ui/Toolbar";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useCatalogoState } from "@/components/dashboard/providers/catalog";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { usePromotions } from "@/features/promotions/provider";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 import { combosSummary } from "@/components/dashboard/summaries/summary-selectors";
@@ -15,7 +17,9 @@ import { HubBlocks } from "@/components/dashboard/workspace-ui";
 
 /** Combos: paquetes de productos con precio fijo. */
 export function CombosPage() {
-  const { combos, setCombos, products, notify } = useModules();
+  const { combos, setCombos } = usePromotions();
+  const { products } = useCatalogoState();
+  const { notify } = useNotifications();
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState({ name: "", description: "", productIds: [] as string[], price: "", status: "Activo" as "Activo" | "Inactivo" });

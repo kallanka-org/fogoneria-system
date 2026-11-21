@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/Button";
 import { Field, Select, TextInput } from "@/components/ui/fields";
 import { Toolbar } from "@/components/ui/Toolbar";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useCatalogoState } from "@/components/dashboard/providers/catalog";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useInventory } from "@/features/inventory/provider";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniBars } from "@/components/dashboard/summaries/charts";
 import { inventarioSummary } from "@/components/dashboard/summaries/summary-selectors";
@@ -29,7 +31,9 @@ function deriveState(stock: number, min: number): StockState {
 
 /** Inventarios · Stock: insumos, mínimos y escandallos (maestro en demo, AYCDS-24). */
 export function InventoryPage({ onlyCritical = false }: { onlyCritical?: boolean } = {}) {
-  const { products, notify, ingredients, setIngredients, movements, setMovements } = useModules();
+  const { products } = useCatalogoState();
+  const { notify } = useNotifications();
+  const { ingredients, setIngredients, movements, setMovements } = useInventory();
   const [criticalOnly] = useState(() => {
     if (onlyCritical) return true;
     try {

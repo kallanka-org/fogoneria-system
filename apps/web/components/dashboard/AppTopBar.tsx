@@ -8,7 +8,9 @@ import { ROLE_LABEL } from "@/lib/auth";
 import { featureModules } from "@/features/registry";
 import { moduleTitles, modulesNav } from "@/lib/modules-nav";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { useModules } from "./ModulesProvider";
+import { useSession } from "./providers/session";
+import { useNotifications } from "./providers/notifications";
+import { useWorkspaceActions } from "./providers/workspace-actions";
 
 const navEntries = modulesNav.flatMap((group) => group.entries);
 
@@ -27,7 +29,9 @@ function titleFor(pathname: string) {
 export function AppTopBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { currentUser, logout, resetDemoData, notify } = useModules();
+  const { currentUser, logout } = useSession();
+  const { notify } = useNotifications();
+  const { resetDemoData } = useWorkspaceActions();
   const { theme, toggle } = useTheme();
   const [profileOpen, setProfileOpen] = useState(false);
   const [pendingReset, setPendingReset] = useState(false);

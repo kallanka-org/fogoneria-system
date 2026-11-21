@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Field, Select, TextInput } from '@/components/ui/fields';
 import { TableCard, THead, TH, TR, TD } from '@/components/ui/data-table';
 import { Toolbar } from '@/components/ui/Toolbar';
-import { useModules } from '@/components/dashboard/ModulesProvider';
+import { useSession } from '@/components/dashboard/providers/session';
 import { etiquetaBloque, type BloqueTurno } from '@fogoneria/contracts/staff';
 import { initialEmployees } from '@/lib/erp';
 import { useShifts } from './hooks';
@@ -19,7 +19,7 @@ const tonoBloque: Record<BloqueTurno, 'neutral' | 'warning' | 'dark'> = {
 
 /** Planificador de turnos del módulo RRHH. */
 export function StaffShiftsPage() {
-  const { hasSession } = useModules();
+  const { hasSession } = useSession();
   return hasSession ? <ShiftsLive /> : <ShiftsDemo />;
 }
 

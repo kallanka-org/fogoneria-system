@@ -8,7 +8,10 @@ vi.mock('next/navigation', () => ({ usePathname: () => nav.pathname }));
 const sesion = vi.hoisted(() => ({
   currentUser: null as null | { role: string; name: string },
 }));
-vi.mock('./ModulesProvider', () => ({ useModules: () => sesion }));
+vi.mock('./providers/session', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useSession: () => sesion,
+}));
 vi.mock('@/features/tenant', () => ({ BranchSwitcher: () => <div>sucursal</div> }));
 
 import { AppSidebar } from './AppSidebar';

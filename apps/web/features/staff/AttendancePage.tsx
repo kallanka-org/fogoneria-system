@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { TableCard, THead, TH, TR, TD } from '@/components/ui/data-table';
-import { useModules } from '@/components/dashboard/ModulesProvider';
+import { useSession } from '@/components/dashboard/providers/session';
 import {
   etiquetaAsistencia,
   type Asistencia,
@@ -28,7 +28,7 @@ function hora(iso: string | null): string {
 
 /** Pantalla de asistencia y propinas del módulo RRHH. */
 export function StaffAttendancePage() {
-  const { hasSession } = useModules();
+  const { hasSession } = useSession();
   return hasSession ? <AttendanceLive /> : <AttendanceDemo />;
 }
 

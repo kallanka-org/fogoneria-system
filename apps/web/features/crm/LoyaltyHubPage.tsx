@@ -2,14 +2,14 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis } from "recharts";
 import { KpiCard } from "@/components/ui/KpiCard";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useLoyaltyData } from "@/components/dashboard/hooks/use-loyalty-data";
 import { ChartCard, HubBlocks, type HubLink } from "@/components/dashboard/workspace-ui";
 
 const tick = { fontSize: 12, fill: "var(--c-mute)" };
 
 /** Workspace Fidelización: KPIs + gráfico + columnas. */
 export function LoyaltyHubPage() {
-  const { customers, coupons } = useModules();
+  const { customers, coupons } = useLoyaltyData();
   const points = customers.reduce((s, c) => s + c.points, 0);
   const redeemed = coupons.reduce((s, c) => s + c.used, 0);
   const chartData = coupons.slice(0, 5).map((c) => ({ name: c.code.slice(0, 6), v: c.used }));

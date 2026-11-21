@@ -7,7 +7,7 @@ import { diaCorto } from '@fogoneria/kernel';
 import { KpiCard } from '@/components/ui/KpiCard';
 import { TableCard, THead, TH, TR, TD } from '@/components/ui/data-table';
 import { ChartCard } from '@/components/dashboard/workspace-ui';
-import { useModules } from '@/components/dashboard/ModulesProvider';
+import { useExpenses } from "@/components/dashboard/hooks/use-demo-expenses";
 import { fmtMoney } from '@/lib/domain';
 import { useBi } from './hooks';
 
@@ -30,7 +30,7 @@ const tick = { fontSize: 12, fill: 'var(--c-mute)' };
 
 /** Analíticas: P&L, ventas por día, platos top y cobros por método (AYCDS-45). */
 export function AnaliticasPage() {
-  const { expenses } = useModules();
+  const { expenses } = useExpenses();
   const { pnl, serie, platos, metodos, error } = useBi();
 
   const gastosDemo = useMemo(

@@ -2,14 +2,14 @@
 
 import { Bar, BarChart, ResponsiveContainer, XAxis } from "recharts";
 import { KpiCard } from "@/components/ui/KpiCard";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useInventory } from "@/features/inventory/provider";
 import { ChartCard, HubBlocks, type HubLink } from "@/components/dashboard/workspace-ui";
 
 const tick = { fontSize: 12, fill: "var(--c-mute)" };
 
 /** Workspace Inventarios: KPIs + gráfico + columnas. */
 export function InventoryHubPage() {
-  const { ingredients, movements } = useModules();
+  const { ingredients, movements } = useInventory();
   const critical = ingredients.filter((i) => i.state !== "Óptimo").length;
 
   const byCategory = ingredients.reduce<Record<string, number>>((acc, i) => {

@@ -14,7 +14,7 @@ import {
   type PnlDia,
   type PlatoTop,
 } from '@fogoneria/contracts/bi';
-import { useModules } from '@/components/dashboard/ModulesProvider';
+import { useSession } from '@/components/dashboard/providers/session';
 import { biApi, rangoVista } from './api';
 
 export type BiData = {
@@ -31,7 +31,7 @@ function mensaje(error: unknown): string {
 }
 
 export function useBi(dias: number = DIAS_VISTA_BI) {
-  const { hasSession } = useModules();
+  const { hasSession } = useSession();
   const [datos, setDatos] = useState<BiData>(VACIO);
   const [error, setError] = useState<string | null>(null);
 

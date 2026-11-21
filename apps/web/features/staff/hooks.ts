@@ -10,7 +10,8 @@ import type {
   PozoPropina,
   Turno,
 } from '@fogoneria/contracts/staff';
-import { useModules } from '@/components/dashboard/ModulesProvider';
+import { useNotifications } from '@/components/dashboard/providers/notifications';
+import { useActiveBranchId } from '@/components/dashboard/hooks/use-active-branch';
 import { rrhhApi } from './api';
 
 function mensaje(error: unknown, fallback: string): string {
@@ -19,7 +20,8 @@ function mensaje(error: unknown, fallback: string): string {
 
 /** Asistencia del día + pozos de propinas del módulo RRHH. */
 export function useAttendance() {
-  const { activeBranchId, notify } = useModules();
+  const activeBranchId = useActiveBranchId();
+  const { notify } = useNotifications();
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [asistencias, setAsistencias] = useState<Asistencia[]>([]);
   const [pozos, setPozos] = useState<PozoPropina[]>([]);
@@ -117,7 +119,8 @@ export function useAttendance() {
 
 /** Plan de turnos por día, con asignación y baja. */
 export function useShifts() {
-  const { activeBranchId, notify } = useModules();
+  const activeBranchId = useActiveBranchId();
+  const { notify } = useNotifications();
   const [fecha, setFecha] = useState(() => diaLima());
   const [empleados, setEmpleados] = useState<Empleado[]>([]);
   const [turnos, setTurnos] = useState<Turno[]>([]);

@@ -7,7 +7,87 @@ const estado = vi.hoisted(() => ({
   notify: vi.fn(),
 }));
 
-vi.mock('@/components/dashboard/ModulesProvider', () => ({ useModules: () => estado }));
+vi.mock('@/components/dashboard/providers/session', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useSession: () => estado,
+}));
+vi.mock('@/components/dashboard/providers/notifications', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useNotifications: () => estado,
+}));
+vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTenant: () => estado,
+}));
+vi.mock('@/components/dashboard/providers/catalog', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCatalogoState: () => estado,
+}));
+vi.mock('@/components/dashboard/providers/live', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useLiveData: () => estado,
+}));
+vi.mock('@/components/dashboard/providers/workspace-actions', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useWorkspaceActions: () => estado,
+}));
+vi.mock('@/components/dashboard/hooks/use-cash-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCashScope: () => estado,
+}));
+vi.mock('@/components/dashboard/hooks/use-branch-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useBranchScope: () => estado,
+}));
+vi.mock('@/components/dashboard/hooks/use-accounts-scope', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useAccountsScope: () => (estado as unknown as { accounts?: unknown[] }).accounts as never,
+}));
+vi.mock('@/features/orders/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useAccounts: () => estado,
+  useOrdersDemo: () => estado,
+}));
+vi.mock('@/features/tables/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTables: () => estado,
+}));
+vi.mock('@/features/reservations/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useReservations: () => estado,
+}));
+vi.mock('@/features/cash/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCash: () => estado,
+}));
+vi.mock('@/features/receipts/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useReceipts: () => estado,
+}));
+vi.mock('@/features/promotions/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  usePromotions: () => estado,
+}));
+vi.mock('@/features/crm/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCrm: () => estado,
+}));
+vi.mock('@/features/expenses/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useExpenses: () => estado,
+}));
+vi.mock('@/features/inventory/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useInventory: () => estado,
+}));
+vi.mock('@/features/staff/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useStaff: () => estado,
+}));
+vi.mock('@/components/dashboard/providers/tickets', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTickets: () => estado,
+}));
 vi.mock('@/components/dashboard/PaymentsView', () => ({
   PaymentsView: ({ paymentHistory }: { paymentHistory: unknown[] }) => (
     <div>pagos:{paymentHistory.length}</div>
@@ -59,7 +139,6 @@ vi.mock('@/components/dashboard/PlanModals', () => ({
 import PagosPage from './page';
 
 beforeEach(() => {
-  estado.payments = [{ id: 1 }, { id: 2 }];
   estado.notify.mockReset();
 });
 
@@ -69,7 +148,7 @@ describe('PagosPage', () => {
   it('abre el plan, cambia a básico y confirma la suscripción', () => {
     render(<PagosPage />);
     expect(screen.getByText(/Plan Profesional/)).toBeTruthy();
-    expect(screen.getByText('pagos:2')).toBeTruthy();
+    expect(screen.getByText('pagos:1')).toBeTruthy();
 
     fireEvent.click(screen.getByText('Gestionar suscripción'));
     expect(screen.getByText('plan:profesional')).toBeTruthy();

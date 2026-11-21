@@ -1,17 +1,19 @@
 'use client';
 
 /**
- * Fachada del salón sobre `ModulesProvider`.
+ * Fachada del salón sobre los hooks por módulo.
  *
  * El ERP comparte un único estado de mesas, cuentas y reservas con mozo y caja,
  * así que la feature no lo duplica: expone solo la superficie que usan el mapa
- * y la agenda. La escritura vive en `api.ts`; el refresco, en el proveedor.
- *
- * Acoplamiento restante y consciente: `components/dashboard/ModulesProvider`
- * sigue siendo el dueño del estado hasta la ola de órdenes (Fase 4).
+ * y la agenda. La escritura vive en `api.ts`; el refresco, en `LiveDataProvider`.
  */
 
-import { useModules } from '@/components/dashboard/ModulesProvider';
+import { useLiveData } from '@/components/dashboard/providers/live';
+import { useNotifications } from '@/components/dashboard/providers/notifications';
+import { useSession } from '@/components/dashboard/providers/session';
+import { useWorkspaceActions } from '@/components/dashboard/providers/workspace-actions';
+import { useAccountsScope } from '@/components/dashboard/hooks/use-accounts-scope';
+import { useBranchScope } from '@/components/dashboard/hooks/use-branch-scope';
 import {
   useOrdersRealtime,
   type LiveEventKind,
@@ -25,22 +27,18 @@ export function useSalon() {
     setTables,
     reservations,
     setReservations,
-    accounts,
-    openAccount,
-    currentUser,
-    hasSession,
-    notify,
     refreshTables,
     refreshReservations,
     tablesLoading,
     tablesError,
     reservationsLoading,
     reservationsError,
-    isGeneral,
-    branches,
-    branchOf,
-    activeBranchId,
-  } = useModules();
+  } = useLiveData();
+  const accounts = useAccountsScope();
+  const { openAccount } = useWorkspaceActions();
+  const { currentUser, hasSession } = useSession();
+  const { notify } = useNotifications();
+  const { isGeneral, branches, branchOf, activeBranchId } = useBranchScope();
 
   return {
     tables,

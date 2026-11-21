@@ -1,9 +1,9 @@
 "use client";
 
 import { SettingsView } from "@/components/dashboard/SettingsView";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
 
 export default function ConfiguracionPage() {
-  const { notify } = useModules();
+  const { notify } = useNotifications();
   return <SettingsView onNotify={notify} />;
 }

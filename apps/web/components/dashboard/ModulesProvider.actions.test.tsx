@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { act, cleanup, render, waitFor } from '@testing-library/react';
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const sesion = vi.hoisted(() => ({
@@ -110,11 +110,26 @@ const api = vi.hoisted(() => ({
 
 vi.mock('./providers/session', () => ({ useSession: () => sesion }));
 vi.mock('./providers/notifications', () => ({ useNotifications: () => avisos }));
-vi.mock('@/features/tenant/provider', () => ({ useTenant: () => tenant }));
-vi.mock('@/features/crm/provider', () => ({ useCrm: () => crm }));
-vi.mock('@/features/expenses/provider', () => ({ useExpenses: () => expenses }));
-vi.mock('@/features/inventory/provider', () => ({ useInventory: () => inventory }));
-vi.mock('@/features/staff/provider', () => ({ useStaff: () => staff }));
+vi.mock('@/features/tenant/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useTenant: () => tenant,
+}));
+vi.mock('@/features/crm/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useCrm: () => crm,
+}));
+vi.mock('@/features/expenses/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useExpenses: () => expenses,
+}));
+vi.mock('@/features/inventory/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useInventory: () => inventory,
+}));
+vi.mock('@/features/staff/provider', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useStaff: () => staff,
+}));
 vi.mock('./providers/catalog', () => ({ useCatalogoState: () => catalogo }));
 vi.mock('@/lib/realtime', () => ({ connectOrdersRealtime: () => () => {} }));
 vi.mock('@/lib/orders-api', () => ({
@@ -130,7 +145,7 @@ vi.mock('@/lib/facturacion', async (importOriginal) => {
   return { ...actual, getFacturacionPort: () => api.port };
 });
 
-import { ModulesProvider, useModules } from './ModulesProvider';
+import { useModules } from './ModulesProvider';
 import { AccountsProvider } from '@/features/orders/provider';
 import { CashProvider } from '@/features/cash/provider';
 import { ReceiptsProvider } from '@/features/receipts/provider';
@@ -138,8 +153,11 @@ import { PromotionsProvider } from '@/features/promotions/provider';
 import { ReservationsProvider } from '@/features/reservations/provider';
 import { TablesProvider } from '@/features/tables/provider';
 import { TicketsProvider } from './providers/tickets';
+import { LiveDataProvider } from './providers/live';
+import { WorkspaceActionsProvider, useWorkspaceActions } from './providers/workspace-actions';
 
 let ctx: ReturnType<typeof useModules>;
+let ctx2: ReturnType<typeof useWorkspaceActions> | null = null;
 
 function Sonda() {
   const value = useModules();
@@ -149,8 +167,16 @@ function Sonda() {
   return null;
 }
 
-function montar() {
-  return render(
+function SondaAcciones() {
+  const value = useWorkspaceActions();
+  useEffect(() => {
+    ctx2 = value;
+  }, [value]);
+  return null;
+}
+
+function stack(children: ReactNode) {
+  return (
     <TablesProvider>
       <ReservationsProvider>
         <AccountsProvider>
@@ -158,16 +184,31 @@ function montar() {
             <ReceiptsProvider>
               <PromotionsProvider>
                 <TicketsProvider>
-                  <ModulesProvider initialPayments={[]}>
-                    <Sonda />
-                  </ModulesProvider>
+                  <LiveDataProvider>
+                    <WorkspaceActionsProvider>{children}</WorkspaceActionsProvider>
+                  </LiveDataProvider>
                 </TicketsProvider>
               </PromotionsProvider>
             </ReceiptsProvider>
           </CashProvider>
         </AccountsProvider>
       </ReservationsProvider>
-    </TablesProvider>,
+    </TablesProvider>
+  );
+}
+
+function montar() {
+  return render(stack(<Sonda />));
+}
+
+function montarDoble() {
+  return render(
+    stack(
+      <>
+        <Sonda />
+        <SondaAcciones />
+      </>,
+    ),
   );
 }
 
@@ -187,6 +228,7 @@ const pagos = (total: number) => [{ method: 'Efectivo' as const, amount: total }
 beforeEach(() => {
   sesion.currentUser = null;
   sesion.hasSession = false;
+  ctx2 = null;
   tenant.activeBranchId = 'miraflores';
   tenant.writeBranchId = 'miraflores';
   tenant.branchIds = ['miraflores'];
@@ -311,6 +353,62 @@ describe('ModulesProvider (con sesión real)', () => {
     });
     expect(ctx.ordersError).toBe('No se pudo actualizar la comanda.');
   });
+
+  it('registra el error si el envío a cocina falla', async () => {
+    api.listOrders.mockResolvedValue({ items: [] });
+    api.createOrder.mockRejectedValue(new Error('sin stock'));
+    montar();
+    await waitFor(() => expect(ctx).toBeTruthy());
+
+    let accountId = '';
+    act(() => {
+      accountId = ctx.openAccount({ tableId: null, label: 'Barra', customer: 'Ana', waiter: 'Luis' }) ?? '';
+      ctx.addAccountItems(accountId, [item()]);
+    });
+
+    await act(async () => {
+      await expect(ctx.sendToKitchen(accountId)).rejects.toThrow('sin stock');
+    });
+    expect(ctx.ordersError).toBe('No se pudo enviar la comanda.');
+  });
+
+  it('cierra las comandas de la cuenta al cobrar', async () => {
+    api.listOrders.mockResolvedValue({ items: [] });
+    api.getOrder.mockResolvedValue({ ...ordenApi, estado: 'ENTREGADO' });
+    api.createOrder.mockResolvedValue(ordenApi);
+    montar();
+    await waitFor(() => expect(ctx).toBeTruthy());
+
+    let accountId = '';
+    act(() => {
+      accountId = ctx.openAccount({
+        tableId: 1,
+        tableApiId: 'm-1',
+        label: 'Mesa 1',
+        customer: 'Ana',
+        waiter: 'Luis',
+      }) ?? '';
+      ctx.addAccountItems(accountId, [item()]);
+    });
+    await act(async () => {
+      await ctx.sendToKitchen(accountId);
+    });
+
+    act(() => {
+      ctx.checkoutAccount({
+        accountId,
+        payments: pagos(24.9),
+        tip: 0,
+        receiptType: '03',
+        docType: '',
+        docNumber: '',
+        customerId: null,
+        couponCode: null,
+      });
+    });
+
+    await waitFor(() => expect(api.updateOrderStatus).toHaveBeenCalledWith('o-1', 'PAGADA'));
+  });
 });
 
 describe('ModulesProvider (modo demo)', () => {
@@ -340,13 +438,25 @@ describe('ModulesProvider (modo demo)', () => {
     });
     expect(ctx.accounts[0].items).toHaveLength(1);
 
+    act(() => {
+      ctx.addAccountItems(accountId, [
+        { ...item('it-3'), modifiers: [{ optionId: 'm-1', name: 'Sin cebolla', extra: 0 }] },
+      ]);
+    });
+    expect(ctx.accounts[0].items).toHaveLength(2);
+
     let orden: unknown = null;
     await act(async () => {
       orden = await ctx.sendToKitchen(accountId);
     });
     expect(orden).toBeTruthy();
-    expect(ctx.accounts[0].items[0].sent).toBe(true);
+    expect(ctx.accounts[0].items.every((i) => i.sent)).toBe(true);
     expect(api.createOrder).not.toHaveBeenCalled();
+
+    act(() => {
+      ctx.removeAccountItem(accountId, 'it-3');
+    });
+    expect(ctx.accounts[0].items).toHaveLength(1);
 
     const nueva = ctx.orders[0];
     await act(async () => {
@@ -522,6 +632,45 @@ describe('ModulesProvider (modo demo)', () => {
     expect(ctx.receipts[0].motivoAnulacion).toBe('Duplicado');
   });
 
+  it('anula una factura y emite su nota de crédito', async () => {
+    montar();
+    await waitFor(() => expect(ctx).toBeTruthy());
+
+    act(() => {
+      ctx.setReceipts([
+        {
+          id: 'F001-3',
+          type: '01',
+          at: new Date().toISOString(),
+          date: 'Hoy',
+          customer: 'Empresa SAC',
+          docType: '6',
+          docNumber: '20123456786',
+          subtotal: 100,
+          igv: 18,
+          total: 118,
+          status: 'Pagada',
+          source: 'Mesa 2',
+          estadoSunat: 'aceptado',
+          intentosEnvio: 1,
+        },
+      ]);
+    });
+
+    act(() => {
+      ctx.annulReceipt('F001-3', 'Error de RUC');
+    });
+
+    const nota = ctx.receipts.find((receipt) => receipt.type === '07');
+    expect(nota).toMatchObject({
+      status: 'Emitida',
+      refId: 'F001-3',
+      motivoAnulacion: 'Error de RUC',
+    });
+    expect(ctx.receipts.find((receipt) => receipt.id === 'F001-3')?.status).toBe('Anulada');
+    expect(ctx.cashMovements.some((m) => m.concept === 'Anulación F001-3')).toBe(true);
+  });
+
   it('cubre rechazos de SUNAT, tickets y ramas sin pendientes', async () => {
     montar();
     await waitFor(() => expect(ctx).toBeTruthy());
@@ -590,5 +739,68 @@ describe('ModulesProvider (modo demo)', () => {
       ctx.resetDemoData();
     });
     expect(ctx.accounts).toHaveLength(0);
+  });
+
+  it('comparte guards entre consumidores y el reset limpia SUNAT (H1)', async () => {
+    montarDoble();
+    await waitFor(() => expect(ctx).toBeTruthy());
+    await waitFor(() => expect(ctx2).toBeTruthy());
+
+    const checkout = (accountId: string) => ({
+      accountId,
+      payments: pagos(24.9),
+      tip: 0,
+      receiptType: '03' as const,
+      docType: '' as const,
+      docNumber: '',
+      customerId: null,
+      couponCode: null,
+    });
+
+    let primera = '';
+    act(() => {
+      primera =
+        ctx.openAccount({ tableId: null, label: 'Barra', customer: 'Ana', waiter: 'Luis' }) ?? '';
+      ctx.addAccountItems(primera, [item()]);
+    });
+
+    let recibo1: { id?: string } | null = null;
+    act(() => {
+      recibo1 = ctx.checkoutAccount(checkout(primera)) as { id?: string } | null;
+    });
+    expect(recibo1).toBeTruthy();
+    await waitFor(() => expect(api.port.enviar).toHaveBeenCalledTimes(1));
+
+    // Doble cobro desde el otro consumidor: mismo comprobante, sin reenviar.
+    let recibo2: { id?: string } | null = null;
+    act(() => {
+      recibo2 = ctx2!.checkoutAccount(checkout(primera)) as { id?: string } | null;
+    });
+    expect((recibo2 as { id?: string } | null)?.id).toBe(
+      (recibo1 as { id?: string } | null)?.id,
+    );
+    expect(api.port.enviar).toHaveBeenCalledTimes(1);
+
+    // Reset desde el otro consumidor (como AppTopBar) limpia los guards.
+    act(() => {
+      ctx2!.resetDemoData();
+    });
+    expect(ctx.accounts).toHaveLength(0);
+
+    // El nuevo cobro recicla el mismo id de comprobante; debe reenviarse.
+    let segunda = '';
+    act(() => {
+      segunda =
+        ctx.openAccount({ tableId: null, label: 'Barra 2', customer: '', waiter: 'Luis' }) ?? '';
+      ctx.addAccountItems(segunda, [item()]);
+    });
+    let recibo3: { id?: string } | null = null;
+    act(() => {
+      recibo3 = ctx.checkoutAccount(checkout(segunda)) as { id?: string } | null;
+    });
+    expect((recibo3 as { id?: string } | null)?.id).toBe(
+      (recibo1 as { id?: string } | null)?.id,
+    );
+    await waitFor(() => expect(api.port.enviar).toHaveBeenCalledTimes(2));
   });
 });

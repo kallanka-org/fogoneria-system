@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Toolbar } from "@/components/ui/Toolbar";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useWorkspaceActions } from "@/components/dashboard/providers/workspace-actions";
 import { AddItemModal } from "./AddItemModal";
 import { useNow } from "@/lib/use-now";
 import {
@@ -19,16 +21,16 @@ import { canAnnulAccount, canCheckout, canCreateOrder, canOpenAccount } from "@/
 
 /** Panel de una cuenta abierta: líneas, envío a cocina y totales. */
 export function AccountPanel({ account, onBack }: { account: TableAccount; onBack: () => void }) {
+  const { currentUser } = useSession();
+  const { notify } = useNotifications();
   const {
-    currentUser,
     updateAccountItem,
     removeAccountItem,
     addAccountItems,
     sendToKitchen,
     annulAccount,
     checkoutAccount,
-    notify,
-  } = useModules();
+  } = useWorkspaceActions();
   useNow(30000);
   const role = currentUser?.role;
   const [adding, setAdding] = useState(false);

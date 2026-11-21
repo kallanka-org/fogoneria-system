@@ -7,7 +7,10 @@ import { Field, Select, TextInput } from "@/components/ui/fields";
 import { Modal } from "@/components/ui/Modal";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
 import { Toolbar } from "@/components/ui/Toolbar";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useCrm } from "@/features/crm/provider";
+import { useActiveBranchId } from "@/components/dashboard/hooks/use-active-branch";
 import type { Customer } from "@/lib/erp";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniDonut } from "@/components/dashboard/summaries/charts";
@@ -40,7 +43,10 @@ function toCustomer(cliente: Cliente): Customer {
 
 /** Maestro de Clientes: comensales identificados con puntos y segmento (AYCDS-40). */
 export function ClientesPage() {
-  const { hasSession, customers, setCustomers, notify, activeBranchId } = useModules();
+  const { hasSession } = useSession();
+  const { customers, setCustomers } = useCrm();
+  const { notify } = useNotifications();
+  const activeBranchId = useActiveBranchId();
   const [apiRows, setApiRows] = useState<Cliente[]>([]);
   const [query, setQuery] = useState("");
   const [segmento, setSegmento] = useState<SegmentoCliente | "">("");

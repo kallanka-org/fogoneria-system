@@ -62,6 +62,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - F6b: `ExpensesProvider`/`useExpenses` (`features/expenses/provider.tsx`) es dueño del estado demo; persiste `fogoneria:expenses:v1:<tenant>` y sincroniza por `BroadcastChannel`. `ModulesProvider` lo reexporta.
 
 - Metadata (2026-11-21): `features/expenses/module.ts` describe la entrada de nav del registry generado; no cambia el estado.

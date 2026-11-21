@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/Badge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { TableCard, THead, TH, TR, TD } from "@/components/ui/data-table";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
 import { ApiError } from "@fogoneria/sdk";
 import { etiquetaPlan } from "@fogoneria/contracts/billing";
 import { type EmpresaSaas, type MetricasSaas } from "@fogoneria/contracts/saas";
@@ -53,7 +54,8 @@ function errorMessage(error: unknown): string {
 
 /** Consola SaaS del superadmin: empresas, planes y estado. Fuera del shell restaurante. */
 export function SaasPage({ billing }: { billing?: ReactNode }) {
-  const { currentUser, logout, notify } = useModules();
+  const { currentUser, logout } = useSession();
+  const { notify } = useNotifications();
   const [companies, setCompanies] = useState<Company[] | null>(null);
   const [metrics, setMetrics] = useState<MetricasSaas>(EMPTY_METRICS);
   const [error, setError] = useState<string | null>(null);

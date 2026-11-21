@@ -54,6 +54,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - `tenant` no tiene unit test propio ni e2e dedicado (observación 9 de `docs/PLAN-MODULOS-Y-PROPIEDAD.md`).
 - Durante la hidratación, una llamada con `sucursalId` puede salir sin filtro (vista agregada) y repetirse al resolverse la sucursal; es un request extra, no un cambio visual.
 - `TenantProvider` reexpone por `ModulesProvider`; las features nuevas deben usar `useTenant` directamente.

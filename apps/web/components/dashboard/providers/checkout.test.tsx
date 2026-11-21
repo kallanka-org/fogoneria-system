@@ -14,7 +14,7 @@ vi.mock('@/components/dashboard/providers/session', () => ({
   useSession: () => sesion,
 }));
 
-import { useCheckout } from './checkout';
+import { useCheckoutController } from './checkout';
 import { AccountsProvider, useAccounts } from '@/features/orders/provider';
 import { CashProvider, useCash } from '@/features/cash/provider';
 import { CrmProvider } from '@/features/crm/provider';
@@ -36,7 +36,7 @@ type Harness = {
 const harness: Harness = {};
 
 function Probe() {
-  const checkout = useCheckout({ onCommitted, onPostCommitFailed, retryDelayMs: 1 });
+  const checkout = useCheckoutController({ onCommitted, onPostCommitFailed, retryDelayMs: 1 });
   const { setAccounts, resetAccounts } = useAccounts();
   const receiptsCtx = useReceipts();
   const cash = useCash();
@@ -120,7 +120,7 @@ beforeEach(() => {
 });
 afterEach(cleanup);
 
-describe('useCheckout', () => {
+describe('useCheckoutController', () => {
   it('ignora el doble clic: un comprobante y un movimiento por cuenta', async () => {
     const { rerender } = render(shell());
     await act(async () => {

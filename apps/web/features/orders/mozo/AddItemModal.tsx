@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Field, TextInput } from "@/components/ui/fields";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useCatalogoState } from "@/components/dashboard/providers/catalog";
 import {
   fmtMoney,
   newId,
@@ -21,7 +21,7 @@ export function AddItemModal({
   onAdd: (item: AccountItem) => void;
   onClose: () => void;
 }) {
-  const { products, priceOf, modifierGroups } = useModules();
+  const { products, priceOf, modifierGroups } = useCatalogoState();
   const active = products.filter((p) => p.status === "Activo");
   const [productId, setProductId] = useState<string | null>(active[0]?.id ?? null);
   const [qty, setQty] = useState(1);

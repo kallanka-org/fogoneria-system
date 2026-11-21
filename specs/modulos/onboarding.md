@@ -51,6 +51,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - Rate limit en memoria: no sirve con más de una instancia (migrar a Redis).
 - No hay storage de imágenes: el logo vive como data URL en la base.
 - No hay verificación del RUC contra SUNAT, solo dígito verificador.

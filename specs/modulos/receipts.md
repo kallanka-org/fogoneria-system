@@ -61,6 +61,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - F6c2: `ReceiptsProvider`/`useReceipts` (`features/receipts/provider.tsx`) es dueño de comprobantes y contingencia SUNAT; persiste `fogoneria:receipts:v1:<tenant>`. La anulación la orquesta `ModulesProvider` (cuentas + caja) con `patchReceipt`/`addReceipt` + `reverseMovements`.
 - F6c3: tests de sync entre pestañas y de cambio de tenant para el store de comprobantes.
 

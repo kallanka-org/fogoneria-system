@@ -67,6 +67,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - F6c2: `PromotionsProvider`/`usePromotions` (`features/promotions/provider.tsx`) es dueño de combos y cupones demo; persiste `fogoneria:promotions:v1:<tenant>` y expone `consumeCoupon`/`restoreCoupon`. La poda de combos sigue en `ModulesProvider` porque necesita el catálogo (se monta debajo de `FeatureProviders`).
 - F6c3: tests de sync entre pestañas y de cambio de tenant para combos/cupones.
 

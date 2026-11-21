@@ -59,6 +59,8 @@ Reglas:
 
 ## 7. Deuda conocida
 
+- Retiro de `ModulesProvider`: la vista usa hooks por módulo (`useSession`, `useLiveData`, `useWorkspaceActions` y los providers de su feature); sin cambio funcional. `useModules()` queda como hook puro de compatibilidad.
+
 - Sin refresh token: la sesión web se refresca por cookie deslizante (15 min) con tope de 8 h; el rol del JWT es inmutable en ese lapso.
 - No hay reset de contraseña automático: `/recuperar` abre `mailto:` a soporte.
 - `JWT_SECRET`/`SESSION_SECRET` de demo deben rotarse antes de usuarios reales (`docs/despliegue.md`).

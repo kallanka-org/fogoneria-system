@@ -7,7 +7,12 @@ import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Field, Select, TextInput } from "@/components/ui/fields";
 import { Modal } from "@/components/ui/Modal";
-import { useModules } from "@/components/dashboard/ModulesProvider";
+import { useCatalogoState } from "@/components/dashboard/providers/catalog";
+import { useLiveData } from "@/components/dashboard/providers/live";
+import { useNotifications } from "@/components/dashboard/providers/notifications";
+import { useSession } from "@/components/dashboard/providers/session";
+import { useWorkspaceActions } from "@/components/dashboard/providers/workspace-actions";
+import { useAccountsScope } from "@/components/dashboard/hooks/use-accounts-scope";
 import { AccountPanel } from "./mozo/AccountPanel";
 import { useOrdersRealtime } from "@/lib/orders-realtime";
 import type { RealtimeStatus } from "@/lib/realtime";
@@ -22,20 +27,18 @@ import {
 
 /** Panel del mesero: cuentas por mesa (POS) y estados de sus comandas. */
 export function MozoView() {
+  const { currentUser } = useSession();
+  const accounts = useAccountsScope();
+  const { openAccount, advanceOrder } = useWorkspaceActions();
   const {
-    currentUser,
-    accounts,
-    openAccount,
     orders,
     ordersLoading,
     ordersError,
     refreshOrders,
-    advanceOrder,
     tables,
-    products,
-    priceOf,
-    notify,
-  } = useModules();
+  } = useLiveData();
+  const { products, priceOf } = useCatalogoState();
+  const { notify } = useNotifications();
   const me = currentUser?.name ?? "Mesero";
   const role = currentUser?.role;
   const canDeliver = canMarkEntregado(role);

@@ -327,6 +327,62 @@ describe('ModulesProvider (con sesión real)', () => {
     });
     expect(ctx.ordersError).toBe('No se pudo actualizar la comanda.');
   });
+
+  it('registra el error si el envío a cocina falla', async () => {
+    api.listOrders.mockResolvedValue({ items: [] });
+    api.createOrder.mockRejectedValue(new Error('sin stock'));
+    montar();
+    await waitFor(() => expect(ctx).toBeTruthy());
+
+    let accountId = '';
+    act(() => {
+      accountId = ctx.openAccount({ tableId: null, label: 'Barra', customer: 'Ana', waiter: 'Luis' }) ?? '';
+      ctx.addAccountItems(accountId, [item()]);
+    });
+
+    await act(async () => {
+      await expect(ctx.sendToKitchen(accountId)).rejects.toThrow('sin stock');
+    });
+    expect(ctx.ordersError).toBe('No se pudo enviar la comanda.');
+  });
+
+  it('cierra las comandas de la cuenta al cobrar', async () => {
+    api.listOrders.mockResolvedValue({ items: [] });
+    api.getOrder.mockResolvedValue({ ...ordenApi, estado: 'ENTREGADO' });
+    api.createOrder.mockResolvedValue(ordenApi);
+    montar();
+    await waitFor(() => expect(ctx).toBeTruthy());
+
+    let accountId = '';
+    act(() => {
+      accountId = ctx.openAccount({
+        tableId: 1,
+        tableApiId: 'm-1',
+        label: 'Mesa 1',
+        customer: 'Ana',
+        waiter: 'Luis',
+      }) ?? '';
+      ctx.addAccountItems(accountId, [item()]);
+    });
+    await act(async () => {
+      await ctx.sendToKitchen(accountId);
+    });
+
+    act(() => {
+      ctx.checkoutAccount({
+        accountId,
+        payments: pagos(24.9),
+        tip: 0,
+        receiptType: '03',
+        docType: '',
+        docNumber: '',
+        customerId: null,
+        couponCode: null,
+      });
+    });
+
+    await waitFor(() => expect(api.updateOrderStatus).toHaveBeenCalledWith('o-1', 'PAGADA'));
+  });
 });
 
 describe('ModulesProvider (modo demo)', () => {
@@ -356,13 +412,25 @@ describe('ModulesProvider (modo demo)', () => {
     });
     expect(ctx.accounts[0].items).toHaveLength(1);
 
+    act(() => {
+      ctx.addAccountItems(accountId, [
+        { ...item('it-3'), modifiers: [{ optionId: 'm-1', name: 'Sin cebolla', extra: 0 }] },
+      ]);
+    });
+    expect(ctx.accounts[0].items).toHaveLength(2);
+
     let orden: unknown = null;
     await act(async () => {
       orden = await ctx.sendToKitchen(accountId);
     });
     expect(orden).toBeTruthy();
-    expect(ctx.accounts[0].items[0].sent).toBe(true);
+    expect(ctx.accounts[0].items.every((i) => i.sent)).toBe(true);
     expect(api.createOrder).not.toHaveBeenCalled();
+
+    act(() => {
+      ctx.removeAccountItem(accountId, 'it-3');
+    });
+    expect(ctx.accounts[0].items).toHaveLength(1);
 
     const nueva = ctx.orders[0];
     await act(async () => {
@@ -536,6 +604,45 @@ describe('ModulesProvider (modo demo)', () => {
       ctx.annulReceipt('B001-7', 'Otra vez');
     });
     expect(ctx.receipts[0].motivoAnulacion).toBe('Duplicado');
+  });
+
+  it('anula una factura y emite su nota de crédito', async () => {
+    montar();
+    await waitFor(() => expect(ctx).toBeTruthy());
+
+    act(() => {
+      ctx.setReceipts([
+        {
+          id: 'F001-3',
+          type: '01',
+          at: new Date().toISOString(),
+          date: 'Hoy',
+          customer: 'Empresa SAC',
+          docType: '6',
+          docNumber: '20123456786',
+          subtotal: 100,
+          igv: 18,
+          total: 118,
+          status: 'Pagada',
+          source: 'Mesa 2',
+          estadoSunat: 'aceptado',
+          intentosEnvio: 1,
+        },
+      ]);
+    });
+
+    act(() => {
+      ctx.annulReceipt('F001-3', 'Error de RUC');
+    });
+
+    const nota = ctx.receipts.find((receipt) => receipt.type === '07');
+    expect(nota).toMatchObject({
+      status: 'Emitida',
+      refId: 'F001-3',
+      motivoAnulacion: 'Error de RUC',
+    });
+    expect(ctx.receipts.find((receipt) => receipt.id === 'F001-3')?.status).toBe('Anulada');
+    expect(ctx.cashMovements.some((m) => m.concept === 'Anulación F001-3')).toBe(true);
   });
 
   it('cubre rechazos de SUNAT, tickets y ramas sin pendientes', async () => {

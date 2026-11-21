@@ -10,7 +10,7 @@ import { Toolbar } from "@/components/ui/Toolbar";
 import { useSession } from "@/components/dashboard/providers/session";
 import { useNotifications } from "@/components/dashboard/providers/notifications";
 import { useCrm } from "@/features/crm/provider";
-import { useTenant } from "@/features/tenant/provider";
+import { useActiveBranchId } from "@/components/dashboard/hooks/use-active-branch";
 import type { Customer } from "@/lib/erp";
 import { ModuleSummary } from "@/components/dashboard/summaries/ModuleSummary";
 import { MiniDonut } from "@/components/dashboard/summaries/charts";
@@ -46,7 +46,7 @@ export function ClientesPage() {
   const { hasSession } = useSession();
   const { customers, setCustomers } = useCrm();
   const { notify } = useNotifications();
-  const { activeBranchId } = useTenant();
+  const activeBranchId = useActiveBranchId();
   const [apiRows, setApiRows] = useState<Cliente[]>([]);
   const [query, setQuery] = useState("");
   const [segmento, setSegmento] = useState<SegmentoCliente | "">("");

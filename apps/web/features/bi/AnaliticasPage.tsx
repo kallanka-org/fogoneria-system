@@ -7,7 +7,7 @@ import { diaCorto } from '@fogoneria/kernel';
 import { KpiCard } from '@/components/ui/KpiCard';
 import { TableCard, THead, TH, TR, TD } from '@/components/ui/data-table';
 import { ChartCard } from '@/components/dashboard/workspace-ui';
-import { useExpenses } from '@/features/expenses/provider';
+import { useExpenses } from "@/components/dashboard/hooks/use-demo-expenses";
 import { fmtMoney } from '@/lib/domain';
 import { useBi } from './hooks';
 

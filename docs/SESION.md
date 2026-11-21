@@ -1,5 +1,12 @@
 # SESION — estado entre sesiones
 
+## 2026-11-21 — H1: guards del workspace en un provider singleton
+
+- **Hallazgo:** `sunatEnviados`, `checkingOut`, `paidByAccount` y la cola post-commit vivían en refs por instancia de `useWorkspaceActions`/`useCheckout`; el reset de `AppTopBar` solo limpiaba su copia y otro consumidor (CheckoutModal) podía omitir SUNAT con IDs reciclados.
+- **Fix:** `WorkspaceActionsProvider` se monta una vez en `app/layout.tsx` (dentro de `LiveDataProvider`) y es dueño de los guards, la idempotencia y la cola; `useWorkspaceActions` consume el contexto y `useCheckout` es un alias. `resetDemoData` limpia `sunatEnviados`, `checkingOut`, `paidByAccount` y la cola (`resetCheckout`).
+- **Test:** dos consumidores bajo el mismo provider; reset en uno, cobro en otro y comprobante con ID reciclado → `enviarSunat` se ejecuta otra vez; doble cobro desde el otro consumidor devuelve el mismo comprobante y no reenvía.
+- Verificado: web **974** tests, types, lint y build.
+
 ## 2026-11-21 — Retiro de `ModulesProvider` (F6 completo)
 
 - **Provider retirado:** `app/layout.tsx` monta `Theme > Session > Notifications > FeatureProviders > Catalogo > Tickets > LiveData`; ya no hay `ModulesProvider` ni `ErpState`.

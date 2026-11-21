@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { act, cleanup, render, waitFor } from '@testing-library/react';
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const sesion = vi.hoisted(() => ({
@@ -154,8 +154,10 @@ import { ReservationsProvider } from '@/features/reservations/provider';
 import { TablesProvider } from '@/features/tables/provider';
 import { TicketsProvider } from './providers/tickets';
 import { LiveDataProvider } from './providers/live';
+import { WorkspaceActionsProvider, useWorkspaceActions } from './providers/workspace-actions';
 
 let ctx: ReturnType<typeof useModules>;
+let ctx2: ReturnType<typeof useWorkspaceActions> | null = null;
 
 function Sonda() {
   const value = useModules();
@@ -165,8 +167,16 @@ function Sonda() {
   return null;
 }
 
-function montar() {
-  return render(
+function SondaAcciones() {
+  const value = useWorkspaceActions();
+  useEffect(() => {
+    ctx2 = value;
+  }, [value]);
+  return null;
+}
+
+function stack(children: ReactNode) {
+  return (
     <TablesProvider>
       <ReservationsProvider>
         <AccountsProvider>
@@ -175,7 +185,7 @@ function montar() {
               <PromotionsProvider>
                 <TicketsProvider>
                   <LiveDataProvider>
-                    <Sonda />
+                    <WorkspaceActionsProvider>{children}</WorkspaceActionsProvider>
                   </LiveDataProvider>
                 </TicketsProvider>
               </PromotionsProvider>
@@ -183,7 +193,22 @@ function montar() {
           </CashProvider>
         </AccountsProvider>
       </ReservationsProvider>
-    </TablesProvider>,
+    </TablesProvider>
+  );
+}
+
+function montar() {
+  return render(stack(<Sonda />));
+}
+
+function montarDoble() {
+  return render(
+    stack(
+      <>
+        <Sonda />
+        <SondaAcciones />
+      </>,
+    ),
   );
 }
 
@@ -203,6 +228,7 @@ const pagos = (total: number) => [{ method: 'Efectivo' as const, amount: total }
 beforeEach(() => {
   sesion.currentUser = null;
   sesion.hasSession = false;
+  ctx2 = null;
   tenant.activeBranchId = 'miraflores';
   tenant.writeBranchId = 'miraflores';
   tenant.branchIds = ['miraflores'];
@@ -713,5 +739,68 @@ describe('ModulesProvider (modo demo)', () => {
       ctx.resetDemoData();
     });
     expect(ctx.accounts).toHaveLength(0);
+  });
+
+  it('comparte guards entre consumidores y el reset limpia SUNAT (H1)', async () => {
+    montarDoble();
+    await waitFor(() => expect(ctx).toBeTruthy());
+    await waitFor(() => expect(ctx2).toBeTruthy());
+
+    const checkout = (accountId: string) => ({
+      accountId,
+      payments: pagos(24.9),
+      tip: 0,
+      receiptType: '03' as const,
+      docType: '' as const,
+      docNumber: '',
+      customerId: null,
+      couponCode: null,
+    });
+
+    let primera = '';
+    act(() => {
+      primera =
+        ctx.openAccount({ tableId: null, label: 'Barra', customer: 'Ana', waiter: 'Luis' }) ?? '';
+      ctx.addAccountItems(primera, [item()]);
+    });
+
+    let recibo1: { id?: string } | null = null;
+    act(() => {
+      recibo1 = ctx.checkoutAccount(checkout(primera)) as { id?: string } | null;
+    });
+    expect(recibo1).toBeTruthy();
+    await waitFor(() => expect(api.port.enviar).toHaveBeenCalledTimes(1));
+
+    // Doble cobro desde el otro consumidor: mismo comprobante, sin reenviar.
+    let recibo2: { id?: string } | null = null;
+    act(() => {
+      recibo2 = ctx2!.checkoutAccount(checkout(primera)) as { id?: string } | null;
+    });
+    expect((recibo2 as { id?: string } | null)?.id).toBe(
+      (recibo1 as { id?: string } | null)?.id,
+    );
+    expect(api.port.enviar).toHaveBeenCalledTimes(1);
+
+    // Reset desde el otro consumidor (como AppTopBar) limpia los guards.
+    act(() => {
+      ctx2!.resetDemoData();
+    });
+    expect(ctx.accounts).toHaveLength(0);
+
+    // El nuevo cobro recicla el mismo id de comprobante; debe reenviarse.
+    let segunda = '';
+    act(() => {
+      segunda =
+        ctx.openAccount({ tableId: null, label: 'Barra 2', customer: '', waiter: 'Luis' }) ?? '';
+      ctx.addAccountItems(segunda, [item()]);
+    });
+    let recibo3: { id?: string } | null = null;
+    act(() => {
+      recibo3 = ctx.checkoutAccount(checkout(segunda)) as { id?: string } | null;
+    });
+    expect((recibo3 as { id?: string } | null)?.id).toBe(
+      (recibo1 as { id?: string } | null)?.id,
+    );
+    await waitFor(() => expect(api.port.enviar).toHaveBeenCalledTimes(2));
   });
 });

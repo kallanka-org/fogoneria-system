@@ -176,7 +176,7 @@ Reglas:
 Piezas nuevas del retiro:
 
 - `components/dashboard/providers/live.tsx` (`LiveDataProvider`/`useLiveData`): comandas, mesas y reservas de la API, loading/errores, refresh, realtime, migración del `ErpState` legacy y remapeo slug→UUID. Se monta en `app/layout.tsx` debajo de `CatalogoProvider`.
-- `components/dashboard/providers/workspace-actions.ts` (`useWorkspaceActions`): abrir/anular cuentas, líneas, enviar a cocina, avanzar comandas, cobrar, anular comprobantes, turnos, tickets y reset. Hook puro sobre los providers.
+- `components/dashboard/providers/workspace-actions.tsx` (`WorkspaceActionsProvider`/`useWorkspaceActions`): abrir/anular cuentas, líneas, enviar a cocina, avanzar comandas, cobrar, anular comprobantes, turnos, tickets y reset. **Se monta una vez** en el layout y es dueño de los guards de orquestación (`sunatEnviados`, `checkingOut`, `paidByAccount`, cola post-commit): todos los consumidores (topbar, caja, mozo…) comparten el mismo estado y `resetDemoData` limpia todos los guards/mapas/cola. `useCheckout` es un alias que consume ese contexto; `useCheckoutController` es el controlador interno que solo usa el provider.
 - `components/dashboard/hooks/use-branch-scope.ts`, `use-cash-scope.ts`, `use-accounts-scope.ts`: sucursal activa/`branchOf`, vista de caja y cuentas filtradas.
 - `useModules()` sigue disponible para tests y consumidores externos; las vistas usan los hooks específicos (`useSession`, `useNotifications`, `useTenant`, `useCatalogoState`, `useLiveData`, `useWorkspaceActions`, `useAccountsScope`, `useCashScope`, `useBranchScope`, `useTickets` y los providers de módulo).
 

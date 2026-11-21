@@ -3,12 +3,19 @@
 /**
  * Acciones cross-cutting del workspace (retiro de `ModulesProvider`).
  *
- * Hook puro que compone los providers de módulo y el estado de la API: no
- * crea contexto ni estado global nuevo. Las vistas lo usan para abrir/anular
- * cuentas, enviar a cocina, avanzar comandas, cobrar y resetear la demo.
+ * `WorkspaceActionsProvider` se monta **una sola vez** en `app/layout.tsx` y
+ * posee los guards de orquestación (`sunatEnviados`, idempotencia y cola del
+ * checkout). `useWorkspaceActions` consume ese contexto: dos consumidores
+ * (topbar, caja, mozo…) comparten los mismos guards y el reset los limpia todos.
  */
 
-import { useCallback, useRef } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  type ReactNode,
+} from 'react';
 import {
   fmtDateTime,
   itemLineTotal,
@@ -42,7 +49,7 @@ import { useStaff } from '@/features/staff/provider';
 import { useTables } from '@/features/tables/provider';
 import { useTickets } from './tickets';
 import { useCatalogoState } from './catalog';
-import { useCheckout } from './checkout';
+import { useCheckoutController } from './checkout';
 import { useLiveData } from './live';
 import { useNotifications } from './notifications';
 import { useSession } from './session';
@@ -54,7 +61,7 @@ const TERMINAL_API_STATES: readonly ordersApi.ApiOrderStatus[] = [
   'ANULADA',
 ];
 
-export function useWorkspaceActions() {
+function useWorkspaceActionsValue() {
   const { currentUser } = useSession();
   const { notify } = useNotifications();
   const { branchIds, activeBranchId, isGeneral } = useTenant();
@@ -355,7 +362,7 @@ export function useWorkspaceActions() {
 
   /* ---------- Cobro ---------- */
 
-  const { checkoutAccount } = useCheckout({
+  const { checkoutAccount, resetCheckout } = useCheckoutController({
     onCommitted: (receipt, account) => {
       if (account.tableId) patchStatus(account.branchId, account.tableId, 'libre');
       if (!sunatEnviados.current.has(receipt.id)) {
@@ -470,6 +477,7 @@ export function useWorkspaceActions() {
   const resetDemoData = useCallback(() => {
     resetErpState(tenantKey);
     sunatEnviados.current.clear();
+    resetCheckout();
     resetCustomers();
     resetExpenses();
     resetInventory();
@@ -497,6 +505,7 @@ export function useWorkspaceActions() {
     resetTables,
     resetTickets,
     resetCash,
+    resetCheckout,
     tenantKey,
   ]);
 
@@ -516,4 +525,35 @@ export function useWorkspaceActions() {
     addTicket,
     resetDemoData,
   };
+}
+
+type WorkspaceActions = ReturnType<typeof useWorkspaceActionsValue>;
+
+const WorkspaceActionsContext = createContext<WorkspaceActions | null>(null);
+
+/**
+ * Provider singleton de acciones y guards. Se monta una vez en el layout;
+ * todos los consumidores comparten `sunatEnviados`, idempotencia y cola.
+ */
+export function WorkspaceActionsProvider({ children }: { children: ReactNode }) {
+  const value = useWorkspaceActionsValue();
+  return (
+    <WorkspaceActionsContext.Provider value={value}>
+      {children}
+    </WorkspaceActionsContext.Provider>
+  );
+}
+
+export function useWorkspaceActions(): WorkspaceActions {
+  const context = useContext(WorkspaceActionsContext);
+  if (!context) {
+    throw new Error('useWorkspaceActions debe usarse dentro de WorkspaceActionsProvider');
+  }
+  return context;
+}
+
+/** Alias de compatibilidad: el checkout ya vive en el provider singleton. */
+export function useCheckout() {
+  const { checkoutAccount } = useWorkspaceActions();
+  return { checkoutAccount };
 }

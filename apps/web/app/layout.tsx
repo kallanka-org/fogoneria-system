@@ -8,6 +8,7 @@ import { LiveDataProvider } from "@/components/dashboard/providers/live";
 import { NotificationsProvider } from "@/components/dashboard/providers/notifications";
 import { SessionProvider } from "@/components/dashboard/providers/session";
 import { TicketsProvider } from "@/components/dashboard/providers/tickets";
+import { WorkspaceActionsProvider } from "@/components/dashboard/providers/workspace-actions";
 import { FeatureProviders } from "@/features/registry";
 
 const inter = Inter({
@@ -39,7 +40,9 @@ export default function RootLayout({
               <FeatureProviders>
                 <CatalogoProvider>
                   <TicketsProvider>
-                    <LiveDataProvider>{children}</LiveDataProvider>
+                    <LiveDataProvider>
+                      <WorkspaceActionsProvider>{children}</WorkspaceActionsProvider>
+                    </LiveDataProvider>
                   </TicketsProvider>
                 </CatalogoProvider>
               </FeatureProviders>

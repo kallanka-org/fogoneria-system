@@ -38,7 +38,7 @@ type UseCheckoutOptions = {
 
 type PostCommitTask = { receipt: Receipt; account: TableAccount; attempts: number };
 
-export function useCheckout({
+export function useCheckoutController({
   onCommitted,
   onPostCommitFailed,
   retryDelayMs = 300,
@@ -239,5 +239,17 @@ export function useCheckout({
     ],
   );
 
-  return { checkoutAccount };
+  /**
+   * Limpia los guards/mapas/cola del coordinador (reset demo o cambio de
+   * empresa). Lo llama el provider singleton, no cada consumidor.
+   */
+  const resetCheckout = useCallback(() => {
+    checkingOut.current.clear();
+    paidByAccount.current.clear();
+    pendingPostCommit.current = [];
+    if (retryTimer.current) clearTimeout(retryTimer.current);
+    retryTimer.current = null;
+  }, []);
+
+  return { checkoutAccount, resetCheckout };
 }

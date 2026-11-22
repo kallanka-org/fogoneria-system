@@ -1,5 +1,15 @@
 # SESION — estado entre sesiones
 
+## 2026-11-21 — Cierre definitivo: `mod_` y validación final
+
+- **Paridad 20/20/20/20** con `mod_<id>` en backend, frontend, contratos, specs, schema y manifiestos; 20 specs; 32 alias deprecados.
+- **`ModulesProvider`/`useModules` eliminados**; layout `LiveData` + `WorkspaceActions`, vistas por hooks. Rutas de la app sin cambios.
+- **Sesión/BFF** intactos (`git diff` vacío), Prisma con DDL idéntico, migraciones/RLS/triggers sin tocar.
+- **Gates:** `check:modules --strict` 20/20/20/20, `gen:modules --check`, boundaries 0, specs OK; CI `development` success.
+- **Sonar:** 89.4 % overall (líneas 93.6, ramas 83.6), nuevo código 89.0 %, duplicación 0.0 %, ratings A, 0 vulns/smells/hotspots.
+- **Tests:** API 683 unit + 112 e2e; Web 974; contratos 153.
+- **PRs:** #127-#140; 0 abiertos. Deuda: UI compartida de salón, registry generado ante metadata concurrente y convención de migraciones por módulo para tablas nuevas.
+
 ## 2026-11-21 — Prefijo `mod_` en los 20 módulos y retiro de `useModules`
 
 - **Renombre:** backend (`apps/api/src/modules/mod_*`), features web (`features/mod_*`), contratos (`mod_*.ts`), specs (`mod_*.md`), schema Prisma (`mod_*.prisma`) y manifiestos (`modules/mod_*/module.json`). Catálogo, generadores, check de paridad/alcance/specs y registry regenerado con los IDs `mod_*`. Rutas de la app sin cambios.

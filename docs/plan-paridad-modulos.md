@@ -11,12 +11,14 @@
 | `gen:modules --check` | verde (EOL normalizado) |
 | Fronteras | **0** históricas/nuevas; ninguna feature importa otra ni `components/erp` |
 | Sesión/BFF | sin cambios (`lib/session`, `lib/backend`, `proxy`, `app/api/session|backend`) |
-| Alias de contratos | 12 deprecados con targets válidos |
+| Alias de contratos | 32 deprecados (20 previos + 12 históricos) con targets válidos |
 | Prisma | multi-archivo por módulo; DDL idéntico, migraciones/RLS/triggers intactos |
-| Cobertura Sonar | **88.8 %** overall (líneas 92.9, ramas 83.2), nuevo código **90.1 %** |
+| Cobertura Sonar | **89.4 %** overall (líneas 93.6, ramas 83.6), nuevo código **89.0 %** |
 | Duplicación / ratings | **0.0 %** / A-A-A; 0 vulnerabilidades/code smells/hotspots |
-| Tests | API 683 unit + 112 e2e; Web 967; contratos 133 |
-| Auditorías | F0-F2, F3, F4-F5, F6, F6b, F6c, F6c2 y F6c3 con PASS; fixes aplicados y re-auditados |
+| Tests | API 683 unit + 112 e2e; Web 974; contratos 153 |
+| Auditorías | F0-F2, F3, F4-F5, F6, F6b, F6c, F6c2, F6c3, retiro y `mod_` con PASS; fixes aplicados y re-auditados |
+
+Los IDs finales llevan **`mod_`** en todas las capas (`mod_auth`, `mod_catalog`, …). Las tablas históricas de este documento usan el nombre corto por legibilidad; la ruta real es `apps/api/src/modules/mod_<id>`, `apps/web/features/mod_<id>`, `packages/contracts/src/mod_<id>.ts`, `specs/modulos/mod_<id>.md` y `prisma/schema/mod_<id>.prisma`.
 
 **Retiro completado:** `ModulesProvider` y `useModules` ya no existen. El layout usa `LiveDataProvider` + `WorkspaceActionsProvider` y las vistas consumen hooks por módulo (ver [`plan-f6c-pos.md`](plan-f6c-pos.md) §10).
 

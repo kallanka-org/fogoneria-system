@@ -15,6 +15,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Los términos del servicio se publican en la landing (el portal es interno).
+  // Se mantiene el redirect para no romper enlaces viejos al portal.
+  async redirects() {
+    return [
+      {
+        source: "/terminos",
+        destination: "https://fogoneria-landing.vercel.app/terminos/",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -1,6 +1,6 @@
 # auth — especificación
 
-**Estado:** API real · **Última revisión:** 2026-11-19
+**Estado:** API real · **Última revisión:** 2026-11-28
 
 ## 1. Propósito
 
@@ -38,6 +38,7 @@ Reglas:
 ## 5. UI y rutas
 
 - `/` login limpio (sin cuentas demo en pantalla); «¿Olvidaste tu contraseña?» → `/recuperar`.
+- Login y recuperación no muestran enlaces legales: el portal es interno y las condiciones se publican en la landing (`https://fogoneria-landing.vercel.app/terminos/`). El redirect 308 de `/terminos` vive en `next.config.ts`.
 - `lib/auth.ts` mapea rol API → rol web y **falla cerrado** ante rol/sucursal desconocidos.
 - `proxy.ts` aplica `canViewPath` con la cookie firmada; el rol no se puede alterar desde DevTools.
 - `/app/auditoria` es la única excepción admin-only del shell: `canViewPath` la reserva a `admin` y la página revalida con la misma función (defensa en profundidad).
@@ -68,7 +69,7 @@ Reglas:
 ## 8. Trazabilidad
 
 - Jira: AYCDS-48 (auth), AYCDS-55 (sesión), AYCDS-14 (ticket WS).
-- PRs: #2 (`feat/api-david`), #4/#5 (sesión HttpOnly), #13 (ticket WS).
+- PRs: #2 (`feat/api-david`), #4/#5 (sesión HttpOnly), #13 (ticket WS), #147 (términos a la landing).
 - Specs: [mod_auth](mod_auth.md) · [roles](../producto/roles-permisos.md).
 
 ## 9. Próximos pasos

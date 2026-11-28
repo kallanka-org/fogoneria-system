@@ -93,19 +93,23 @@ import { LoginPage } from './LoginPage';
 import { RecoverPage } from './RecoverPage';
 
 describe('LoginPage', () => {
-  it('pinta el formulario de acceso', () => {
+  it('pinta el formulario de acceso sin términos', () => {
     const markup = renderToStaticMarkup(<LoginPage />);
     expect(markup).toContain('Bienvenido de nuevo');
     expect(markup).toContain('Correo');
     expect(markup).toContain('Contraseña');
     expect(markup).toContain('Entrar');
+    expect(markup).not.toContain('Términos');
+    expect(markup).not.toContain('/terminos');
   });
 });
 
 describe('RecoverPage', () => {
-  it('pinta la recuperación por soporte con el correo visible', () => {
+  it('pinta la recuperación por soporte con el correo visible y sin términos', () => {
     const markup = renderToStaticMarkup(<RecoverPage />);
     expect(markup).toContain('Solicitar ayuda');
     expect(markup).toContain('soporte');
+    expect(markup).not.toContain('Términos');
+    expect(markup).not.toContain('/terminos');
   });
 });

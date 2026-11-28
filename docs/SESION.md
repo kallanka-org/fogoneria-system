@@ -1,5 +1,12 @@
 # SESION — estado entre sesiones
 
+## 2026-11-28 — Términos y condiciones fuera del portal
+
+- **Pedido:** el portal es interno; el cliente conoce las condiciones al contratar, así que login/recuperación ya no enlazan términos.
+- **Cambio:** se eliminó `apps/web/app/terminos/page.tsx` y el enlace en `features/mod_auth/LoginPage.tsx` + `RecoverPage.tsx`. `apps/web/next.config.ts` redirige `/terminos` (308) a `https://fogoneria-landing.vercel.app/terminos/` para enlaces viejos.
+- **Docs/specs:** rutas actualizadas en `apps/web/AGENTS.md`, `docs/arquitectura.md` y `specs/producto/roles-permisos.md`.
+- **Verificado:** web 974 tests, `check-types`, `lint` (0 errores; warning preexistente en `coverage/lcov-report`), `build` (sin ruta `/terminos`), `check:specs` y `check:modules --strict`. Sin deploy ni commit.
+
 ## 2026-11-21 — Cierre definitivo: `mod_` y validación final
 
 - **Paridad 20/20/20/20** con `mod_<id>` en backend, frontend, contratos, specs, schema y manifiestos; 20 specs; 32 alias deprecados.

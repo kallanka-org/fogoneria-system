@@ -102,6 +102,7 @@
 | Variables de la web en `globalEnv` de Turbo | #68 | `turbo.json` |
 | Script idempotente de roles RLS | #69 | `apps/api/prisma/rls-roles.ts` |
 | Login limpio + recuperación por soporte | #71 | `features/mod_auth/{LoginPage,RecoverPage}.tsx`, `lib/support.ts` |
+| Términos del servicio movidos a la landing | #147 | login/recuperación sin enlaces legales; redirect 308 `/terminos` en `next.config.ts` |
 | Runbook Vercel + Railway | #72 | [despliegue](../docs/despliegue.md) |
 | Repo de specs docs-as-code + trazabilidad | #74 | [specs/README](README.md), `docs/INDICE.md` |
 | CI Fase A: check agregado, Docker/Trivy, CodeQL y Dependabot | #76 | `.github/workflows/{ci,codeql}.yml`, `.github/dependabot.yml` |

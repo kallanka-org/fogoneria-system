@@ -37,7 +37,8 @@ Hay **tres capas** de autorización. Las tres deben coincidir; el servidor es la
 
 - Un usuario autenticado que pide una ruta prohibida es redirigido a su `ROLE_HOME` (307).
 - Sin sesión, toda ruta del matcher redirige a `/` y borra la cookie.
-- `/`, `/recuperar`, `/onboarding`, `/terminos` y `/demo/[id]` quedan fuera del matcher o son públicas.
+- `/`, `/recuperar`, `/onboarding` y `/demo/[id]` quedan fuera del matcher o son públicas.
+- `/terminos` queda fuera del matcher y se redirige (308) a `https://fogoneria-landing.vercel.app/terminos/` desde `next.config.ts`; el portal es interno y no enlaza términos desde login/recuperación.
 
 ## 3. Sesión y cookie
 

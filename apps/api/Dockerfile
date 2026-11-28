@@ -4,6 +4,7 @@
 
 FROM node:24-bookworm-slim AS build
 RUN apt-get update \
+  && apt-get upgrade -y \
   && apt-get install -y --no-install-recommends openssl \
   && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm@11.25.0 --ignore-scripts
@@ -25,6 +26,7 @@ RUN pnpm --filter api build
 
 FROM node:24-bookworm-slim AS runtime
 RUN apt-get update \
+  && apt-get upgrade -y \
   && apt-get install -y --no-install-recommends openssl \
   && rm -rf /var/lib/apt/lists/*
 WORKDIR /app

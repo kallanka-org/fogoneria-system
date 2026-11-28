@@ -134,13 +134,12 @@ describe('LoginPage', () => {
     expect(router.push).not.toHaveBeenCalled();
   });
 
-  it('enlaza la recuperación y los términos', () => {
+  it('enlaza la recuperación y no muestra términos', () => {
     render(<LoginPage />);
     expect(screen.getByText('¿Olvidaste tu contraseña?').closest('a')?.getAttribute('href')).toBe(
       '/recuperar',
     );
-    expect(screen.getByText('Términos y Condiciones').closest('a')?.getAttribute('href')).toBe(
-      '/terminos',
-    );
+    expect(screen.queryByText('Términos y Condiciones')).toBeNull();
+    expect(document.querySelector('a[href="/terminos"]')).toBeNull();
   });
 });

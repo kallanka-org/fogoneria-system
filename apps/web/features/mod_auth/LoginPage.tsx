@@ -97,14 +97,6 @@ export function LoginPage() {
           </Link>
         </p>
       </div>
-
-      <p className="text-xs text-ink-400 text-center mt-6">
-        Al continuar aceptas los{" "}
-        <Link href="/terminos" className="text-ink-900 font-medium hover:underline">
-          Términos y Condiciones
-        </Link>
-        .
-      </p>
     </main>
   );
 }

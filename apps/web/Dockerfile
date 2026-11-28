@@ -2,6 +2,9 @@
 # Imagen de la web Next.js (Fogonería) usando `output: "standalone"`.
 
 FROM node:24-bookworm-slim AS build
+RUN apt-get update \
+  && apt-get upgrade -y \
+  && rm -rf /var/lib/apt/lists/*
 RUN npm install -g pnpm@11.25.0 --ignore-scripts
 WORKDIR /app
 
@@ -19,6 +22,9 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN pnpm --filter web build
 
 FROM node:24-bookworm-slim AS runtime
+RUN apt-get update \
+  && apt-get upgrade -y \
+  && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
